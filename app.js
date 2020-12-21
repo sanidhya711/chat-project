@@ -12,6 +12,7 @@ const Filter = require("bad-words");
 const filter = new Filter();
 var nodemailer = require('nodemailer');
 const crypto = require('crypto');
+const randomanime = require('random-anime');
 require('dotenv').config();
 app.use(express.static("public"));
 app.use(bodyParser.json());
@@ -235,13 +236,14 @@ app.post("/register",function(req,res){
         if(err){
             res.render("register",{ERROR:"a user with the given username already exists"});
         }else{        
+            const anime = randomanime.anime();
             var setPreferences = new Preference({
                 username: req.body.username,
                 notifications: false,
                 filter:false,
                 primaryColor:"#c4e8ed",
                 secondryColor:"#e6a7a7",
-                pfp:"https://content.api.news/v3/images/bin/7b790c831c72c5dd3b3275833df09f29",
+                pfp:anime,
                 email:null,
             });
             setPreferences.save();
