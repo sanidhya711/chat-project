@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body style="display: flex;justify-content: center;align-items: center;height: 100vh;margin: 0;background-color: #333;color:#EAEAEA;" >
+    <form style="display: flex;flex-direction: column;" action="/reset/<%= resetLink %>" method="POST">
+        <h5>New Password:</h5>
+        <input style="width: 300px;" id="p1" type="password" name="newPassword">
+        <br>
+        <h5>Confirm Password:</h5>
+        <input id="p2" type="password">
+        <br>
+        <div class="btn btn-outline-light btn-md" style="align-self: center;" onclick="submit()">Submit</div>
+    </form>
+    <script>
+        var p1 = document.getElementById("p1");
+        var p2 = document.getElementById("p2");
+        function submit(){
+            if(p1.value==p2.value && p1.value!=""){
+                document.querySelector("form").submit();
+            }
+        }
+        
+    </script>
+</body>
+</html>

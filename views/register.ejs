@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>register</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="/favicon.png">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="loginandregister.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </head>
+    <body>
+         <%- include("loading.ejs") %>
+        <h1 class="error" ><%= ERROR %></h1>
+        <div class="loginHolder">
+            <h1>Register</h1>
+            <form id="myform" action="/register" method="POST">
+            <label>Username:</label>
+            <input id="username" oninput="trackInput()" type="text" required name="username">
+            <span id="error" class="hidee">username cannot contain spaces</span>
+            <label id="password">Password:</label>
+            <input type="password" required name="password">
+            <div onclick="submitt()" class="btn btn-md btn-info" style="display: flex;justify-content: center;align-items: center;padding-left: 20px;padding-right: 20px;margin-top: 10px;">Sumbit
+                <span class="ani"></span>
+            <div class="loader" id="btn-loader" style="height: 20px;width: 20px;"><div class="loader-inner"></div></div>
+        </div>
+            <a style="position: relative; top: 15px;" href="/login">
+                <span class="redirect">
+                    already have an account?
+                </span> 
+                <span class="redirect">
+                    login
+                </span> 
+            </a>
+          </div>
+        </form>
+
+    <script src="/register.js"></script>
+
+    </body>
+</html>
