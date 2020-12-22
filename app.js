@@ -221,20 +221,20 @@ app.get("/",async function(req,res){
         });
     });
    }else{
-    res.redirect("/login")
+    res.redirect("/signin")
     }
 });
 
 
 //register new user
-app.get("/register",function(req,res){
-        res.render("register",{ERROR:""});
+app.get("/signup",function(req,res){
+        res.render("signup",{ERROR:""});
 });
 
-app.post("/register",function(req,res){
+app.post("/signup",function(req,res){
     User.register({username: req.body.username},req.body.password,function(err,user){
         if(err){
-            res.render("register",{ERROR:"a user with the given username already exists"});
+            res.render("signup",{ERROR:"a user with the given username already exists"});
         }else{        
             const anime = randomanime.anime();
             var setPreferences = new Preference({
@@ -256,11 +256,11 @@ app.post("/register",function(req,res){
 
 
 //login user
-app.get("/login",function(req,res){
-    res.render("login",{Authorized:""});
+app.get("/signin",function(req,res){
+    res.render("signin",{Authorized:""});
 });
 
-app.post("/login",function(req,res){
+app.post("/signin",function(req,res){
     var rememberMe = req.body.rememberMe;
     if(rememberMe=="on"){
         // 1000*60*60*24*30*3 = 3 months
@@ -273,7 +273,7 @@ app.post("/login",function(req,res){
         password:req.body.password
     });
      req.login(user,function(err){
-        passport.authenticate("local",{failureRedirect:"/loginERR"})(req,res,function(){
+        passport.authenticate("local",{failureRedirect:"/signinERR"})(req,res,function(){
             res.redirect("/");
         });
     });
@@ -339,7 +339,7 @@ app.get("/chats/:to",async function(req,res){
             });
         });
     }else{
-        res.redirect("/login")
+        res.redirect("/signin")
     }
 });
 
@@ -364,7 +364,7 @@ app.post("/reset/:resetLink",function(req,res){
                     console.error(err);
                 }else{
                     User.register({username: fetchedData.username},newPassword,function(err,user){
-                        res.send("<h1>password sucessfully changed</h1> <br> <h3><a href='/'>back to login screen</a></h3>");
+                        res.send("<h1>password sucessfully changed</h1> <br> <h3><a href='/'>back to sign in screen</a></h3>");
                     });
                 }
               });
@@ -424,9 +424,8 @@ app.post("/getresetlink",function(req,res){
     });
 });
 
-//get loginERR
-app.get("/loginERR",function(req,res){
-    res.render("login",{Authorized:"Incorrect Username or Password"});
+app.get("/signinERR",function(req,res){
+    res.render("signin",{Authorized:"Incorrect Username or Password"});
 });
 
 //do not change

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://use.fontawesome.com/d4dcb4c71a.js"></script>
+    <link rel="stylesheet" href="signupANDsignin.css">
+</head>
+<body>
+    <div class="outer">
+        <div class="signin-holder">
+            <h1>
+                Sign Up
+            </h1>
+        </div>
+            <form action="/signup" method="POST">
+                <br>
+                <br>
+                <input name="username" placeholder="Email" type="text">
+                <br>
+                <div class="password-holder">
+                    <input name="password" id="password" placeholder="Password" type="password">
+                    <i class="fa fa-eye" aria-hidden="true"></i>
+                    <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                </div>
+                <br>
+                <br>
+                <button class="btn btn-success" type="submit">Sign Up</button>
+                <br>
+                <br>
+                <br>
+                already have an account?
+                <a href="/signin">
+                    Sign In
+                </a>
+            </form>
+    </div>
+</body>
+</html>

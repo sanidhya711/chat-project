@@ -1,0 +1,140 @@
+*{
+    user-select: none;
+    overflow: hidden;
+}
+body{
+    background-color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #333;
+}
+.outer{
+    height: 555px;
+    width: 30rem;
+    background-color: #EAEAEA;
+    border-radius: 20px;
+    min-width: 400px;
+}
+.signin-holder{
+    display: flex;
+    justify-content: center;
+    background-color: #28a745;
+    border-radius: 20px 20px 0px 0px;
+    height: 120px;
+    align-items: center;
+    color: #EAEAEA;
+    text-decoration: underline;
+}
+input{
+    border-radius: 27px;
+    width: 22rem;
+    height: 52px;
+    padding: 25px;
+    border: none;
+    background-color: rgb(202, 202, 202);
+    transition: width 0.5s;
+    caret-color: transparent;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+    box-shadow: 0 0 0px 1000px rgb(202, 202, 202) inset;
+}
+input:focus{
+    outline: none;
+    width: 24rem;
+    caret-color: #333;
+}
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: calc(100% - 125px);
+    box-shadow: 0 0 2px #fff;
+    border-radius: 0 0 30px 30px;
+}
+.btn{
+    border-radius: 50px;
+    height: 52px;
+    width: 22rem;
+    font-size: 17px;
+    transition: background-color 0.4s;
+}
+a:hover{
+    text-decoration: none;
+    color: #333;
+}
+a{
+    transition: color 0.5s;
+    font-size: 13px;
+}
+::placeholder { 
+    color: #333;
+}
+.fa{
+    position: absolute;
+    right: 25px;
+    top: 19px;
+    color: rgb(107, 107, 107);
+    transition: color 0.5s;
+}
+.fa:hover{
+    color: #333;
+}
+.password-holder{
+    position: relative;
+}
+.link-holder{
+    display: flex;
+    position: relative;
+    align-items: center;
+    width: 20rem;
+    height: 50px;
+    margin-bottom: 12px;
+}
+input[type="checkbox"]{
+    display: none;
+}
+input[type="checkbox"] + label:before {
+    position: relative;
+    top: 4.1px;
+    border-radius: 2.5px;
+    border: 1.5px solid #333;
+    content: "\00a0";
+    display: inline-block;
+    font: 13px/1em sans-serif;
+    height: 15px;
+    margin: 0 7px 0 0;
+    padding:0;
+    vertical-align: top;
+    width: 15px;
+  }
+  input[type="checkbox"]:checked + label:before {
+    background: #28a745;
+    color: rgb(255, 255, 255);
+    content: "\2713";
+    text-align: center;
+  }
+  input[type="checkbox"]:checked + label:after {
+    font-weight: bold;
+  }
+  
+  input[type="checkbox"]:focus + label::before {
+      outline: rgb(255, 255, 255) auto 5px;
+  }
+.remember-me-label{
+    font-size: 13px;
+    margin: 0;
+ }
+ .remember-me-holder{
+    position: absolute;
+    left: 0;
+ }
+ .forgot-password{
+     position: absolute;
+     right: 0;
+ }
