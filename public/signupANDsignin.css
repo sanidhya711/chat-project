@@ -37,13 +37,6 @@ input{
     transition: width 0.5s;
     caret-color: transparent;
 }
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-    transition: background-color 5000s ease-in-out 0s;
-    box-shadow: 0 0 0px 1000px rgb(202, 202, 202) inset;
-}
 input:focus{
     outline: none;
     width: 24rem;

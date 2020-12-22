@@ -1,5 +1,7 @@
 <!DOCTYPE html>
     <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>chats <%= to %></title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
@@ -135,7 +137,7 @@
     </div>
 
         <div style="width: 60%;">
-          <input onclick="hide_gif()" style="background-color: <%= primaryColor %>;" id="msg" type="text" placeholder="Enter Message" required oninput="typing()" autocomplete="off" />
+          <input onclick="hide_gif()" id="msg" type="text" placeholder="Message <%= to %>" required oninput="typing()" autocomplete="off" />
         </div>
           <div>
             <button style="background-color: <%= primaryColor %>;" class="send"><img src="https://img.icons8.com/ios-glyphs/30/000000/filled-sent.png"/></button>
@@ -235,4 +237,3 @@ fileSubmitVideo.on("change",function(e){
 
 </script>    
     </body>
-</html>
