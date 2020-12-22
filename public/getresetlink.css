@@ -1,0 +1,44 @@
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #333;
+}
+form{
+    display: flex;
+    flex-direction: column;
+    width: 24rem;
+    align-items: center;
+}
+
+input{
+    border-radius: 27px;
+    width: 22rem;
+    height: 52px;
+    padding: 25px;
+    border: none;
+    background-color: rgb(202, 202, 202);
+    transition: width 0.5s;
+    caret-color: transparent;
+}
+input:focus{
+    outline: none;
+    width: 24rem;
+    caret-color: #333;
+}
+.btn{
+    border-radius: 50px;
+    height: 52px;
+    width: 22rem;
+    font-size: 17px;
+    transition: background-color 0.4s;
+}
+::placeholder { 
+    color: #333;
+}
+h2{
+    color: #EAEAEA;
+    text-decoration: underline;
+}
