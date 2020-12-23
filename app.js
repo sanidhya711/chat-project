@@ -59,7 +59,7 @@ const preferencesSchema = mongoose.Schema({
 const resetPasswordSchema = mongoose.Schema({
     username:"String",
     recovery_token:"String",
-    expire_at: {type: Date, default: Date.now, expires: 300} 
+    expire_at: {type: Date, default: Date.now, expires: 60*60*24} 
 });
 
 usersSchema.plugin(passportLocalMongoose);
@@ -417,7 +417,7 @@ app.post("/getresetlink",function(req,res){
                       if(err){
                         res.send(err);
                       }else{
-                        res.send("<h2>Check Your Email For Instructions on how to change your password <br> if you dont see it please check spam</h2>");
+                        res.send("<h2>Check Your Email For Instructions on how to change your password <br> if you dont see it please check spam <br> The link will be valid for 24 hours </h2>");
                       }
                   });
             });
