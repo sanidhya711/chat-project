@@ -5,11 +5,12 @@ body{
     height: 100vh;
     margin: 0;
     background-color: #333;
-    color:#EAEAEA;
 }
 form{
     display: flex;
     flex-direction: column;
+    width: 24rem;
+    align-items: center;
 }
 input{
     border-radius: 27px;
@@ -32,4 +33,11 @@ input:focus{
     width: 22rem;
     font-size: 17px;
     transition: background-color 0.4s;
+}
+::placeholder { 
+    color: #333;
+}
+h2{
+    color: #EAEAEA;
+    text-decoration: underline;
 }

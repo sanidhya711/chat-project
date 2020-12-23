@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="/reset.css">
 </head>
 <body>
     <form action="/reset/<%= resetLink %>" method="POST">
-        <input required id="p1" type="password" name="newPassword">
+        <h2>Reset Password</h2>
         <br>
-        <input required id="p2" type="password">
+        <input required id="p1" type="password" placeholder="Password" name="newPassword">
+        <br>
+        <input required id="p2" placeholder="Confirm Password" type="password">
         <br>
         <button class="btn btn-success" type="submit">Reset Password</button>
     </form>
