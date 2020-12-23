@@ -59,7 +59,7 @@ const preferencesSchema = mongoose.Schema({
 const resetPasswordSchema = mongoose.Schema({
     username:"String",
     recovery_token:"String",
-    expire_at: {type: Date, default: Date.now, expires: 1000*60*5} 
+    expire_at: {type: Date, default: Date.now, expires: 300} 
 });
 
 usersSchema.plugin(passportLocalMongoose);
