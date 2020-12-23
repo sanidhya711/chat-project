@@ -254,8 +254,16 @@ progress{
 .videogreen{
     border: 5px solid  rgb(63, 151, 63);
 }
-.videoblue{
-    border: 5px solid rgb(57, 185, 185);
+.videogreen{
+    border: none;
+}
+@media(min-width:100px){
+    .videoblue{
+        border: none;
+    }
+    .videogreen{
+        border: none;
+    }
 }
 .fa-cog{
     position: absolute;
@@ -357,5 +365,9 @@ progress{
     display: flex;
     flex-direction: column;
 }
-
+emoji-picker{
+    position: fixed;
+    bottom: 100px;
+    margin-left: 15px;
+}
 

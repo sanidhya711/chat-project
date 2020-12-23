@@ -19,7 +19,7 @@
             <form action="/signin" method="POST">
                 <br>
                 <br>
-                <input required name="username" placeholder="Email" type="text">
+                <input autocomplete="off" required name="username" placeholder="Username" type="text">
                 <br>
                 <div class="password-holder">
                     <input required name="password" id="password" placeholder="Password" type="password">
@@ -45,6 +45,14 @@
                 </a>
             </form>
     </div>
+    
+    <div class="context-menu">
+        <div onclick="signup()">Sign Up</div>
+        <div onclick="forgotPassword()">Forgot Password?</div>
+        <div onclick="rememberMe()">Remember Me</div>
+        <div onclick="submit()">Submit</div>
+    </div>
+    <script src="signupANDsignin.js"></script>
 </body>
 </html>
 

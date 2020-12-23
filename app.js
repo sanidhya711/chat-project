@@ -10,7 +10,7 @@ const passport = require('passport');
 const moment = require('moment-timezone'); 
 const Filter = require("bad-words");
 const filter = new Filter();
-var nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const randomanime = require('random-anime');
 require('dotenv').config();
@@ -91,7 +91,9 @@ io.on("connection",socket => {
     Preference.find({username: {$in:[message.from,message.to]}},{_id:0,filter:1},function(err,fetchedFilterSettings){
         fetchedFilterSettings.forEach(function(setting){
             if(setting.filter){
-                mightGetFiltered = filter.clean(message.msg); 
+                if(!message.msg.includes("emoji")){
+                    mightGetFiltered = filter.clean(message.msg); 
+                }
             }
             });
             var chat = new Chat({

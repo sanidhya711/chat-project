@@ -134,6 +134,7 @@ socket.on("new",function(message){
     socket.emit("seeneverything",{to:username,from:to,roomName:roomName});
     if(message.from==username){var id = "green"}else{var id = "blue"};
     if(message.type==null){
+        message.message = message.message.replace("emoji","");
     var div = document.createElement("div");
     div.id= message._id;
     div.className=`${id} messagee unseen`
@@ -563,4 +564,15 @@ socket.on("loaded more messages",data=>{
         parent.prepend(div);
     });
     canLoadMore=true;
+});
+
+document.querySelector('emoji-picker').addEventListener('emoji-click',function(event){
+    console.log(event.detail);
+    var msg = {
+        msg:"emoji"+event.detail.unicode,
+        from:from[0],
+        to:to[0],
+        roomName:roomName
+    }
+    socket.emit("new",msg);
 });
