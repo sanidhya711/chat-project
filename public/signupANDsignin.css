@@ -143,16 +143,15 @@ input[type="checkbox"] + label:before {
     padding: 10px;
 }
 .context-menu div{
-    padding: 7px;
+    padding: 6px;
     display: flex;
     width: 100%;
-    min-width: 175px;
+    min-width: 190px;
     justify-content: center;
-    border-top: 0.01px solid white;
-    background-color: rgb(88, 88, 88);
+    background-color: #333;
     transition: all 0.5s;
     color: #EAEAEA;
-    box-shadow: 0 0 2px #fff;
+    box-shadow: 0 0 2px #EAEAEA;
 }
 .context-menu div:hover{
     background-color: #28a745;

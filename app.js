@@ -125,7 +125,7 @@ io.on("connection",socket => {
 
     //client sending a request to mark everthing as seen
     socket.on("seeneverything",data=>{
-        markAsSeen(data.to,data.from[0]);
+        markAsSeen(data.to,data.from);
         io.sockets.in(data.roomName).emit("otherusersaweverything",data.to);
     });
 
@@ -294,7 +294,7 @@ app.get("/logout",function(req,res){
 //personal chats
 app.get("/chats/:to",async function(req,res){
     if(req.isAuthenticated()){
-        var username  = req.session.passport.user; 
+        var username = req.session.passport.user; 
         var to = req.params.to;
         
         var pfps = []; 
@@ -335,8 +335,8 @@ app.get("/chats/:to",async function(req,res){
                     await Preference.findOne({username:to},{_id:0,pfp:1},function(err,fetchedImage){
                         toPfp = fetchedImage.pfp;      
                     });
-                    Preference.findOne({username:username},{_id:0,primaryColor:1,secondryColor:1},function(err,preFetchedPreferences) {
-                            res.render("chats",{username:username,to:to,from:username ,messages:fetchedMessages,users:users,primaryColor:preFetchedPreferences.primaryColor,secondryColor:preFetchedPreferences.secondryColor,toPfp:toPfp});      
+                    Preference.findOne({username:username},{_id:0,primaryColor:1,secondryColor:1},function(err,preFetchedPreferences){
+                        res.render("chats",{username:username,to:to,from:username,messages:fetchedMessages,users:users,primaryColor:preFetchedPreferences.primaryColor,secondryColor:preFetchedPreferences.secondryColor,toPfp:toPfp});      
                     });                  
                 }); 
             });
