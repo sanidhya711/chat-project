@@ -87,18 +87,17 @@ io.on("connection",socket => {
 
     //new message in some room
     socket.on("new", message => {
-    var mightGetFiltered = message.msg;
-    //filter message if anyone has enabled filter
     Preference.find({username: {$in:[message.from,message.to]}},{_id:0,filter:1},function(err,fetchedFilterSettings){
         fetchedFilterSettings.forEach(function(setting){
             if(setting.filter){
-                if(!message.msg.includes("emoji")){
-                    mightGetFiltered = filter.clean(message.msg); 
+                var regExp = /[a-zA-Z]/g; 
+                if(regExp.test(message.msg)){
+                    message.msg = filter.clean(message.msg);
                 }
             }
             });
             var chat = new Chat({
-                message:mightGetFiltered,
+                message:message.msg,
                 from:message.from,
                 to:message.to,
                 time: moment().tz("Asia/Kolkata").format("h:mm a"),
@@ -108,7 +107,7 @@ io.on("connection",socket => {
             });
             chat.save();
             io.sockets.in(message.roomName).emit("new",chat);
-            io.emit("pushNotification",{to:message.to,from:message.from,msg:mightGetFiltered,type:message.type});
+            io.emit("pushNotification",{to:message.to,from:message.from,msg:message.msg,type:message.type});
             });
         });
 

@@ -168,11 +168,12 @@ input:focus{
     background-size: contain;
 }
 .message{
-    padding: 16px;
+    padding: 15px 45px;
     max-width: fit-content;
     border-radius: 5px;
     margin: 10.5px 0px;
     user-select: auto;
+    position: relative;
 }
 .message:last-of-type{
     margin-bottom: 100px;
@@ -259,7 +260,8 @@ video:fullscreen{
     border: none;
 }
 .video{
-    padding: 27px;
+    padding: 0px;
+    margin: 27px;
     max-width: fit-content;
     align-self: center;
     width: 60%;
@@ -267,7 +269,8 @@ video:fullscreen{
     max-width: 580px;
 }
 .image{
-    padding: 20px;
+    padding: 0px;
+    margin: 20px;
     max-width: fit-content;
     align-self: center;
     width: 60%;
@@ -294,4 +297,10 @@ a:hover{
 .dot-flashing{
     margin-top: 3px;
     margin-left: 25px;
+}
+emoji-picker{
+    position: absolute;
+    right: 5%;
+    bottom: 80px;
+    display: none;
 }

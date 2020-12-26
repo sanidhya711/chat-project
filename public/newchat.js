@@ -47,54 +47,7 @@ function handleGesture() {
 var doodleHolder = document.querySelector(".messages");
 var noOfDoodles = 6;
 var randomDoodle = Math.floor(Math.random() * noOfDoodles)+1;
-doodleHolder.style.backgroundImage = "url(/chat-page-new-design/doodles/doodle"+randomDoodle+".jpg)";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+doodleHolder.style.backgroundImage = "url(/doodles/doodle"+randomDoodle+".jpg)";
 
 var socket = io();
 
@@ -313,3 +266,103 @@ socket.on("offline",userOffline=>{
         document.querySelector("."+userOffline+" h4").style.color="inherit";
     }
 });
+
+//file upload
+var uploadButton = document.querySelector(".fa-plus");
+var fileUpload = document.querySelector(".fileUpload");
+uploadButton.addEventListener("click",function(){
+    fileUpload.click();
+});
+
+fileUpload.addEventListener("change",function(e){
+    var file = e.target.files[0];
+    var type = isImage(file.name) ? "image" : isVideo(file.name) ? "video" :"invalid"; 
+    console.log(type);
+    if(type!="invalid"){
+        var storageRef = firebase.storage().ref("/files/"+username+"/"+to+"/"+file.name);
+        var uploadTask = storageRef.put(file)
+        uploadTask.on('state_changed', function(snapshot){
+            var progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+            console.log(progress);
+            },function(error){
+                console.log("error occured while upload the file to firebase");
+            },
+            function(){
+                uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL){
+                newFile(downloadURL,file.name,type);
+            });
+        });
+    }else{
+        alert("please select a valid file type");
+    }
+});
+
+function newFile(downloadURL,fileName,type){
+    var msg = {
+        msg:downloadURL,
+        from:from,
+        to:to,
+        roomName:roomName,
+        type:type,
+        name:fileName
+    }
+    socket.emit("new",msg);
+}
+
+function getExtension(filename){
+    var parts = filename.split('.');
+    return parts[parts.length - 1];
+}
+
+function isImage(filename) {
+    var ext = getExtension(filename);
+    switch (ext.toLowerCase()) {
+      case 'jpg':
+      case 'gif':
+      case 'bmp':
+      case 'png':
+        return true;
+    }
+    return false;
+}
+  
+function isVideo(filename) {
+    var ext = getExtension(filename);
+    switch (ext.toLowerCase()) {
+      case 'm4v':
+      case 'avi':
+      case 'mpg':
+      case 'mp4':
+        return true;
+    }
+    return false;
+}
+
+// delete file from firebase
+function deleteFileFromFirebase(fileName){
+    if(!fileName.includes("tenor")){
+        var deleteref = firebase.storage().ref("/files/"+username+"/"+to+"/"+fileName)
+        deleteref.delete().then(function(){
+        console.log("file successfully deleted from firebase");
+        }).catch(function(error) {
+            console.log(error);
+        });
+    }
+}
+
+//clicke on show smoji button
+document.querySelector(".fa-smile-o").addEventListener("click",function(){
+    document.querySelector("emoji-picker").style.display="inline-block";
+});
+
+
+//send emoji
+document.querySelector('emoji-picker').addEventListener('emoji-click',function(event){
+    var value = document.querySelector("#msg").value;
+    value = value+event.detail.unicode;
+    document.querySelector("#msg").value=value;
+    document.addEventListener('click',function(e) {
+        document.querySelector("emoji-picker").style.display="none";
+    });
+});
+
