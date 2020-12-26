@@ -286,3 +286,12 @@ a{
 a:hover{
     color: inherit;
 }
+.typing-box{
+    display: flex;
+    align-items: center;
+    padding-right: 27px;
+}
+.dot-flashing{
+    margin-top: 3px;
+    margin-left: 25px;
+}

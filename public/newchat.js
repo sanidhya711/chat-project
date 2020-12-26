@@ -144,6 +144,22 @@ function typing(){
     }
 }
 
+//other user is typing
+socket.on("typing",data=>{
+    if(data){
+        console.log("show typing bar");
+        var div = document.createElement("div");
+        div.classList.add("typing-box");
+        div.classList.add("message");
+        div.classList.add("from-other-user");
+        div.innerHTML=`${to} is typing<div class="dot-flashing"></div>`;
+        document.querySelector(".messages").appendChild(div);
+        document.querySelector(".messages").scrollTop = document.querySelector(".messages").scrollHeight;
+    }else{
+        document.querySelector(".messages").removeChild(document.querySelector(".typing-box"));
+    }
+})
+
 //send new data
 document.querySelector(".send-holder").addEventListener("click",function(){
     if(document.getElementById("msg").value){
@@ -264,4 +280,36 @@ socket.on("loaded more messages",data=>{
         document.querySelector(".messages").prepend(div);
     });
     canLoadMore=true;
+});
+
+//who is online
+socket.emit("newUser", username);
+socket.emit("getOnline","bruh");
+
+socket.on("startingOnline",data=>{
+  data.forEach(function(user) {
+    console.log(user);
+    if(user == to){
+     document.querySelector(".top-bar h3").style.color="#5cb85c";
+    }else if(user != username){
+     document.querySelector("."+user+" h4").style.color="#5cb85c";
+    }
+  });
+});
+
+socket.on("online",userOnline=>{
+    if(userOnline == to){
+        document.querySelector(".top-bar h3").style.color="#5cb85c";
+    }else if(userOnline!=username){
+        document.querySelector("."+userOnline+" h4").style.color="#5cb85c";
+    }
+});
+
+socket.on("offline",userOffline=>{
+    console.log(userOffline);
+    if(userOffline == to){
+        document.querySelector(".top-bar h3").style.color="inherit";
+    }else if(userOffline!=username){
+        document.querySelector("."+userOffline+" h4").style.color="inherit";
+    }
 });

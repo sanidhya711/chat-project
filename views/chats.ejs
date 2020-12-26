@@ -26,7 +26,7 @@
 
         <% users.forEach(function(name){%>
             <% if(username!=name.username && name.username!=to){%>
-                <a class="user" href="/chats/<%=name.username%>"> 
+                <a class="user <%= name.username %>" href="/chats/<%=name.username%>"> 
                     <img class="pfp" src="<%= name.pfp %>">
                     <h4><%= name.username %></h4>
                 </a>
@@ -61,7 +61,7 @@
         </div>
         <div class="input-bar-holder">
             <i class="fa fa-plus" aria-hidden="true"></i>
-            <input id="msg" placeholder="Message User" type="text">
+            <input oninput="typing()" id="msg" placeholder="Message User" type="text">
             <i class="fa fa-lg fa-smile-o" aria-hidden="true"></i>
             <div class="send-holder">
                 <i class="fa fa-paper-plane" aria-hidden="true"></i>
