@@ -52,8 +52,8 @@
                         <img class="media-<%= colorClass %>" src="<%= message.message %>">
                     </div>
                 <% }else if(message.type=="audio"){ %>
-                    <div>
-                        
+                    <div id="message.id" class="message">
+                        <audio controls src="message.message"></audio>
                     </div>
                 <% }else{ %>
                     <div id="<%= message.id %>" class="message video">

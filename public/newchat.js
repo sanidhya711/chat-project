@@ -75,6 +75,8 @@ socket.on("new",function(message){
     }else if(message.type=="image"){
         div.classList.add("image");
         div.innerHTML=`<img onload='scrollToBottom()' class="media-${colorClass}" src="${message.message}">`;
+    }else if(message.type=="audio"){
+        div.innerHTML=`<audio controls src="${message.message}"></audio>`
     }else{
         div.classList.add("video");
         div.innerHTML=`<video onload='scrollToBottom()' class="media-${colorClass}" controls src="${message.message}"></video>`;
