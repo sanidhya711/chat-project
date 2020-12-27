@@ -421,7 +421,7 @@ function tenorCallback_search(responsetext){
 
     var response_objects = JSON.parse(responsetext);
 
-    top_10_gifs = response_objects["results"];
+    var top_10_gifs = response_objects["results"];
 
     removeAllChildNodes(document.getElementById("gifBox1"));
     removeAllChildNodes(document.getElementById("gifBox2"));

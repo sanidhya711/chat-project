@@ -74,14 +74,19 @@ socket.on("new",function(message){
         div.innerHTML=`${message.message}`;
     }else if(message.type=="image"){
         div.classList.add("image");
-        div.innerHTML=`<img class="media-${colorClass}" src="${message.message}">`;
+        div.innerHTML=`<img onload='scrollToBottom()' class="media-${colorClass}" src="${message.message}">`;
     }else{
         div.classList.add("video");
-        div.innerHTML=`<video class="media-${colorClass}" controls src="${message.message}"></video>`;
+        div.innerHTML=`<video onload='scrollToBottom()' class="media-${colorClass}" controls src="${message.message}"></video>`;
     }
     document.querySelector(".messages").appendChild(div);
     document.querySelector(".messages").scrollTop = document.querySelector(".messages").scrollHeight;
 });
+
+
+function scrollToBottom(){
+    document.querySelector(".messages").scrollTop = document.querySelector(".messages").scrollHeight;
+}
 
 //emit when typing
 var typingvar = 0;
@@ -276,7 +281,7 @@ uploadButton.addEventListener("click",function(){
 
 fileUpload.addEventListener("change",function(e){
     var file = e.target.files[0];
-    var type = isImage(file.name) ? "image" : isVideo(file.name) ? "video" :"invalid"; 
+    var type = isImage(file.name) ? "image" : isVideo(file.name) ? "video" : isAudio(file.name) ? "audio" : "invalid"; 
     console.log(type);
     if(type!="invalid"){
         var storageRef = firebase.storage().ref("/files/"+username+"/"+to+"/"+file.name);
@@ -338,6 +343,19 @@ function isVideo(filename) {
     return false;
 }
 
+function isAudio(filename) {
+    var ext = getExtension(filename);
+    switch (ext.toLowerCase()) {
+      case 'mp3':
+      case 'wav':
+      case 'm4a':
+      case 'flac':
+      case 'aac' :
+        return true;
+    }
+    return false;
+}
+
 // delete file from firebase
 function deleteFileFromFirebase(fileName){
     if(!fileName.includes("tenor")){
@@ -351,9 +369,9 @@ function deleteFileFromFirebase(fileName){
 }
 
 //clicke on show smoji button
-document.querySelector(".fa-smile-o").addEventListener("click",function(){
-    document.querySelector("emoji-picker").style.display="inline-block";
-});
+// document.querySelector(".fa-smile-o").addEventListener("click",function(){
+//     document.querySelector("emoji-picker").style.display="inline-block";
+// });
 
 
 //send emoji
@@ -365,4 +383,112 @@ document.querySelector('emoji-picker').addEventListener('emoji-click',function(e
         document.querySelector("emoji-picker").style.display="none";
     });
 });
+
+
+//click on gif button
+document.querySelector("svg").addEventListener("click",function(){
+    console.log("show gifs");
+});
+
+function httpGetAsync(theUrl, callback){
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function(){
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
+            callback(xmlHttp.responseText);
+        }
+    }
+    xmlHttp.open("GET", theUrl, true);
+    xmlHttp.send(null);
+    return;
+}
+
+function tenorCallback_search(responsetext){
+    var response_objects = JSON.parse(responsetext);
+    top_10_gifs = response_objects["results"];
+    console.log(top_10_gifs);
+    removeAllChildNodes(document.getElementById("gif-box1"));
+    removeAllChildNodes(document.getElementById("gif-box2"));
+    function removeAllChildNodes(parent) {
+        while (parent.firstChild) {
+            parent.removeChild(parent.firstChild);
+        }
+    }
+    var num=1;
+
+    top_10_gifs.forEach(function(gif){
+        var url = gif.media[0].nanogif.url;
+        var img = document.createElement("img");
+        img.src = url;
+        img.className="gif";
+        img.addEventListener("click",function(){
+            document.getElementById("search_gif").value="";
+            var shareableLink = gif.media[0].tinygif.url;
+            newFile(shareableLink,shareableLink,"image");
+        });
+        if(num%2!=0){
+            document.getElementById("gif-box1").appendChild(img);
+            num++;
+        }else{
+            document.getElementById("gif-box2").appendChild(img);
+            num++;
+        }
+    });
+    return;
+}
+
+function grab_data(){
+    var apikey = "LIVDSRZULELA";
+    var lmt = 10;
+    var search_term = document.getElementById("search_gif").value;
+    var search_url = "https://api.tenor.com/v1/search?q="+search_term + "&key="+apikey + "&limit=" + lmt;
+    httpGetAsync(search_url,tenorCallback_search);
+    return;
+}
+
+document.getElementById("search_gif").addEventListener("input",function(){
+    grab_data();
+});
+
+document.querySelector("body").addEventListener("load",function(){
+    scrollToBottom();
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
