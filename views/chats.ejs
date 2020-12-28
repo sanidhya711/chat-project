@@ -11,6 +11,8 @@
     <link rel="icon" href="/favicon.png">
     <link rel="stylesheet" href="/three-dots.min.css">
     <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
+    <link rel="stylesheet" type="text/css" href="/loading-bar.css"/>
+    <script type="text/javascript" src="/loading-bar.js"></script>
     <link rel="stylesheet" href="/chats.css">
 </head>
 <body style="overflow: hidden;">
@@ -78,11 +80,15 @@
     </div>
 
     <div style="display: none;" class="gif-holder">
-        <input autocomplete="off" placeholder="Search For GIFS" id="search_gif" type="search">
+        <input autocomplete="off" placeholder="Search For GIFS" class="search_gif" type="search">
         <div class="gif-preview-holder">
             <div class="gif-box" id="gif-box1"></div>
             <div class="gif-box" id="gif-box2"></div>
         </div>
+    </div>
+
+    <div class="loading-bar-holder">
+        <div class="ldBar" data-value="50"  data-path="M0 0 L200 0 L200 1"></div>
     </div>
 
     <div id="from" class="<%=from%>"></div>
@@ -113,5 +119,6 @@
       firebase.analytics();
     </script>  
     <script defer src="/newchat.js"></script>
+    <script defer src="/registerServiceWorker.js"></script>
 </body>
 </html>

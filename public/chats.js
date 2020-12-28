@@ -487,7 +487,7 @@ document.querySelector("#gif-input").addEventListener("click",function(){
 
     if(document.getElementById("for_weird_arrow").style.display=="none"){
         document.getElementById("for_weird_arrow").style.display="flex";
-        document.getElementById("search_gif").focus();
+        document.querySelector(".search_gif").focus();
         grab_data();
         setTimeout(() => {
             body.addEventListener("click",function(){

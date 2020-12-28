@@ -13,6 +13,10 @@ const filter = new Filter();
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const randomanime = require('random-anime');
+const webPush = require("web-push");
+const publicVapidKey = "BLMUx_WIr-gWDHM5B6xn5imROX4HeA4q-d8_iI50lKhFDJm4YVwQNqygD_Hn2Ihk83mDMvARdXLqs6mvzNrYhX8";
+const privateVapidKey = "gogpIhGqNZ65xFX4rOfeNUK40TdKJHKjGDrk4VUR9-s";
+webPush.setVapidDetails("mailto:sanidhyjain077@gmail.com",publicVapidKey,privateVapidKey);
 require('dotenv').config();
 app.use(express.static("public"));
 app.use(bodyParser.json());
@@ -74,12 +78,11 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 //dont change anything above this
-var users = [];
 var usersOnline = [];
+var pushSubscriptionIds = {};
 
 //socket.io
 io.on("connection",socket => {
-
     //client wants to join a room
     socket.on("join",data => {
     socket.join(data.roomName);
@@ -107,7 +110,10 @@ io.on("connection",socket => {
             });
             chat.save();
             io.sockets.in(message.roomName).emit("new",chat);
-            io.emit("pushNotification",{to:message.to,from:message.from,msg:message.msg,type:message.type});
+            if( pushSubscriptionIds[message.to] != null ){
+                var notificationData = JSON.stringify({title:message.msg,from:message.from});
+                webPush.sendNotification(pushSubscriptionIds[message.to],notificationData).catch(err => console.log(err));
+            }
             });
         });
 
@@ -191,7 +197,7 @@ app.get("/",async function(req,res){
     });
 
     await User.find({},{_id:0,username:1}, async function(err,fetchedUsers){
-            users = [];
+            var users = [];
             fetchedUsers.forEach(function(user){
                 var temp = {
                     username:user.username,
@@ -250,6 +256,7 @@ app.post("/signup",function(req,res){
             });
             setPreferences.save();
             passport.authenticate("local")(req,res,function(err, result){
+                io.emit("newUser",{username:req.body.username,pfp:anime});
                 res.redirect("/");
             });
         }
@@ -305,7 +312,7 @@ app.get("/chats/:to",async function(req,res){
             Chat.find({to:username,seen:false},{_id:0,from:1},function(err,fetchedMessagesUnseen){
                 //after fetching messages fetch users
                 User.find({},{_id:0,username:1},async function(err,fetchedUsers){
-                    users = [];
+                    var users = [];
                     var toPfp = null;
                         fetchedUsers.forEach(function(user){
                         var temp = {
@@ -428,6 +435,13 @@ app.post("/getresetlink",function(req,res){
 
 app.get("/signinERR",function(req,res){
     res.render("signin",{failureMessage:"Incorrect Username or Password"});
+});
+
+app.post("/subscribeForPushNotifications",(req,res)=>{
+    res.sendStatus(201);
+    const subscription = req.body.subscription;
+    var username = req.body.username
+    pushSubscriptionIds[username] = subscription;
 });
 
 //do not change

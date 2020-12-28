@@ -293,7 +293,8 @@ fileUpload.addEventListener("change",function(e){
     var type = isImage(file.name) ? "image" : isVideo(file.name) ? "video" : isAudio(file.name) ? "audio" : "invalid"; 
     if(type!="invalid"){
         var storageRef = firebase.storage().ref("/files/"+username+"/"+to+"/"+file.name);
-        var uploadTask = storageRef.put(file)
+        var uploadTask = storageRef.put(file);
+        window.onbeforeunload = function(){return 'if you leave now file might not be uploaded';};
         uploadTask.on('state_changed', function(snapshot){
             var progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
             console.log(progress);
@@ -303,6 +304,7 @@ fileUpload.addEventListener("change",function(e){
             function(){
                 uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL){
                 newFile(downloadURL,file.name,type);
+                window.onbeforeunload = function(){};
             });
         });
     }else{
@@ -392,10 +394,10 @@ document.querySelector('emoji-picker').addEventListener('emoji-click',function(e
     });
 });
 
-
 //click on gif button
-document.querySelector("svg").addEventListener("click",function(){
-    console.log("show gifs");
+document.querySelector("svg").addEventListener("click",function(e){
+    e.stopPropagation();
+    document.querySelector(".gif-holder").style.display="flex";   
 });
 
 function httpGetAsync(theUrl, callback){
@@ -428,7 +430,7 @@ function tenorCallback_search(responsetext){
         img.src = url;
         img.className="gif";
         img.addEventListener("click",function(){
-            document.getElementById("search_gif").value="";
+            document.querySelector(".search_gif").value="";
             var shareableLink = gif.media[0].tinygif.url;
             newFile(shareableLink,shareableLink,"image");
         });
@@ -446,13 +448,13 @@ function tenorCallback_search(responsetext){
 function grab_data(){
     var apikey = "LIVDSRZULELA";
     var lmt = 10;
-    var search_term = document.getElementById("search_gif").value;
+    var search_term = document.querySelector(".search_gif").value;
     var search_url = "https://api.tenor.com/v1/search?q="+search_term + "&key="+apikey + "&limit=" + lmt;
     httpGetAsync(search_url,tenorCallback_search);
     return;
 }
 
-document.getElementById("search_gif").addEventListener("input",function(){
+document.querySelector(".search_gif").addEventListener("input",function(){
     grab_data();
 });
 
@@ -460,10 +462,14 @@ document.querySelector("body").addEventListener("load",function(){
     scrollToBottom();
 });
 
-
-
-
-
+socket.on("newUser",data=>{
+    var element = document.createElement("a");
+    element.classList.add("user");
+    element.classList.add(data.username);
+    element.href="/chats/"+data.username;
+    element.innerHTML=`<img class="pfp" src="${data.pfp}"><h4>${data.username}</h4>`;
+    document.querySelector(".users").appendChild(element);
+});
 
 
 
