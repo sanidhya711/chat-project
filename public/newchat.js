@@ -76,7 +76,8 @@ socket.on("new",function(message){
         div.classList.add("image");
         div.innerHTML=`<img onload='scrollToBottom()' class="media-${colorClass}" src="${message.message}">`;
     }else if(message.type=="audio"){
-        div.innerHTML=`<audio controls src="${message.message}"></audio>`
+        div.classList.add("audio");
+        div.innerHTML=`<audio class="audio-${colorClass}" controls src="${message.message}"></audio>`
     }else{
         div.classList.add("video");
         div.innerHTML=`<video onload='scrollToBottom()' class="media-${colorClass}" controls src="${message.message}"></video>`;
@@ -107,7 +108,6 @@ function typing(){
 //other user is typing
 socket.on("typing",data=>{
     if(data){
-        console.log("show typing bar");
         var div = document.createElement("div");
         div.classList.add("typing-box");
         div.classList.add("message");
@@ -116,7 +116,9 @@ socket.on("typing",data=>{
         document.querySelector(".messages").appendChild(div);
         document.querySelector(".messages").scrollTop = document.querySelector(".messages").scrollHeight;
     }else{
-        document.querySelector(".messages").removeChild(document.querySelector(".typing-box"));
+        if(!!document.querySelector(".typing-box")){
+            document.querySelector(".messages").removeChild(document.querySelector(".typing-box"));
+        }
     }
 })
 
@@ -215,14 +217,12 @@ function scrolled(){
     if(scrollTop<400 && canLoadMore){
         var skip = document.querySelectorAll(".message");
         skip = skip.length;
-        console.log(skip);
         canLoadMore = false;
         socket.emit("load more messages",{username:username,to:to,skip:skip});
     }
 }
 
 socket.on("loaded more messages",data=>{
-    console.log(data);
     data.forEach(function(message){
         var div = document.createElement("div");
         div.classList.add("message");
@@ -233,6 +233,9 @@ socket.on("loaded more messages",data=>{
         }else if(message.type=="image"){
             div.classList.add("image");
             div.innerHTML=`<img class="media-${colorClass}" src="${message.message}">`;
+        }else if(message.type=="audio"){
+            div.classList.add("audio");
+            div.innerHTML=`<audio class="audio-${colorClass}" controls src="${message.message}"></audio>`
         }else{
             div.classList.add("video");
             div.innerHTML=`<video class="media-${colorClass}" controls src="${message.message}"></video>`;
@@ -248,7 +251,6 @@ socket.emit("getOnline","bruh");
 
 socket.on("startingOnline",data=>{
   data.forEach(function(user) {
-    console.log(user);
     if(user == to){
      document.querySelector(".top-bar h3").style.color="#5cb85c";
     }else if(user != username){
@@ -260,15 +262,20 @@ socket.on("startingOnline",data=>{
 socket.on("online",userOnline=>{
     if(userOnline == to){
         document.querySelector(".top-bar h3").style.color="#5cb85c";
+        if(typingvar>0){
+            socket.emit("typing",{roomName:roomName,typing:true});
+        }
     }else if(userOnline!=username){
         document.querySelector("."+userOnline+" h4").style.color="#5cb85c";
     }
 });
 
 socket.on("offline",userOffline=>{
-    console.log(userOffline);
     if(userOffline == to){
         document.querySelector(".top-bar h3").style.color="inherit";
+        if(!!document.querySelector(".typing-box")){
+            document.querySelector(".messages").removeChild(document.querySelector(".typing-box"));
+        }
     }else if(userOffline!=username){
         document.querySelector("."+userOffline+" h4").style.color="inherit";
     }
@@ -284,7 +291,6 @@ uploadButton.addEventListener("click",function(){
 fileUpload.addEventListener("change",function(e){
     var file = e.target.files[0];
     var type = isImage(file.name) ? "image" : isVideo(file.name) ? "video" : isAudio(file.name) ? "audio" : "invalid"; 
-    console.log(type);
     if(type!="invalid"){
         var storageRef = firebase.storage().ref("/files/"+username+"/"+to+"/"+file.name);
         var uploadTask = storageRef.put(file)
@@ -407,7 +413,6 @@ function httpGetAsync(theUrl, callback){
 function tenorCallback_search(responsetext){
     var response_objects = JSON.parse(responsetext);
     top_10_gifs = response_objects["results"];
-    console.log(top_10_gifs);
     removeAllChildNodes(document.getElementById("gif-box1"));
     removeAllChildNodes(document.getElementById("gif-box2"));
     function removeAllChildNodes(parent) {
