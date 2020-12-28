@@ -10,6 +10,11 @@
     <link rel="stylesheet" href="signupANDsignin.css">
 </head>
 <body>
+    <% if(failureMessage){ %>
+        <h1 class="errorMessage">
+            <%= failureMessage %>
+        </h1>
+    <% } %>
     <div class="outer">
         <div class="signin-holder">
             <h1>
@@ -24,7 +29,7 @@
                 <div class="password-holder">
                     <input required name="password" id="password" placeholder="Password" type="password">
                     <i class="fa fa-eye" aria-hidden="true"></i>
-                    <!-- <i class="fa fa-eye-slash" aria-hidden="true"></i> -->
+                    <i class="fa fa-eye-slash" aria-hidden="true"></i>
                 </div>
                 <div class="link-holder">
                     <div class="remember-me-holder">
@@ -45,7 +50,7 @@
                 </a>
             </form>
     </div>
-    
+
     <div class="context-menu">
         <div onclick="signup()">Sign Up</div>
         <div onclick="forgotPassword()">Forgot Password?</div>

@@ -230,13 +230,13 @@ app.get("/",async function(req,res){
 
 //register new user
 app.get("/signup",function(req,res){
-        res.render("signup",{ERROR:""});
+        res.render("signup",{failureMessage:""});
 });
 
 app.post("/signup",function(req,res){
     User.register({username: req.body.username},req.body.password,function(err,user){
         if(err){
-            res.render("signup",{ERROR:"a user with the given username already exists"});
+            res.render("signup",{failureMessage:"a user with the given username already exists"});
         }else{        
             const anime = randomanime.anime();
             var setPreferences = new Preference({
@@ -259,7 +259,7 @@ app.post("/signup",function(req,res){
 
 //login user
 app.get("/signin",function(req,res){
-    res.render("signin",{Authorized:""});
+    res.render("signin",{failureMessage:""});
 });
 
 app.post("/signin",function(req,res){
@@ -427,7 +427,7 @@ app.post("/getresetlink",function(req,res){
 });
 
 app.get("/signinERR",function(req,res){
-    res.render("signin",{Authorized:"Incorrect Username or Password"});
+    res.render("signin",{failureMessage:"Incorrect Username or Password"});
 });
 
 //do not change

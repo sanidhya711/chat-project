@@ -10,6 +10,11 @@
     <link rel="stylesheet" href="signupANDsignin.css">
 </head>
 <body>
+    <% if(failureMessage){ %>
+        <h1 class="errorMessage">
+            <%= failureMessage %>
+        </h1>
+    <% } %>
     <div class="outer">
         <div class="signin-holder">
             <h1>
