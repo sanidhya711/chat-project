@@ -111,8 +111,10 @@ io.on("connection",socket => {
             chat.save();
             io.sockets.in(message.roomName).emit("new",chat);
             if( pushSubscriptionIds[message.to] != null ){
-                var notificationData = JSON.stringify({title:message.msg,from:message.from});
-                webPush.sendNotification(pushSubscriptionIds[message.to],notificationData).catch(err => console.log(err));
+                Preference.findOne({username:message.from},{_id:0,pfp:1},function(err,fetchedPfp){
+                    var notificationData = JSON.stringify({title:message.msg,from:message.from,pfp:fetchedPfp.pfp});
+                    webPush.sendNotification(pushSubscriptionIds[message.to],notificationData).catch(err => console.log(err));
+                });
             }
             });
         });

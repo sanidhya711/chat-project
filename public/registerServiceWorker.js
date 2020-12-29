@@ -12,6 +12,8 @@ async function send(){
         applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
     });
 
+    register.active.postMessage(JSON.stringify(to));
+
     var data = {
         subscription:subscription,
         username:username

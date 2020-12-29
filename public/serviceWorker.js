@@ -1,7 +1,16 @@
+var to;
+
+self.addEventListener('message', function(event){
+    var data = JSON.parse(event.data);
+    to = data;
+});
+
 self.addEventListener("push",function(e){
     var data = e.data.json();
+    if(data.from!=to){
     self.registration.showNotification(data.title,{
         body:data.from,
-        icon:"https://i.pinimg.com/originals/a2/88/24/a28824e8dde8223b6b64ec2c9ba68326.jpg"
+        icon:data.pfp
     });
+    }
 });
