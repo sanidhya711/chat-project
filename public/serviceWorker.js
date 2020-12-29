@@ -8,13 +8,15 @@ self.addEventListener('message', function(event){
 self.addEventListener("push",function(e){
     var data = e.data.json();
     if(data.from!=to){
-    self.registration.showNotification(data.title,{
+        const notificationPromise = self.registration.showNotification(data.title,{
         body:data.from,
-        icon:data.pfp
-    });
+        icon:data.pfp,
+        click_action : "/chats/"+data.from,
+        });
+    e.waitUntil(notificationPromise);
     }
 });
 
 self.addEventListener('notificationclick', function(event) {
-     clients.openWindow("https://intense-reef-95110.herokuapp.com/chats/"+event.notification.from);
+    event.waitUntil(clients.openWindow("/chats/"+event.notification.body));  
 });
