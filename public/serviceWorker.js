@@ -14,3 +14,7 @@ self.addEventListener("push",function(e){
     });
     }
 });
+
+self.addEventListener('notificationclick', function(event) {
+     clients.openWindow("https://intense-reef-95110.herokuapp.com/chats/"+event.notification.from);
+});
