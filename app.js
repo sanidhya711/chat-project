@@ -143,8 +143,17 @@ io.on("connection",socket => {
     });
 
     //user is setting preferences
-    socket.on("setPreferences",data =>{
-        Preference.updateOne({username:data.username},{$set:{[data.key]:data.value}},function(err,res){ });
+    socket.on("setPreferences",async function(data){
+        if(data.key!="email"){
+            Preference.updateOne({username:data.username},{$set:{[data.key]:data.value}},function(err,res){ });
+        }else{
+            if(await Preference.exists({email:data.value})){
+                socket.emit("change email response",false);
+            }else{
+                Preference.updateOne({username:data.username},{$set:{[data.key]:data.value}},function(err,res){ });
+                socket.emit("change email response",true);
+            }
+        }
     });
 
     socket.on('newUser',function (NewUserUsername) {

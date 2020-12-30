@@ -210,11 +210,15 @@ document.querySelector(".search-user").addEventListener("input",function(){
 
 
 var canLoadMore = true;
+
 //load more messages when user scrolls up
+document.querySelector(".messages").addEventListener("scroll",scrolled);
+
 function scrolled(){
+    console.log("scrolled");
     var scrollTop = document.querySelector(".messages").scrollTop;
     scrollTop = Math.round(scrollTop);
-    if(scrollTop<400 && canLoadMore){
+    if(scrollTop<500 && canLoadMore){
         var skip = document.querySelectorAll(".message");
         skip = skip.length;
         canLoadMore = false;
@@ -222,27 +226,32 @@ function scrolled(){
     }
 }
 
+
 socket.on("loaded more messages",data=>{
-    data.forEach(function(message){
-        var div = document.createElement("div");
-        div.classList.add("message");
-        if(message.from==username){var colorClass = "from-self"}else{var colorClass = "from-other-user"} 
-        if(message.type==null){
-            div.classList.add(colorClass);
-            div.innerHTML=`${message.message}`;
-        }else if(message.type=="image"){
-            div.classList.add("image");
-            div.innerHTML=`<img class="media-${colorClass}" src="${message.message}">`;
-        }else if(message.type=="audio"){
-            div.classList.add("audio");
-            div.innerHTML=`<audio class="audio-${colorClass}" controls src="${message.message}"></audio>`
-        }else{
-            div.classList.add("video");
-            div.innerHTML=`<video class="media-${colorClass}" controls src="${message.message}"></video>`;
-        }
-        document.querySelector(".messages").prepend(div);
-    });
-    canLoadMore=true;
+    if(data[0]){
+        data.forEach(function(message){
+            var div = document.createElement("div");
+            div.classList.add("message");
+            if(message.from==username){var colorClass = "from-self"}else{var colorClass = "from-other-user"} 
+            if(message.type==null){
+                div.classList.add(colorClass);
+                div.innerHTML=`${message.message}`;
+            }else if(message.type=="image"){
+                div.classList.add("image");
+                div.innerHTML=`<img class="media-${colorClass}" src="${message.message}">`;
+            }else if(message.type=="audio"){
+                div.classList.add("audio");
+                div.innerHTML=`<audio class="audio-${colorClass}" controls src="${message.message}"></audio>`
+            }else{
+                div.classList.add("video");
+                div.innerHTML=`<video class="media-${colorClass}" controls src="${message.message}"></video>`;
+            }
+            document.querySelector(".messages").prepend(div);
+        });
+        canLoadMore=true;
+    }else{
+        document.querySelector(".messages").removeEventListener("scroll",scrolled);
+    }
 });
 
 //who is online
@@ -290,25 +299,35 @@ uploadButton.addEventListener("click",function(){
 
 fileUpload.addEventListener("change",function(e){
     var file = e.target.files[0];
-    var type = isImage(file.name) ? "image" : isVideo(file.name) ? "video" : isAudio(file.name) ? "audio" : "invalid"; 
-    if(type!="invalid"){
-        var storageRef = firebase.storage().ref("/files/"+username+"/"+to+"/"+file.name);
-        var uploadTask = storageRef.put(file);
-        window.onbeforeunload = function(){return 'if you leave now file might not be uploaded';};
-        uploadTask.on('state_changed', function(snapshot){
-            var progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-            console.log(progress);
-            },function(error){
-                console.log("error occured while upload the file to firebase");
-            },
-            function(){
-                uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL){
-                newFile(downloadURL,file.name,type);
-                window.onbeforeunload = function(){};
+    if(file!=null){
+        var type = isImage(file.name) ? "image" : isVideo(file.name) ? "video" : isAudio(file.name) ? "audio" : "invalid"; 
+        if(type!="invalid"){
+            var progress_bar = document.createElement("div");
+            progress_bar.classList.add("meter");
+            progress_bar.classList.add("animate");
+            progress_bar.classList.add("message");
+            progress_bar.innerHTML="<span style='width: 0%'><span></span></span>";
+            document.querySelector(".messages").appendChild(progress_bar);
+            scrollToBottom();
+            var storageRef = firebase.storage().ref("/files/"+username+"/"+to+"/"+file.name);
+            var uploadTask = storageRef.put(file);
+            window.onbeforeunload = function(){return 'if you leave now file might not be uploaded';};
+            uploadTask.on('state_changed', function(snapshot){
+                var progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                progress_bar.children[0].style.width=progress+"%";
+                },function(error){
+                    console.log("error occured while upload the file to firebase");
+                },
+                function(){
+                    progress_bar.remove();
+                    uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL){
+                    newFile(downloadURL,file.name,type);
+                    window.onbeforeunload = function(){};
+                });
             });
-        });
-    }else{
-        alert("please select a valid file type");
+        }else{
+            alert("please select a valid file type");
+        }
     }
 });
 
@@ -395,10 +414,10 @@ document.querySelector('emoji-picker').addEventListener('emoji-click',function(e
 });
 
 //click on gif button
-document.querySelector("svg").addEventListener("click",function(e){
-    e.stopPropagation();
-    document.querySelector(".gif-holder").style.display="flex";   
-});
+// document.querySelector("svg").addEventListener("click",function(e){
+//     e.stopPropagation();
+//     document.querySelector(".gif-holder").style.display="flex";   
+// });
 
 function httpGetAsync(theUrl, callback){
     var xmlHttp = new XMLHttpRequest();

@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="/three-dots.min.css">
     <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
     <link rel="stylesheet" href="/chats.css">
+    <link rel="stylesheet" href="/loading-bar.css">
 </head>
 <body style="overflow: hidden;">
     <div class="left-navbar">
@@ -39,7 +40,7 @@
             <img class="pfp" src="<%= toPfp %>">
             <h3><%= to %></h3>
         </div>
-        <div onscroll="scrolled()" class="messages">
+        <div class="messages">
 
             <% messages.slice().reverse().forEach(function(message){ %>
                 <% if(message.from==username){var colorClass = "from-self"}else{var colorClass = "from-other-user"} %>
@@ -61,7 +62,6 @@
                     </div>
                 <% } %>
             <%});%>
-
         </div>
         <div class="input-bar-holder">
             <i class="fa fa-plus" aria-hidden="true"></i>

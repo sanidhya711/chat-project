@@ -287,15 +287,24 @@ socket.on("offline",userOffline=>{
   document.querySelector("."+userOffline+" .bruhbruhbruh").style.color="rgb(66, 184, 221)";
 });
 
+var email;
+
 document.getElementById("setEmail").addEventListener("click",function(){
-  var email = document.getElementById("email").value;
+  email = document.getElementById("email").value;
   socket.emit("setPreferences",{username:username,key:"email",value:email});
-  document.getElementById("email_div").style.display="none";
-  document.getElementById("change_email_div").style.display="inline-block";
-  document.getElementById("show_email").innerText=email;
 });
 
-document.getElementById("changeEmail").addEventListener("click",function(){
+socket.on("change email response",data=>{
+  if(data){
+    document.getElementById("email_div").style.display="none";
+    document.getElementById("change_email_div").style.display="inline-block";
+    document.getElementById("show_email").innerText=email;
+  }else{
+    alert("that email is already registered with another account");
+  }
+});
+
+  document.getElementById("changeEmail").addEventListener("click",function(){
   document.getElementById("email_div").style.display="inline-block";
   document.getElementById("change_email_div").style.display="none";
 });

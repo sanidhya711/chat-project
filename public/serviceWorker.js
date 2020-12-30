@@ -1,13 +1,15 @@
 var to;
 
-self.addEventListener('message', function(event){
-    var data = JSON.parse(event.data);
-    to = data;
+self.addEventListener('message',function(event){
+        var data = JSON.stringify(event.data);
+        var data = JSON.parse(data);
+        to = data;
+        console.log(to);
 });
 
 self.addEventListener("push",function(e){
     var data = e.data.json();
-    if(data.from!=to){
+    if(JSON.stringify(data.from)!=to){
         const notificationPromise = self.registration.showNotification(data.title,{
         body:data.from,
         icon:data.pfp,
