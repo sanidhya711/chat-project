@@ -74,18 +74,17 @@ socket.on("new",function(message){
         div.innerHTML=`${message.message}`;
     }else if(message.type=="image"){
         div.classList.add("image");
-        div.innerHTML=`<img onload='scrollToBottom()' class="media-${colorClass}" src="${message.message}">`;
+        div.innerHTML=`<img class="media-${colorClass}" src="${message.message}">`;
     }else if(message.type=="audio"){
         div.classList.add("audio");
         div.innerHTML=`<audio class="audio-${colorClass}" controls src="${message.message}"></audio>`
     }else{
         div.classList.add("video");
-        div.innerHTML=`<video onload='scrollToBottom()' class="media-${colorClass}" controls src="${message.message}"></video>`;
+        div.innerHTML=`<video class="media-${colorClass}" controls src="${message.message}"></video>`;
     }
     document.querySelector(".messages").appendChild(div);
-    document.querySelector(".messages").scrollTop = document.querySelector(".messages").scrollHeight;
+    scrollToBottom();
 });
-
 
 function scrollToBottom(){
     document.querySelector(".messages").scrollTop = document.querySelector(".messages").scrollHeight;
@@ -114,7 +113,7 @@ socket.on("typing",data=>{
         div.classList.add("from-other-user");
         div.innerHTML=`${to} is typing<div class="dot-flashing"></div>`;
         document.querySelector(".messages").appendChild(div);
-        document.querySelector(".messages").scrollTop = document.querySelector(".messages").scrollHeight;
+        scrollToBottom();
     }else{
         if(!!document.querySelector(".typing-box")){
             document.querySelector(".messages").removeChild(document.querySelector(".typing-box"));
@@ -152,7 +151,7 @@ document.addEventListener("keypress",function(e) {
 });
 
 //scroll all the way down on load
-document.querySelector(".messages").scrollTop = document.querySelector(".messages").scrollHeight;
+scrollToBottom();
     
 //when connected mark everything as seen
 socket.emit("seeneverything",{to:username,from:to,roomName:roomName});
@@ -300,36 +299,42 @@ uploadButton.addEventListener("click",function(){
 fileUpload.addEventListener("change",function(e){
     var file = e.target.files[0];
     if(file!=null){
-        var type = isImage(file.name) ? "image" : isVideo(file.name) ? "video" : isAudio(file.name) ? "audio" : "invalid"; 
-        if(type!="invalid"){
-            var progress_bar = document.createElement("div");
-            progress_bar.classList.add("meter");
-            progress_bar.classList.add("animate");
-            progress_bar.classList.add("message");
-            progress_bar.innerHTML="<span style='width: 0%'><span></span></span>";
-            document.querySelector(".messages").appendChild(progress_bar);
-            scrollToBottom();
-            var storageRef = firebase.storage().ref("/files/"+username+"/"+to+"/"+file.name);
-            var uploadTask = storageRef.put(file);
-            window.onbeforeunload = function(){return 'if you leave now file might not be uploaded';};
-            uploadTask.on('state_changed', function(snapshot){
-                var progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-                progress_bar.children[0].style.width=progress+"%";
-                },function(error){
-                    console.log("error occured while upload the file to firebase");
-                },
-                function(){
-                    progress_bar.remove();
-                    uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL){
-                    newFile(downloadURL,file.name,type);
-                    window.onbeforeunload = function(){};
-                });
-            });
-        }else{
-            alert("please select a valid file type");
-        }
+        newFileUpload(file);
     }
 });
+
+function newFileUpload(file){
+    var type = isImage(file.name) ? "image" : isVideo(file.name) ? "video" : isAudio(file.name) ? "audio" : "invalid"; 
+    if(type!="invalid"){
+        var progress_bar = document.createElement("div");
+        progress_bar.classList.add("meter");
+        progress_bar.classList.add("animate");
+        progress_bar.classList.add("message");
+        progress_bar.innerHTML="<span style='width: 0%'><span></span></span>";
+        document.querySelector(".messages").appendChild(progress_bar);
+        scrollToBottom();
+        var storageRef = firebase.storage().ref("/files/"+username+"/"+to+"/"+file.name);
+        var uploadTask = storageRef.put(file);
+        window.onbeforeunload = function(){
+            return 'if you leave now file might not be uploaded';
+        };
+        uploadTask.on('state_changed', function(snapshot){
+            var progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+            progress_bar.children[0].style.width=progress+"%";
+            },function(error){
+                console.log("error occured while upload the file to firebase");
+            },
+            function(){
+                progress_bar.remove();
+                uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL){
+                newFile(downloadURL,file.name,type);
+                window.onbeforeunload = function(){};
+            });
+        });
+    }else{
+        alert("please select a valid file type");
+    }
+}
 
 function newFile(downloadURL,fileName,type){
     var msg = {
@@ -491,9 +496,22 @@ socket.on("newUser",data=>{
 });
 
 
+function dropHandler(ev) {
+    ev.preventDefault();
 
+    for (let i = 0; i < ev.dataTransfer.items.length; i++) {
+        var file =   ev.dataTransfer.items[i].getAsFile();
+        console.log(file);
+        newFileUpload(file);
+    }
+}
+function dragOverHandler(ev) {
+    ev.preventDefault();
+}
 
-
+window.onload = function(){
+    scrollToBottom();
+  };
 
 
 

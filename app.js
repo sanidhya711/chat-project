@@ -370,9 +370,9 @@ app.get("/chats/:to",async function(req,res){
 
 app.get("/reset/:resetlink",function(req,res){
     var resetLink = req.params.resetlink;
-    ResetPassword.find({recovery_token:resetLink},{},function(err,fetchedData){
-        if(fetchedData.length>0){
-            res.render("reset",{resetLink:resetLink});
+    ResetPassword.findOne({recovery_token:resetLink},{_id:0,username:1},function(err,fetchedData){
+        if(fetchedData){
+            res.render("reset",{resetLink:resetLink,username:fetchedData.username});
         }else{
             res.sendStatus(401);;
         }

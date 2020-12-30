@@ -4,7 +4,6 @@ self.addEventListener('message',function(event){
         var data = JSON.stringify(event.data);
         var data = JSON.parse(data);
         to = data;
-        console.log(to);
 });
 
 self.addEventListener("push",function(e){

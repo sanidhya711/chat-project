@@ -2,12 +2,29 @@ var active = "context-menu--active";
 var menu = document.querySelector(".context-menu");
 
 document.addEventListener( "contextmenu", function(e){
-e.preventDefault();
-        var x = e.clientX;
-        var y = e.clientY;
-        menu.style.left = x-10+"px";
-        menu.style.top = y-10+"px";
-        menu.classList.add(active);
+    e.preventDefault();
+    var x = e.clientX;
+    var y = e.clientY;
+
+    var totalx = window.innerWidth;
+    var totaly = window.innerHeight;
+
+    var contextMenuWidth = 190;
+    var contextMenuHeight = 122;
+
+    if(x+contextMenuWidth > totalx){
+        menu.style.left = (x-contextMenuWidth+10)+"px";
+    }else{
+        menu.style.left = (x-8)+"px";
+    }
+
+    if(y+164 > totaly){
+        menu.style.top = (y-contextMenuHeight-30)+"px";
+    }else{
+        menu.style.top = (y-8)+"px";
+    }
+
+    menu.classList.add(active);
 });
 
 document.addEventListener("click",function(){

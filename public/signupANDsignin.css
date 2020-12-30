@@ -133,20 +133,19 @@ input[type="checkbox"] + label:before {
  }
 .context-menu {
     display: none;
+    padding: 10px;
     position: absolute;
+    width: 190px;
 }
-
 .context-menu--active {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 10px;
 }
 .context-menu div{
     padding: 6px;
-    display: flex;
     width: 100%;
-    min-width: 190px;
+    display: flex;
     justify-content: center;
     background-color: #333;
     transition: all 0.5s;
@@ -156,6 +155,7 @@ input[type="checkbox"] + label:before {
 .context-menu div:hover{
     background-color: #28a745;
     color: #EAEAEA;
+    text-decoration: underline;
 }
 .context-menu div:first-child{
     border: none;

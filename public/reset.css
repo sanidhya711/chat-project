@@ -37,7 +37,11 @@ input:focus{
 ::placeholder { 
     color: #333;
 }
-h2{
+h3{
     color: #EAEAEA;
     text-decoration: underline;
+}
+h1{
+    color: #EAEAEA;
+    padding-bottom: 30px;
 }
