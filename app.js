@@ -14,6 +14,7 @@ const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const randomanime = require('random-anime');
 const webPush = require("web-push");
+const secure = require('express-force-https');
 const publicVapidKey = "BLMUx_WIr-gWDHM5B6xn5imROX4HeA4q-d8_iI50lKhFDJm4YVwQNqygD_Hn2Ihk83mDMvARdXLqs6mvzNrYhX8";
 const privateVapidKey = "gogpIhGqNZ65xFX4rOfeNUK40TdKJHKjGDrk4VUR9-s";
 webPush.setVapidDetails("mailto:sanidhyjain077@gmail.com",publicVapidKey,privateVapidKey);
@@ -23,13 +24,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.set("view engine","ejs")
 var maxAge = null;
-app.use (function (req, res, next) {
-    if (req.secure) {
-            next();
-    } else {
-            res.redirect('https://' + req.headers.host + req.url);
-    }
-});
+app.use(secure);
 app.use(session({
     secret:process.env.SECRET,
     resave:false,
