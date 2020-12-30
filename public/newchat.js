@@ -499,10 +499,14 @@ socket.on("newUser",data=>{
 function dropHandler(ev) {
     ev.preventDefault();
 
-    for (let i = 0; i < ev.dataTransfer.items.length; i++) {
-        var file =   ev.dataTransfer.items[i].getAsFile();
-        console.log(file);
-        newFileUpload(file);
+    if( ev.dataTransfer.items.length<=10){
+        for (let i = 0; i < ev.dataTransfer.items.length; i++) {
+            var file =   ev.dataTransfer.items[i].getAsFile();
+            console.log(file);
+            newFileUpload(file);
+        }
+    }else{
+        alert("bruhhh u cannot upload more than 10 files at a time");
     }
 }
 function dragOverHandler(ev) {
