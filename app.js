@@ -272,6 +272,8 @@ app.get("/signin",function(req,res){
 });
 
 app.post("/signin",function(req,res){
+    var redirectTo = req.session.current_url ? req.session.current_url : "/";
+
     var rememberMe = req.body.rememberMe;
     if(rememberMe=="on"){
         // 1000*60*60*24*30*3 = 3 months
@@ -285,7 +287,7 @@ app.post("/signin",function(req,res){
     });
      req.login(user,function(err){
         passport.authenticate("local",{failureRedirect:"/signinERR"})(req,res,function(){
-            res.redirect("/");
+            res.redirect(redirectTo);
         });
     });
 });
@@ -301,9 +303,9 @@ app.get("/logout",function(req,res){
 
 //personal chats
 app.get("/chats/:to",async function(req,res){
+    var to = req.params.to;
     if(req.isAuthenticated()){
         var username = req.session.passport.user; 
-        var to = req.params.to;
         
         var pfps = []; 
         Preference.find({},{_id:0,username:1,pfp:1},function(err,fetchedPfps){
@@ -350,6 +352,7 @@ app.get("/chats/:to",async function(req,res){
             });
         });
     }else{
+        req.session.current_url = "/chats/"+to;
         res.redirect("/signin")
     }
 });

@@ -37,6 +37,7 @@ function rememberMe(){
 }
 function submit(){
     document.querySelector(".btn").click();
+    hi
 }
 
 document.querySelector(".fa-eye").addEventListener("click",function(){

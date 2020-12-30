@@ -31,7 +31,7 @@ function handleGesture() {
                 users.classList.add("users-swipe-right");
                 setTimeout(() => {
                     isAnimationRuuning=false;
-                },700);
+                },750);
             }
     }
     if(touchendX >= touchstartX+65 && !isAnimationRuuning){
@@ -40,7 +40,7 @@ function handleGesture() {
         users.classList.add("users-swipe-left");
         setTimeout(() => {
             isAnimationRuuning=false;
-        },700);
+        },750);
     }
 }
 
