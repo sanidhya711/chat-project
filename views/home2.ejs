@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>home</title>
+        <link rel="icon" href="/favicon.png">
+        <link rel="stylesheet" href="home.css">
+         <script src="/socket.io/socket.io.js"></script>
+         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+         <link rel="stylesheet" href="/pfploader.css">
+         <link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600,800,900" rel="stylesheet" type="text/css">
+    </head>
+    <body style="background-color: <%= secondryColor %>;">
+    <%- include("loading.ejs") %>
+    <div>
+       <div style="position: absolute;width: 80vw;margin-left: 20vw;display:flex;flex-direction: row;justify-content: center;align-items: baseline;">
+        <h1 style="font-size: 45px;margin-right: 1vw;">welcome</h1>
+        <h1 style="font-size:50px;text-decoration: underline;"><%= username %></h1>
+       </div>
+        <div id="username" class="<%= username %>"></div>
+        <div style="background-color: <%= primaryColor %>;" class="homeHolder">
+    <h1 class="usersHeading">users</h1>
+    <input autocomplete="off" id="searchUsers" placeholder="serach user" type="search">
+        <% users.forEach(function(name){%>
+            <% if(username!=name.username){ %>
+                <a class="userNameHolder" href="/chats/<%=name.username%>"> 
+                    <div class="eachUser <%= name.username %>">
+                        <h1 class="bruhbruhbruh"><%=name.username%></h1>
+                        <img style="height: 50px;width: 50px;border-radius: 50%;position: absolute;right: 15px;top: 27px;" src="<%= name.pfp %>">
+                        <div  id="<%= name.username %>"></div>
+                        <% if(name.unseen>0){ %>
+                            <h1 class="notification<%=name.username%>" ><%= name.unseen %></h1>
+                            <% } %>
+                    </div>
+                 </a>
+        <% } %>
+        <%})%>
+        </div>
+        <div style="position: absolute;left: 350px;top: 185px;">
+            <div style="color: rgb(5, 134, 91);font-size: xx-large;" id="loadingPreferences">
+                Fetching Preferences...
+            </div>
+            <br>
+            <br>
+            <div id="preferences">
+                <div id="left">
+                    <input type="checkbox" id="notificationsbich">
+                    <label style="font-size: x-large;color: rgb(1, 180, 120);" for="notificationsbich">Notifications</label>
+                    <br>
+                    <br>
+                    <input type="checkbox" id="filterbich">
+                    <label style="font-size: x-large;color: rgb(1, 180, 120);" for="filterbich">Filter Chat</label>
+                    <div class="showResetColors">
+                        <br>
+                        <button id="resetColors" onclick="resetColours()">Reset Colours</button>
+                    </div>
+                    <br>
+                    <input type="color" value="#c4e8ed" id="color1bich">
+                    <label style="font-size: x-large;color: rgb(1, 180, 120);" for="color1bich">Primary Color</label>
+                    <br>
+                    <br>
+                    <input type="color" value="#e6a7a7" id="color2bich">
+                    <label style="font-size: x-large;color: rgb(1, 180, 120);" for="color2bich">Secondry Color</label>
+                    <br>
+                    <br>
+                    <% if(email){%>
+                        <div id="change_email_div" style="display: inline-block;">
+                            <h3 id="show_email"><%= email %></h3>
+                            <button id="changeEmail">changeEmail</button>
+                        </div>
+
+                        <div style="display: none;" id="email_div">
+                            <input id="email">
+                            <br>
+                            <br>
+                            <button id="setEmail">Set Email</button>
+                        </div>
+                    <% }else{ %>
+                        <div  id="change_email_div" style="display: none;">
+                            <h3 id="show_email"><%= email %></h3>
+                            <button id="changeEmail">changeEmail</button>
+                        </div>
+
+                        <div style="display: inline-block;" id="email_div">
+                            <input id="email">
+                            <button id="setEmail">Set Email</button>
+                        </div>
+                    <%}%>
+                </div>
+                <div id="right">
+                    <div id="container">
+                        <div id="img-holder">
+                            <img src="<%= pfp %>" id="img_url">
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <input type="file" id="img_file" accept="image/x-png,image/gif,image/jpeg" onChange="img_pathUrl(this);">
+                    <button id="uploadPfp">Upload pfp</button>
+                </div>
+            </div>
+        </div>
+        <div style="z-index: 1;" class="logout-holder"><a id="logout-button" href="/logout">Logout</a></div>
+    </div>
+
+
+
+     
+    <script src="https://www.gstatic.com/firebasejs/7.17.2/firebase.js"></script>
+    <script>
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: "AIzaSyCuWvo9j3jIFPUUI3q9BCpw_2ZDOz9UnJE",
+        authDomain: "learning-data-bucket.firebaseapp.com",
+        databaseURL: "https://learning-data-bucket.firebaseio.com",
+        projectId: "learning-data-bucket",
+        storageBucket: "learning-data-bucket.appspot.com",
+        messagingSenderId: "1044574492967",
+        appId: "1:1044574492967:web:1c88e6d23f3fbd1395b102",
+        measurementId: "G-8ZV0F76E34"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      firebase.analytics();
+      </script>
+    <script src="https://rawgit.com/kimmobrunfeldt/progressbar.js/1.0.0/dist/progressbar.js"></script>
+    <script src="/home.js"></script>   
+    </body>
+</html>
