@@ -1,0 +1,31 @@
+body{
+    background-color: #333;
+    color: #EAEAEA;
+    display: flex;
+    flex-direction: column;
+}
+.about{
+    padding-top: 35px;
+    align-self: center;
+    text-decoration: underline;
+}
+.credits{
+    padding-left: 100px;
+    padding-top: 100px;
+}
+span{
+    color: #5f5f5f;
+}
+.fa{
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    color: #d9534f;
+    transition: color 0.6s;
+}
+.fa:hover{
+    color: #EAEAEA;
+}
+a:hover{
+    text-decoration: none;
+}

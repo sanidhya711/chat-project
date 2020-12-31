@@ -453,11 +453,30 @@ app.get("/signinERR",function(req,res){
     res.render("signin",{failureMessage:"Incorrect Username or Password"});
 });
 
+app.get("/deleteAccount",async function(req,res){
+    if(req.session.passport){
+        var username = req.session.passport.user; 
+        console.log("Deleteing Preferences...");
+        await Preference.deleteOne({username:username},function(err){});
+        console.log("preferences Deleted");
+        console.log("Deleteing Account...");
+        await User.deleteOne({username:username},function(err){});
+        console.log("Account Deleted...");
+        res.sendStatus(200);
+    }else{
+        res.redirect("/");
+    }
+});
+
 app.post("/subscribeForPushNotifications",(req,res)=>{
     res.sendStatus(201);
     const subscription = req.body.subscription;
     var username = req.body.username
     pushSubscriptionIds[username] = subscription;
+});
+
+app.get("/about",function(req,res){
+    res.render("about");
 });
 
 //do not change
