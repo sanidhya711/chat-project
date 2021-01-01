@@ -33,7 +33,7 @@ function call(){
             alert(err);
         });
     }else{
-        socket.emit("call",{to:to,from:from,roomName:roomName});
+        socket.emit("call",{to:to,from:from});
     }
 }
 

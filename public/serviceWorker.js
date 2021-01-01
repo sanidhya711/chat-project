@@ -13,7 +13,7 @@ self.addEventListener("push",function(e){
         body:data.from,
         icon:data.pfp,
         click_action : "/chats/"+data.from,
-        });
+    });
     e.waitUntil(notificationPromise);
     }
 });
