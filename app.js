@@ -83,6 +83,7 @@ passport.deserializeUser(User.deserializeUser());
 var usersOnline = [];
 var pushSubscriptionIds = {};
 var offlineTimeout = {};
+var peerIDs = {};
 
 //socket.io
 io.on("connection",socket => {
@@ -159,19 +160,27 @@ io.on("connection",socket => {
         }
     });
 
-    socket.on('newUser',function (NewUserUsername) {
-        socket.username = NewUserUsername;
-        if(offlineTimeout[NewUserUsername]!=null){
-            clearTimeout(offlineTimeout[NewUserUsername]);
-            offlineTimeout[NewUserUsername]=null;
+    socket.on("call",(data)=>{
+        io.sockets.in(data.roomName).broadcast.emit("calling");
+        var notificationData = JSON.stringify({title:"calling",from:data.from,pfp:"https://cdn2.iconfinder.com/data/icons/font-awesome/1792/phone-square-512.png"});
+        webPush.sendNotification(pushSubscriptionIds[data.to],notificationData).catch(err => console.log(err));
+    });
+
+    socket.on('newUser',function(data) {
+        socket.username = data.username;
+        peerIDs[data.username]=data.peerid;
+        if(offlineTimeout[data.username]!=null){
+            clearTimeout(offlineTimeout[data.username]);
+            offlineTimeout[data.username]=null;
         }else{
-            usersOnline.push(NewUserUsername);
-            socket.broadcast.emit("online",NewUserUsername);
+            usersOnline.push(data.username);
+            socket.broadcast.emit("online",{username:data.username,peerid:data.peerid});
         }
    });
 
    socket.on('disconnect', function () {
     var index = usersOnline.indexOf(socket.username);
+    peerIDs[socket.username]=null;
     offlineTimeout[socket.username] = setTimeout(() => {
         usersOnline.splice(index,1);
         socket.broadcast.emit("offline",socket.username);
@@ -181,14 +190,6 @@ io.on("connection",socket => {
 
   socket.on("getOnline",data=>{
     socket.emit("startingOnline",usersOnline);
-  });
-
-  socket.on("peer id",data=>{
-      socket.to(data.roomName).broadcast.emit("peer id",data.id);
-  });
-
-  socket.on("get starting id",data=>{
-      socket.to(data.roomName).broadcast.emit("get id");
   });
 
   socket.on("hangup",data=>{
@@ -326,51 +327,54 @@ app.get("/chats/:to",async function(req,res){
     var to = req.params.to;
     if(req.isAuthenticated()){
         var username = req.session.passport.user; 
-        
-        var pfps = []; 
-        Preference.find({},{_id:0,username:1,pfp:1},function(err,fetchedPfps){
-            pfps = fetchedPfps;
-        });
-
-        Chat.find({from: { $in: [username ,to]} ,to: { $in : [username, to ]}},{message:1,from:1,time:1,seen:1,type:1,name:1},{sort:{_id:-1},limit:30},function(err,fetchedMessages){
-            Chat.find({to:username,seen:false},{_id:0,from:1},function(err,fetchedMessagesUnseen){
-                //after fetching messages fetch users
-                User.find({},{_id:0,username:1},async function(err,fetchedUsers){
-                    var users = [];
-                    var toPfp = null;
-                        fetchedUsers.forEach(function(user){
-                        var temp = {
-                            username:user.username,
-                            unseen:0,
-                            pfp:null
-                        }
-                        users.push(temp);
-                    });
-
-                    pfps.forEach(function(userPfp){
-                        users.forEach(function(user) {
-                            if(user.username==userPfp.username){
-                                user.pfp = userPfp.pfp;
-                            }
-                        });
-                    });
-
-                    fetchedMessagesUnseen.forEach(function(message){
-                        users.forEach(function(user){
-                            if(message.from==user.username && !message.seen){
-                                user.unseen++
-                            }
-                        });
-                    });
-                    await Preference.findOne({username:to},{_id:0,pfp:1},function(err,fetchedImage){
-                        toPfp = fetchedImage.pfp;      
-                    });
-                    Preference.findOne({username:username},{_id:0,primaryColor:1,secondryColor:1},function(err,preFetchedPreferences){
-                        res.render("chats",{username:username,to:to,from:username,messages:fetchedMessages,users:users,primaryColor:preFetchedPreferences.primaryColor,secondryColor:preFetchedPreferences.secondryColor,toPfp:toPfp});      
-                    });                  
-                }); 
+        if(username!=to){            
+            var pfps = []; 
+            Preference.find({},{_id:0,username:1,pfp:1},function(err,fetchedPfps){
+                pfps = fetchedPfps;
             });
-        });
+
+            Chat.find({from: { $in: [username ,to]} ,to: { $in : [username, to ]}},{message:1,from:1,time:1,seen:1,type:1,name:1},{sort:{_id:-1},limit:30},function(err,fetchedMessages){
+                Chat.find({to:username,seen:false},{_id:0,from:1},function(err,fetchedMessagesUnseen){
+                    //after fetching messages fetch users
+                    User.find({},{_id:0,username:1},async function(err,fetchedUsers){
+                        var users = [];
+                        var toPfp = null;
+                            fetchedUsers.forEach(function(user){
+                            var temp = {
+                                username:user.username,
+                                unseen:0,
+                                pfp:null
+                            }
+                            users.push(temp);
+                        });
+
+                        pfps.forEach(function(userPfp){
+                            users.forEach(function(user) {
+                                if(user.username==userPfp.username){
+                                    user.pfp = userPfp.pfp;
+                                }
+                            });
+                        });
+
+                        fetchedMessagesUnseen.forEach(function(message){
+                            users.forEach(function(user){
+                                if(message.from==user.username && !message.seen){
+                                    user.unseen++
+                                }
+                            });
+                        });
+                        await Preference.findOne({username:to},{_id:0,pfp:1},function(err,fetchedImage){
+                            toPfp = fetchedImage.pfp;      
+                        });
+                        Preference.findOne({username:username},{_id:0,primaryColor:1,secondryColor:1},function(err,preFetchedPreferences){
+                            res.render("chats",{username:username,to:to,from:username,messages:fetchedMessages,users:users,primaryColor:preFetchedPreferences.primaryColor,secondryColor:preFetchedPreferences.secondryColor,toPfp:toPfp,peerid:peerIDs[to]});      
+                        });                  
+                    }); 
+                });
+            });
+        }else{
+            res.send("<h1>u cannot message ur self yet</h1>");
+        }
     }else{
         req.session.current_url = "/chats/"+to;
         res.redirect("/signin")

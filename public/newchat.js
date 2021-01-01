@@ -214,7 +214,6 @@ var canLoadMore = true;
 document.querySelector(".messages").addEventListener("scroll",scrolled);
 
 function scrolled(){
-    console.log("scrolled");
     var scrollTop = document.querySelector(".messages").scrollTop;
     scrollTop = Math.round(scrollTop);
     if(scrollTop<500 && canLoadMore){
@@ -254,7 +253,6 @@ socket.on("loaded more messages",data=>{
 });
 
 //who is online
-socket.emit("newUser", username);
 socket.emit("getOnline","bruh");
 
 socket.on("startingOnline",data=>{
@@ -267,8 +265,11 @@ socket.on("startingOnline",data=>{
   });
 });
 
-socket.on("online",userOnline=>{
+socket.on("online",data=>{
+    var userOnline=data.username;
     if(userOnline == to){
+        peerid=data.peerid;
+        console.log("can call now");
         document.querySelector(".top-bar h3").style.color="#5cb85c";
         if(typingvar>0){
             socket.emit("typing",{roomName:roomName,typing:true});
@@ -280,6 +281,8 @@ socket.on("online",userOnline=>{
 
 socket.on("offline",userOffline=>{
     if(userOffline == to){
+        peerid=null;
+        console.log("cannot call now");
         document.querySelector(".top-bar h3").style.color="inherit";
         if(!!document.querySelector(".typing-box")){
             document.querySelector(".messages").removeChild(document.querySelector(".typing-box"));

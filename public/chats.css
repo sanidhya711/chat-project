@@ -63,7 +63,7 @@ body{
     display: flex;
     justify-content: center;
     color: #333;
-    align-items: center;
+    align-items:flex-end;
 }
 .input-bar-holder{
     position: fixed;
@@ -397,4 +397,25 @@ audio{
 }
 .audio-from-other-user::-webkit-media-controls-panel{
     background-color: #d9534f;
+}
+#call{
+    position: absolute;
+    right: 95px;
+    color: #5cb85c;
+    transition: color 0.8s;
+}
+#hangup{
+    position: absolute;
+    right: 25px;
+    color: #d9534f;
+    transition: color 0.8s;
+}
+#answer{
+    position: absolute;
+    right: 60px;
+    color: #5bc0de;
+    transition: color 0.8s;
+}
+.fa-phone-square:hover{
+    color: #333 !important;
 }
