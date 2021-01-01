@@ -13,7 +13,7 @@ myPeer.on('open', id => {
 
 
 function call(){
-    if(peerid.length>1){
+    if(peerid){
         navigator.mediaDevices.getUserMedia({audio:true,video:true}).then(stream => {
             var myVideo = document.createElement("video");
             myVideo.srcObject=stream;
