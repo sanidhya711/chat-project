@@ -325,6 +325,8 @@ app.get("/logout",function(req,res){
 app.get("/chats/:to",async function(req,res){
     var to = req.params.to;
     if(req.isAuthenticated()){
+        User.findOne({username:to},function(err,response){
+            if(response!=null){
         var username = req.session.passport.user; 
         if(username!=to){            
             var pfps = []; 
@@ -373,7 +375,11 @@ app.get("/chats/:to",async function(req,res){
             });
         }else{
             res.send("<h1>u cannot message ur self yet</h1>");
+            }
+        }else{
+            res.send("<h1>No user found with that username</h1>");
         }
+    });
     }else{
         req.session.current_url = "/chats/"+to;
         res.redirect("/signin")

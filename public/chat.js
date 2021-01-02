@@ -288,6 +288,7 @@ socket.on("offline",userOffline=>{
             document.querySelector(".messages").removeChild(document.querySelector(".typing-box"));
         }
     }else if(userOffline!=username){
+        console.log(userOffline);
         document.querySelector("."+userOffline+" h4").style.color="inherit";
     }
 });
