@@ -61,9 +61,7 @@
                 <% if(message.from==username){var colorClass = "from-self"}else{var colorClass = "from-other-user"} %>
                 <% if(message.type==null){%>
                     <div id="<%= message.id %>" class="message <%= colorClass %>">
-                        <span>
-                            <%= message.message %>
-                        </span>
+                        <%= message.message %>
                     </div>
                 <%} else if(message.type=="image"){ %>
                     <div id="<%= message.id %>"  class="message image">

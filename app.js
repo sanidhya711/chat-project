@@ -161,8 +161,13 @@ io.on("connection",socket => {
     });
 
     socket.on("call",(data)=>{
-        var notificationData = JSON.stringify({title:"calling",from:data.from,pfp:"https://cdn2.iconfinder.com/data/icons/font-awesome/1792/phone-square-512.png"});
-        webPush.sendNotification(pushSubscriptionIds[data.to],notificationData).catch(err => console.log(err));
+        console.log(data);
+        console.log(pushSubscriptionIds[data.to])
+        if(pushSubscriptionIds[data.to]!=null){
+            console.log("sending call notification");
+            var notificationData = JSON.stringify({title:"calling",from:data.from,pfp:"https://cdn2.iconfinder.com/data/icons/font-awesome/1792/phone-square-512.png"});
+            webPush.sendNotification(pushSubscriptionIds[data.to],notificationData).catch(err => console.log(err));
+        }
     });
 
     socket.on('newUser',function(data) {

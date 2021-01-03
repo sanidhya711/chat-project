@@ -99,7 +99,7 @@ input:focus{
     width: calc(75% + 50px);
     caret-color: #333;
 }
-::placeholder{
+.search-user::placeholder{
     color: #333;
 }
 .user{
@@ -113,6 +113,7 @@ input:focus{
     width: 100%;
     display: flex;
     justify-content: center;
+    margin-top: 25px;
 }
 .user:hover{
     background-color: #333;
@@ -173,10 +174,12 @@ input:focus{
     background-size: contain;
 }
 .message{
-    padding: 15px 45px;
+    padding: 12px 27px;
     border-radius: 5px;
     margin: 10.5px 0px;
     user-select: auto;
+    word-break: break-all;
+    margin: 4%;
 }
 .message:last-of-type{
     margin-bottom: 100px;
@@ -184,12 +187,10 @@ input:focus{
 .from-other-user{
     align-self: flex-start;
     background-color: #d9534f;
-    margin-left: 4%;
 }
 .from-self{
     align-self: flex-end;
     background-color: #5cb85c;
-    margin-right: 4%;
 }
 ::-webkit-scrollbar-track{
 	box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
@@ -436,4 +437,13 @@ audio{
 }
 .user-self:hover{
     background-color: rgb(83, 83, 83);
+}
+.fa:hover{
+    text-decoration: none;
+}
+textarea {
+    resize: none;
+    overflow: hidden;
+    min-height: 50px;
+    max-height: 100px;
 }
