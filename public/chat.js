@@ -250,7 +250,25 @@ socket.on("loaded more messages",data=>{
             if(message.from==username){var colorClass = "from-self"}else{var colorClass = "from-other-user"} 
             if(message.type==null){
                 div.classList.add(colorClass);
-                div.innerHTML=`${message.message}`;
+                
+                var extractURLs = message.message;
+                var startIndex = extractURLs.indexOf("http");
+                var areURLspresent = extractURLs.indexOf("http");
+                if(areURLspresent!=-1){
+                    var continueLoop = true;
+                    while(continueLoop){
+                        var character = extractURLs.charAt(areURLspresent);
+                        if(character==" " || extractURLs.length==areURLspresent){
+                            continueLoop=false;
+                            var extractedURL = extractURLs.substring(startIndex,areURLspresent);
+                        }else{
+                            areURLspresent++;
+                        }
+                    }
+                }
+                var afterExtracting = extractURLs.replace(extractedURL,`<a target="_blank" href="${extractedURL}">${extractedURL}</a>`);
+                div.innerHTML=`${afterExtracting}`;
+                
             }else if(message.type=="image"){
                 div.classList.add("image");
                 div.innerHTML=`<img class="media-${colorClass}" src="${message.message}">`;
