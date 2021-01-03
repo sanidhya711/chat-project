@@ -11,14 +11,14 @@ const moment = require('moment-timezone');
 const Filter = require("bad-words");
 const filter = new Filter();
 const nodemailer = require('nodemailer');
+require('dotenv').config();
 const crypto = require('crypto');
 const randomanime = require('random-anime');
 const webPush = require("web-push");
 const secure = require('express-force-https');
-const publicVapidKey = "BLMUx_WIr-gWDHM5B6xn5imROX4HeA4q-d8_iI50lKhFDJm4YVwQNqygD_Hn2Ihk83mDMvARdXLqs6mvzNrYhX8";
-const privateVapidKey = "gogpIhGqNZ65xFX4rOfeNUK40TdKJHKjGDrk4VUR9-s";
-webPush.setVapidDetails("mailto:sanidhyjain077@gmail.com",publicVapidKey,privateVapidKey);
-require('dotenv').config();
+const publicVapidKey = process.env.PUBLICVAPIDKEY;
+const privateVapidKey = process.env.PRIVATEVAPIDKEY;
+webPush.setVapidDetails("mailto:kamlesh@gmail.com",publicVapidKey,privateVapidKey);
 app.use(express.static("public"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -367,8 +367,8 @@ app.get("/chats/:to",async function(req,res){
                         await Preference.findOne({username:to},{_id:0,pfp:1},function(err,fetchedImage){
                             toPfp = fetchedImage.pfp;      
                         });
-                        Preference.findOne({username:username},{_id:0,primaryColor:1,secondryColor:1},function(err,preFetchedPreferences){
-                            res.render("chats",{username:username,to:to,from:username,messages:fetchedMessages,users:users,primaryColor:preFetchedPreferences.primaryColor,secondryColor:preFetchedPreferences.secondryColor,toPfp:toPfp,peerid:peerIDs[to]});      
+                        Preference.findOne({username:username},{_id:0,primaryColor:1,secondryColor:1,pfp:1},function(err,preFetchedPreferences){
+                            res.render("chats",{username:username,to:to,from:username,messages:fetchedMessages,users:users,primaryColor:preFetchedPreferences.primaryColor,secondryColor:preFetchedPreferences.secondryColor,toPfp:toPfp,peerid:peerIDs[to],pfp:preFetchedPreferences.pfp});      
                         });                  
                     }); 
                 });

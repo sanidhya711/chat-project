@@ -71,6 +71,7 @@ socket.on("new",function(message){
     if(message.from==username){var colorClass = "from-self"}else{var colorClass = "from-other-user"} 
     if(message.type==null){
         div.classList.add(colorClass);
+        var extractURLs = message.message;
         div.innerHTML=`${message.message}`;
     }else if(message.type=="image"){
         div.classList.add("image");
@@ -165,7 +166,7 @@ document.querySelector(".search-user").addEventListener("input",function(){
      document.querySelector("#searchUsers").value = query.slice(0, -1); 
     }else {
       var namesToShow = [];
-      var allUserNames = document.querySelectorAll(".user h4");
+      var allUserNames = document.querySelectorAll(".user h5");
       allUserNames.forEach(function(element){
         var username = element.innerText;
         username = username.toLowerCase();
@@ -176,10 +177,10 @@ document.querySelector(".search-user").addEventListener("input",function(){
     
       if(namesToShow.length==0){
         if(document.querySelector(".no-users-found")==null){
-        var h4 = document.createElement("h4");
-        h4.classList.add("no-users-found");
-        h4.innerText="no users found :(";
-        document.querySelector(".users").appendChild(h4);
+        var h5 = document.createElement("h5");
+        h5.classList.add("no-users-found");
+        h5.innerText="no users found :(";
+        document.querySelector(".users-inner").appendChild(h5);
         }
       }else{
         if(document.querySelector(".no-users-found")!=null){
@@ -260,7 +261,7 @@ socket.on("startingOnline",data=>{
     if(user == to){
      document.querySelector(".top-bar h3").style.color="#5cb85c";
     }else if(user != username){
-     document.querySelector("."+user+" h4").style.color="#5cb85c";
+     document.querySelector("."+user+" h5").style.color="#5cb85c";
     }
   });
 });
@@ -275,7 +276,7 @@ socket.on("online",data=>{
             socket.emit("typing",{roomName:roomName,typing:true});
         }
     }else if(userOnline!=username){
-        document.querySelector("."+userOnline+" h4").style.color="#5cb85c";
+        document.querySelector("."+userOnline+" h5").style.color="#5cb85c";
     }
 });
 
@@ -289,7 +290,7 @@ socket.on("offline",userOffline=>{
         }
     }else if(userOffline!=username){
         console.log(userOffline);
-        document.querySelector("."+userOffline+" h4").style.color="inherit";
+        document.querySelector("."+userOffline+" h5").style.color="inherit";
     }
 });
 
@@ -495,7 +496,7 @@ socket.on("newUser",data=>{
     element.classList.add("user");
     element.classList.add(data.username);
     element.href="/chats/"+data.username;
-    element.innerHTML=`<img class="pfp" src="${data.pfp}"><h4>${data.username}</h4>`;
+    element.innerHTML=`<img class="pfp" src="${data.pfp}"><h5>${data.username}</h5>`;
     document.querySelector(".users").appendChild(element);
 });
 
