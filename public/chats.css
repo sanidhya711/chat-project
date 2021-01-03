@@ -177,7 +177,7 @@ input:focus{
     padding: 12px 27px;
     border-radius: 5px;
     margin: 10.5px 0px;
-    user-select: auto;
+    user-select:text;
     word-break: break-all;
     margin: 4%;
 }
@@ -192,17 +192,31 @@ input:focus{
     align-self: flex-end;
     background-color: #5cb85c;
 }
-::-webkit-scrollbar-track{
-	box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    background-color: #EAEAEA;
+::-webkit-scrollbar {
+    width: 14px;
 }
-::-webkit-scrollbar{
-    width: 7px;
-	background-color: #EAEAEA;
-}
-::-webkit-scrollbar-thumb{
+::-webkit-scrollbar-thumb {
+    border: 4px solid rgba(0, 0, 0, 0);
+    background-clip: padding-box;
+    border-radius: 7px;
     background-color: #5bc0de;
-    border-radius: 3px;
+    min-height: 100px;
+    box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(0, 0, 0, 0.05);
+}
+::-webkit-scrollbar-button {
+    width: 0px;
+    height: 0px;
+    display: none;
+}
+::-webkit-scrollbar-corner {
+    background-color: transparent;
+}
+.users-inner::-webkit-scrollbar{
+    width: 12px;
+    display: none;
+}
+.users:hover .users-inner::-webkit-scrollbar{
+    display: block;
 }
 .search-user{
     width: 85%;
@@ -288,7 +302,7 @@ video:fullscreen{
 .media-from-other-user{
     border: 3px solid #d9534f;
 }
-a{
+.users a{
     color: inherit;
 }
 a:hover{
@@ -357,20 +371,6 @@ svg:hover{
     flex-direction: column;
 
 }
-.gif-preview-holder::-webkit-scrollbar {
-    width: 7px;
-    border-radius: 5px;
-}
-.gif-preview-holder::-webkit-scrollbar-track{
-	border-radius: 10px;
-}
-.gif-preview-holder::-webkit-scrollbar-thumb{
-	border-radius: 10px;
-}
-.users-inner::-webkit-scrollbar{
-    width: 3.2px;
-}
-
 .gif-holder input{
     padding-left: 20px;
     font-size: 12px;

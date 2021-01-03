@@ -60,8 +60,9 @@
             <% messages.slice().reverse().forEach(function(message){ %>
                 <% if(message.from==username){var colorClass = "from-self"}else{var colorClass = "from-other-user"} %>
                 <% if(message.type==null){%>
+                    <% var extractURLs = message.message; var startIndex = extractURLs.indexOf("http"); var areURLspresent = extractURLs.indexOf("http"); if(areURLspresent!=-1){ var continueLoop = true; while(continueLoop){ var character = extractURLs.charAt(areURLspresent); if(character==" " || extractURLs.length==areURLspresent){ continueLoop=false; var extractedURL = extractURLs.substring(startIndex,areURLspresent); }else{ areURLspresent++; } } } var afterExtracting = extractURLs.replace(extractedURL,`<a target="_blank" href="${extractedURL}">${extractedURL}</a>`); %>
                     <div id="<%= message.id %>" class="message <%= colorClass %>">
-                        <%= message.message %>
+                        <%- afterExtracting %>
                     </div>
                 <%} else if(message.type=="image"){ %>
                     <div id="<%= message.id %>"  class="message image">
