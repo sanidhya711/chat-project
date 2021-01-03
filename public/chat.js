@@ -184,7 +184,7 @@ document.querySelector(".search-user").addEventListener("input",function(){
         }
       }else{
         if(document.querySelector(".no-users-found")!=null){
-          document.querySelector(".users").removeChild(document.querySelector(".no-users-found"));
+          document.querySelector(".users-inner").removeChild(document.querySelector(".no-users-found"));
         }
       }
   
