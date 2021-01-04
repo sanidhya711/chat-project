@@ -80,10 +80,6 @@ body{
     align-self: center;
     align-self: start;
 }
-.input-bar-holder input{
-    position: relative;
-    left: 29px;
-}
 input{
     border-radius: 27px;
     width: 75%;
@@ -443,7 +439,22 @@ audio{
 }
 textarea {
     resize: none;
-    overflow: hidden;
-    min-height: 50px;
-    max-height: 100px;
+    max-height: 300px;
+    position: relative;
+    left: 30px;
+}
+textarea{
+    border-radius: 27px;
+    width: 75%;
+    padding: 12px 100px 12px 45px;
+    border: none;
+    background-color: rgb(202, 202, 202);
+    transition: width 0.5s;
+    caret-color: transparent;
+    box-shadow: 0 0 6px #EAEAEA;
+}
+textarea:focus{
+    outline: none;
+    width: 80%;
+    caret-color: #333;
 }

@@ -556,6 +556,9 @@ window.onload = function(){
     scrollToBottom();
   };
 
+
+document.querySelector("textarea").style.height="5px";
+document.querySelector("textarea").style.height=(document.querySelector("textarea").scrollHeight)+"px";
 function auto_grow(element) {
     element.style.height = "5px";
     element.style.height = (element.scrollHeight)+"px";
