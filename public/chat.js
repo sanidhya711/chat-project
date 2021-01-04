@@ -71,23 +71,14 @@ socket.on("new",function(message){
     if(message.from==username){var colorClass = "from-self"}else{var colorClass = "from-other-user"} 
     if(message.type==null){
         div.classList.add(colorClass);
-
-        var extractURLs = message.message;
-        var startIndex = extractURLs.indexOf("http");
-        var areURLspresent = extractURLs.indexOf("http");
-        if(areURLspresent!=-1){
-            var continueLoop = true;
-            while(continueLoop){
-                var character = extractURLs.charAt(areURLspresent);
-                if(character==" " || extractURLs.length==areURLspresent){
-                    continueLoop=false;
-                    var extractedURL = extractURLs.substring(startIndex,areURLspresent);
-                }else{
-                    areURLspresent++;
-                }
-            }
+        var afterExtracting = message.message;
+        function urlify(text){
+            var urlRegex = /(https?:\/\/[^\s]+)/g;
+            return text.replace(urlRegex, function(url) {
+              return `<a target="+blank" href="url">${url}</a>`;
+            })
         }
-        var afterExtracting = extractURLs.replace(extractedURL,`<a target="_blank" href="${extractedURL}">${extractedURL}</a>`);
+        afterExtracting = urlify(afterExtracting);
         div.innerHTML=`${afterExtracting}`;
     }else if(message.type=="image"){
         div.classList.add("image");
@@ -149,6 +140,7 @@ document.querySelector(".send-holder").addEventListener("click",function(){
         }
         socket.emit("new",msg);
         document.getElementById("msg").value="";
+        auto_grow(document.getElementById("msg"));
     }
     typing();
 });
@@ -163,7 +155,8 @@ socket.on("delete",WhatToDelete =>{
 // send message if user presses enter
 document.addEventListener("keypress",function(e) {
     if(e.key=="Enter"){
-    document.querySelector(".send-holder").click();
+        e.preventDefault();
+        document.querySelector(".send-holder").click();
     }
 });
 
@@ -250,25 +243,15 @@ socket.on("loaded more messages",data=>{
             if(message.from==username){var colorClass = "from-self"}else{var colorClass = "from-other-user"} 
             if(message.type==null){
                 div.classList.add(colorClass);
-                
-                var extractURLs = message.message;
-                var startIndex = extractURLs.indexOf("http");
-                var areURLspresent = extractURLs.indexOf("http");
-                if(areURLspresent!=-1){
-                    var continueLoop = true;
-                    while(continueLoop){
-                        var character = extractURLs.charAt(areURLspresent);
-                        if(character==" " || extractURLs.length==areURLspresent){
-                            continueLoop=false;
-                            var extractedURL = extractURLs.substring(startIndex,areURLspresent);
-                        }else{
-                            areURLspresent++;
-                        }
-                    }
+                var afterExtracting = message.message;
+                function urlify(text){
+                    var urlRegex = /(https?:\/\/[^\s]+)/g;
+                    return text.replace(urlRegex, function(url) {
+                      return `<a target="+blank" href="url">${url}</a>`;
+                    })
                 }
-                var afterExtracting = extractURLs.replace(extractedURL,`<a target="_blank" href="${extractedURL}">${extractedURL}</a>`);
-                div.innerHTML=`${afterExtracting}`;
-                
+                afterExtracting = urlify(afterExtracting);
+                div.innerHTML=`${afterExtracting}`;    
             }else if(message.type=="image"){
                 div.classList.add("image");
                 div.innerHTML=`<img class="media-${colorClass}" src="${message.message}">`;
@@ -562,6 +545,9 @@ document.querySelector("textarea").style.height=(document.querySelector("textare
 function auto_grow(element) {
     element.style.height = "5px";
     element.style.height = (element.scrollHeight)+"px";
+    var allMessage = document.querySelectorAll(".message");
+    allMessage[allMessage.length-1].style.marginBottom = (element.offsetHeight+52)+"px";
+    scrollToBottom();
 }
 
 

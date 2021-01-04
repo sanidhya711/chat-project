@@ -172,12 +172,11 @@ input:focus{
 .message{
     padding: 12px 27px;
     border-radius: 5px;
-    margin: 10.5px 0px;
     user-select:text;
     word-break: break-all;
-    margin: 4%;
+    margin: 35px 4%;
 }
-.message:last-of-type{
+.message:last-child{
     margin-bottom: 100px;
 }
 .from-other-user{
@@ -442,8 +441,6 @@ textarea {
     max-height: 300px;
     position: relative;
     left: 30px;
-}
-textarea{
     border-radius: 27px;
     width: 75%;
     padding: 12px 100px 12px 45px;
@@ -457,4 +454,10 @@ textarea:focus{
     outline: none;
     width: 80%;
     caret-color: #333;
+}
+textarea::-webkit-scrollbar-track{
+    margin: 20px 0px;
+}
+textarea::-webkit-scrollbar{
+    width: 12px;
 }
