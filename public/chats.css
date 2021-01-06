@@ -4,6 +4,7 @@
 body{
     height: 100vh;
     color: #EAEAEA;
+    overflow: hidden;
     display: flex;
 }
 .left-navbar{
@@ -166,6 +167,7 @@ input:focus{
     padding-top: 40px;
     background-color: #333;
     overflow-y: auto;
+    overflow-x: hidden;
     background-blend-mode:darken;
     background-size: contain;
 }

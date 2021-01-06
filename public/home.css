@@ -6,6 +6,7 @@ body{
     color: #EAEAEA;
     background-color: #333;
     display: flex;
+    overflow: hidden;
 }
 .left-navbar{
     width: 3.5%;
@@ -147,7 +148,6 @@ input:focus{
     }
     .users{
         position: absolute;
-        /* left: -100%; */
         left:0;
         width: 100%;
         z-index: 1;

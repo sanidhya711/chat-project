@@ -63,6 +63,13 @@ if(from>to){
     socket.emit('join', {roomName:roomName});
 }
 
+function urlify(text){
+    var urlRegex = /(https?:\/\/[^\s]+)/g;
+    return text.replace(urlRegex, function(url) {
+      return `<a target="+blank" href="url">${url}</a>`;
+    })
+}
+
 //getting new messages in room
 socket.on("new",function(message){
     socket.emit("seeneverything",{to:username,from:to,roomName:roomName});
@@ -70,16 +77,23 @@ socket.on("new",function(message){
     div.classList.add("message");
     if(message.from==username){var colorClass = "from-self"}else{var colorClass = "from-other-user"} 
     if(message.type==null){
-        div.classList.add(colorClass);
-        var afterExtracting = message.message;
-        function urlify(text){
-            var urlRegex = /(https?:\/\/[^\s]+)/g;
-            return text.replace(urlRegex, function(url) {
-              return `<a target="+blank" href="url">${url}</a>`;
-            })
+        if(!message.message.includes("https://www.youtube.com")){
+            div.classList.add(colorClass);
+            var afterExtracting = message.message;
+            afterExtracting = urlify(afterExtracting);
+            div.innerHTML=`${afterExtracting}`;
+        }else{
+            function getId(url){
+                const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+                const match = url.match(regExp);
+                return (match && match[2].length === 11)
+                  ? match[2]
+                  : null;
+            } 
+            const videoId = getId(message.message);
+            console.log(videoId);
+            // div.innerHTML=`<iframe src="//www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
         }
-        afterExtracting = urlify(afterExtracting);
-        div.innerHTML=`${afterExtracting}`;
     }else if(message.type=="image"){
         div.classList.add("image");
         div.innerHTML=`<img class="media-${colorClass}" src="${message.message}">`;
@@ -244,12 +258,6 @@ socket.on("loaded more messages",data=>{
             if(message.type==null){
                 div.classList.add(colorClass);
                 var afterExtracting = message.message;
-                function urlify(text){
-                    var urlRegex = /(https?:\/\/[^\s]+)/g;
-                    return text.replace(urlRegex, function(url) {
-                      return `<a target="+blank" href="url">${url}</a>`;
-                    })
-                }
                 afterExtracting = urlify(afterExtracting);
                 div.innerHTML=`${afterExtracting}`;    
             }else if(message.type=="image"){
