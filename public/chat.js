@@ -251,32 +251,46 @@ function scrolled(){
 
 socket.on("loaded more messages",data=>{
     if(data[0]){
-        data.forEach(function(message){
-            var div = document.createElement("div");
-            div.classList.add("message");
-            if(message.from==username){var colorClass = "from-self"}else{var colorClass = "from-other-user"} 
-            if(message.type==null){
-                div.classList.add(colorClass);
-                var afterExtracting = message.message;
-                afterExtracting = urlify(afterExtracting);
-                div.innerHTML=`${afterExtracting}`;    
-            }else if(message.type=="image"){
-                div.classList.add("image");
-                div.innerHTML=`<img class="media-${colorClass}" src="${message.message}">`;
-            }else if(message.type=="audio"){
-                div.classList.add("audio");
-                div.innerHTML=`<audio class="audio-${colorClass}" controls src="${message.message}"></audio>`
-            }else{
-                div.classList.add("video");
-                div.innerHTML=`<video class="media-${colorClass}" controls src="${message.message}"></video>`;
-            }
-            document.querySelector(".messages").prepend(div);
-        });
+        appendMessages(data,false);
         canLoadMore=true;
-    }else{
-        document.querySelector(".messages").removeEventListener("scroll",scrolled);
     }
 });
+
+function appendMessages(data,addScrollToBottom){
+    data.forEach(function(message){
+        var div = document.createElement("div");
+        div.classList.add("message");
+        if(message.from==username){var colorClass = "from-self"}else{var colorClass = "from-other-user"} 
+        if(message.type==null){
+            div.classList.add(colorClass);
+            var afterExtracting = message.message;
+            afterExtracting = urlify(afterExtracting);
+            div.innerHTML=`${afterExtracting}`;    
+        }else if(message.type=="image"){
+            div.classList.add("image");
+            if(addScrollToBottom){
+                div.innerHTML=`<img class="media-${colorClass}" onload="scrollToBottom()" src="${message.message}">`;
+            }else{
+                div.innerHTML=`<img class="media-${colorClass}" src="${message.message}">`;
+            }
+        }else if(message.type=="audio"){
+            div.classList.add("audio");
+            if(addScrollToBottom){
+                div.innerHTML=`<audio onload="scrollToBottom()" class="audio-${colorClass}" controls src="${message.message}"></audio>`
+            }else{
+                div.innerHTML=`<audio class="audio-${colorClass}" controls src="${message.message}"></audio>`
+            }
+        }else{
+            div.classList.add("video");
+            if(addScrollToBottom){
+                div.innerHTML=`<video onload="scrollToBottom()"  class="media-${colorClass}" controls src="${message.message}"></video>`;
+            }else{
+                div.innerHTML=`<video class="media-${colorClass}" controls src="${message.message}"></video>`;
+            }
+        }
+        document.querySelector(".messages").prepend(div);
+    });
+}
 
 //who is online
 socket.emit("getOnline","bruh");
@@ -558,8 +572,37 @@ function auto_grow(element) {
     scrollToBottom();
 }
 
+function loadDynamic(bruhh){
+    var pfpTo = document.querySelector(".top-bar img").src;
+    var user = document.createElement("div");
+    user.classList.add("user");
+    user.classList.add(to);
+    user.setAttribute("href","/chats/"+to);
+    user.onclick=function(){loadDynamic(this)};
+    user.innerHTML=`<img class="pfp" src="${pfpTo}"><h5>${to}</h5>`;
+    document.querySelector(".users-inner").prepend(user);
+    to = bruhh.classList[1];
+    pfpTo = bruhh.children[0].src;
+    window.history.pushState('page2', 'Title', '/chats/'+to);
+    socket.emit("load dynamic",{from:from,to:to});
+    document.querySelector("."+to).remove();
+    document.querySelector(".top-bar h3").innerText=to;
+    document.querySelector(".top-bar .pfp").src = pfpTo;
+}
 
-
+socket.on("dynamically loaded",data=>{
+    document.querySelector(".messages").innerHTML="";
+    canLoadMore = false;
+    appendMessages(data,true);
+    scrollToBottom();
+    canLoadMore = true;
+    users.classList.remove("users-swipe-left");
+    users.classList.add("users-swipe-right");
+    isAnimationRuuning=true;
+    setTimeout(() => {
+        isAnimationRuuning=false;
+    },750);
+});
 
 
 

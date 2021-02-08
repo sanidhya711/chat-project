@@ -92,6 +92,12 @@ io.on("connection",socket => {
     socket.join(data.roomName);
     });
 
+    socket.on("load dynamic",data=>{
+        Chat.find({from: { $in: [data.from,data.to]} ,to: { $in : [data.from,data.to]}},{message:1,from:1,time:1,seen:1,type:1,name:1},{sort:{_id:-1},limit:30},function(err,fetchedMessages){
+            socket.emit("dynamically loaded",fetchedMessages);
+        });
+    });
+
     //new message in some room
     socket.on("new", message => {
     Preference.find({username: {$in:[message.from,message.to]}},{_id:0,filter:1},function(err,fetchedFilterSettings){
