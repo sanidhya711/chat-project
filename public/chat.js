@@ -573,6 +573,7 @@ function auto_grow(element) {
 }
 
 function loadDynamic(bruhh){
+    document.querySelector(".messages").innerHTML="";
     var pfpTo = document.querySelector(".top-bar img").src;
     var user = document.createElement("div");
     user.classList.add("user");
@@ -592,7 +593,6 @@ function loadDynamic(bruhh){
 }
 
 socket.on("dynamically loaded",data=>{
-    document.querySelector(".messages").innerHTML="";
     canLoadMore = false;
     appendMessages(data,true);
     scrollToBottom();
