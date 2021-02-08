@@ -22,16 +22,24 @@
     <div class="users">
         <h3>Conversations</h3>
         <input placeholder="Search User" class="search-user" type="search">
+        <div class="gradient-short"></div>
+        <div class="users-inner">
+            <% users.forEach(function(name){%>
+                <% if(username!=name.username){%>
+                    <a class="user <%= name.username %>" href="/chats/<%=name.username%>"> 
+                        <img class="pfp" src="<%= name.pfp %>">
+                        <h5><%= name.username %></h5>
+                    </a>
+            <% } %>
+            <%})%>
+        </div>
 
-        <% users.forEach(function(name){%>
-            <% if(username!=name.username){%>
-                <a class="user <%= name.username %>" href="/chats/<%=name.username%>"> 
-                    <img class="pfp" src="<%= name.pfp %>">
-                    <h4><%= name.username %></h4>
-                </a>
-        <% } %>
-        <%})%>
-    </div>
+        <div class="user-self"> 
+            <img class="pfp" src="<%= pfp %>">
+            <h4><%= username %></h4>
+        </div>
+
+</div>
 
     <div class="settings">
         <h1>Settings/Preferences</h1>

@@ -26,7 +26,7 @@
     <div class="users">
             <h3>Conversations</h3>
             <input placeholder="Search User" class="search-user" type="search">
-
+            <div class="gradient-short"></div>
             <div class="users-inner">
                 <% users.forEach(function(name){%>
                     <% if(username!=name.username && name.username!=to){%>
@@ -52,6 +52,7 @@
             <i id="answer" class="fa fa-2x fa-phone-square"></i>
             <i onclick="hangup()" id="hangup" class="fa fa-2x fa-phone-square"></i>
         </div>
+        <div class="gradient"></div>
         <div class="video-grid">
 
         </div>
