@@ -12,8 +12,9 @@ socket.emit("getOnline","bruh");
 
 socket.on("startingOnline",data=>{
   data.forEach(function(user) {
+    console.log(user);
     if(user != username){
-     document.querySelector("."+user+" h4").style.color="#5cb85c";
+     document.querySelector("."+user+" h5").style.color="#5cb85c";
     }
   });
 });
@@ -21,7 +22,7 @@ socket.on("startingOnline",data=>{
 socket.on("online",data=>{
   var userOnline=data.username;
   if(userOnline!=username){
-    document.querySelector("."+userOnline+" h4").style.color="#5cb85c";
+    document.querySelector("."+userOnline+" h5").style.color="#5cb85c";
   }
 });
 

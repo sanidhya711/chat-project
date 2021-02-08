@@ -175,3 +175,7 @@ input[type="checkbox"] + label:before {
 ::-ms-reveal {
     display: none !important;
 }
+.gradient{
+    background-image: linear-gradient(to right, #FF1178, #FFF205);
+    height: 3px;
+}

@@ -426,17 +426,16 @@ audio{
 .user-self{
     width: 100%;
     display: flex;
-    background-color: rgb(58, 58, 58);
-    border-top: 1px solid #FF1178;
-    padding: 7px 0px 7px 25px;
-    align-items: center;
+    background-color: rgb(55, 55, 55);
+    padding: 10px;
+    align-items: flex-end;
+    justify-content: center;
+    text-decoration:underline;
 }
 .user-self img{
     width: 40px;
     height: 40px;
-}
-.user-self:hover{
-    background-color: rgb(48, 48, 48);
+    margin-left: 15px;
 }
 .fa:hover{
     text-decoration: none;

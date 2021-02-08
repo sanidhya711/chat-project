@@ -586,6 +586,7 @@ function loadDynamic(bruhh){
     window.history.pushState('page2', 'Title', '/chats/'+to);
     socket.emit("load dynamic",{from:from,to:to});
     document.querySelector("."+to).remove();
+    document.querySelector(".top-bar h3").style.color="inherit";
     document.querySelector(".top-bar h3").innerText=to;
     document.querySelector(".top-bar .pfp").src = pfpTo;
 }
