@@ -385,7 +385,7 @@ app.get("/chats/:to",async function(req,res){
                 });
             });
         }else{
-            res.send("<h1>u cannot message ur self yet</h1>");
+            res.send("<h1>u cannot message ur self :D</h1>");
             }
         }else{
             res.send("<h1>No user found with that username</h1>");

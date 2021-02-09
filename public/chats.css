@@ -104,7 +104,9 @@ input:focus{
     width: 100%;
     display: flex;
     align-items: flex-end;
-    transition: background-color 0.7s;
+    transition: background-color 0.6s;
+    border-radius: 5px;
+    position: relative;
 }
 .no-users-found{
     width: 100%;
@@ -179,7 +181,8 @@ input:focus{
     border-radius: 5px;
     user-select:text;
     word-break: break-all;
-    margin: 35px 4%;
+    margin: 20px 4%;
+    position: relative;
 }
 .message:last-child{
     margin-bottom: 100px;
@@ -212,11 +215,8 @@ input:focus{
     background-color: transparent;
 }
 .users-inner::-webkit-scrollbar{
-    width: 12px;
-    display: none;
-}
-.users:hover .users-inner::-webkit-scrollbar{
-    display: block;
+    width: 11.5px;
+    /* display: none; */
 }
 .search-user{
     width: 85%;
@@ -480,4 +480,24 @@ textarea::-webkit-scrollbar{
 @keyframes gradientAnimation{
     from{width: 0%;}
     to{width: 100%;}
+}
+.seen:last-of-type::before{
+    font-family: "Font Awesome 5 Free";
+    content: "\f06e";
+    color: #5bc0de;
+    position: absolute;
+    right: calc(100% + 7px);
+    width: 20px;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    top: calc(100% - 24px);
+}
+.unseen{
+    position: absolute;
+    right: 30px;
+    color: #5bc0de;
+    font-size: xx-large;
 }

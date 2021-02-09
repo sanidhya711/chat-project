@@ -179,3 +179,14 @@ input[type="checkbox"] + label:before {
     background-image: linear-gradient(to right, #FF1178, #FFF205);
     height: 3px;
 }
+.gradient-loading-animation{
+    background: linear-gradient(270deg, #ff1178, #fff205,#FE0000,#01FFF4);
+    background-size: 400% 400%;
+    animation: AnimationName 30s ease infinite;
+}
+
+@keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}

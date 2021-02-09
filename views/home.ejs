@@ -26,10 +26,10 @@
         <div class="users-inner">
             <% users.forEach(function(name){%>
                 <% if(username!=name.username){%>
-                    <a class="user <%= name.username %>" href="/chats/<%=name.username%>"> 
+                    <div onclick="showMessages(this)" class="user <%= name.username %>" href="/chats/<%=name.username%>"> 
                         <img class="pfp" src="<%= name.pfp %>">
                         <h5><%= name.username %></h5>
-                    </a>
+                    </div>
             <% } %>
             <%})%>
         </div>
@@ -45,7 +45,7 @@
         <h1>Settings/Preferences</h1>
 
         <div class="settings-inner">
-            <h4>These buttons dont work right now... will fix it later</h4>
+            <h4>These buttons dont work right now... will fix them later</h4>
             <h5>- Sanidhya</h5>
             <br>
             <div class="toggle-holder">
@@ -72,6 +72,12 @@
                 </label>
             </div>
             <br>
+            <div>
+                <img src="<%= pfp %>" class="pfp">
+                <div class="btn btn-outline-light btn-sm">
+                    change pfp
+                </div>
+            </div>
             <div class="danger-buttons">
                 <div class="btn btn-danger">Logout</div>
                 <button  class="btn btn-danger">Delete Account</button>

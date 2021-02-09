@@ -8,8 +8,8 @@ window.addEventListener("resize",function(){
     input_holder.style.width=width+"px";
 });
 
-let touchstartX = 0;
-let touchendX = 0;
+var touchstartX = 0;
+var touchendX = 0;
 
 document.querySelector("body").addEventListener('touchstart', function(event){
     touchstartX = event.changedTouches[0].screenX;
@@ -66,7 +66,7 @@ if(from>to){
 function urlify(text){
     var urlRegex = /(https?:\/\/[^\s]+)/g;
     return text.replace(urlRegex, function(url) {
-      return `<a target="+blank" href="url">${url}</a>`;
+      return `<a target="+blank" href="${url}">${url}</a>`;
     })
 }
 
@@ -178,56 +178,55 @@ document.addEventListener("keypress",function(e) {
 scrollToBottom();
     
 //when connected mark everything as seen
-socket.emit("seeneverything",{to:username,from:to,roomName:roomName});
+socket.emit("seeneverything",{to:username,from:to});
 
 //search for user
 document.querySelector(".search-user").addEventListener("input",function(){
     var query = document.querySelector(".search-user").value;
     query = query.toLowerCase();
-  
-    if(query.charAt(query.length-1)==" "){
-     document.querySelector("#searchUsers").value = query.slice(0, -1); 
-    }else {
-      var namesToShow = [];
-      var allUserNames = document.querySelectorAll(".user h5");
-      allUserNames.forEach(function(element){
-        var username = element.innerText;
-        username = username.toLowerCase();
-        if(username.includes(query)){
-          namesToShow.push(username);
-        }
-      });
-    
-      if(namesToShow.length==0){
-        if(document.querySelector(".no-users-found")==null){
-        var h5 = document.createElement("h5");
-        h5.classList.add("no-users-found");
-        h5.innerText="no users found :(";
-        document.querySelector(".users-inner").appendChild(h5);
-        }
-      }else{
-        if(document.querySelector(".no-users-found")!=null){
-          document.querySelector(".users-inner").removeChild(document.querySelector(".no-users-found"));
-        }
-      }
-  
-        var containers = document.querySelectorAll(".user");
-        containers.forEach(function(element){
-          var whosContainer = element.getAttribute("href");
-          whosContainer = whosContainer.replace("/chats/","")
-          if(!namesToShow.includes(whosContainer)){
-           element.style.display="none";
-          }else{
-            element.style.display="flex"
-            var text = whosContainer;
-            var queryStarts = text.indexOf(query);
-            var queryEnds = queryStarts+query.length;
-            var part1 = text.slice(0,queryStarts);
-            var part2 = text.slice(queryEnds,text.length);
-            var highlight = "<span style='color:#bfe970;'>"+query+"</span>";
-            element.children[1].innerHTML=part1+highlight+part2
-          }
+        if(query.charAt(query.length-1)==" "){
+            document.querySelector(".search-user").value = query.slice(0, -1); 
+        }else {
+        var namesToShow = [];
+        var allUserNames = document.querySelectorAll(".user h5");
+        allUserNames.forEach(function(element){
+            var username = element.innerText;
+            username = username.toLowerCase();
+            if(username.includes(query)){
+                namesToShow.push(username);
+            }
         });
+        
+        if(namesToShow.length==0){
+            if(document.querySelector(".no-users-found")==null){
+            var h5 = document.createElement("h5");
+            h5.classList.add("no-users-found");
+            h5.innerText="no users found :(";
+            document.querySelector(".users-inner").appendChild(h5);
+            }
+        }else{
+            if(document.querySelector(".no-users-found")!=null){
+            document.querySelector(".users-inner").removeChild(document.querySelector(".no-users-found"));
+            }
+        }
+    
+            var containers = document.querySelectorAll(".user");
+            containers.forEach(function(element){
+            var whosContainer = element.getAttribute("href");
+            whosContainer = whosContainer.replace("/chats/","")
+            if(!namesToShow.includes(whosContainer)){
+               element.style.display="none";
+            }else{
+                element.style.display="flex"
+                var text = whosContainer;
+                var queryStarts = text.indexOf(query);
+                var queryEnds = queryStarts+query.length;
+                var part1 = text.slice(0,queryStarts);
+                var part2 = text.slice(queryEnds,text.length);
+                var highlight = "<span style='color:#bfe970;'>"+query+"</span>";
+                element.children[1].innerHTML=part1+highlight+part2
+            }
+            });
     }
 });
 
@@ -559,7 +558,8 @@ function dragOverHandler(ev) {
 
 window.onload = function(){
     scrollToBottom();
-  };
+    document.querySelector(".gradient").classList.remove("gradient-animation");
+};
 
 
 document.querySelector("textarea").style.height="5px";
@@ -574,6 +574,8 @@ function auto_grow(element) {
 
 function loadDynamic(bruhh){
     document.querySelector(".messages").innerHTML="";
+    document.querySelector(".search-user").value="";
+    document.querySelector(".search-user").dispatchEvent(new Event('input'));
     var pfpTo = document.querySelector(".top-bar img").src;
     var user = document.createElement("div");
     user.classList.add("user");
@@ -608,6 +610,7 @@ socket.on("dynamically loaded",data=>{
     setTimeout(() => {
         isAnimationRuuning=false;
     },750);
+    socket.emit("seeneverything",{to:username,from:to});
 });
 
 

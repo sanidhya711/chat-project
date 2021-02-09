@@ -33,6 +33,11 @@
                         <div onclick="loadDynamic(this)" class="user <%= name.username %>" href="/chats/<%=name.username%>"> 
                             <img class="pfp" src="<%= name.pfp %>">
                             <h5><%= name.username %></h5>
+                            <% if(name.unseen){%>
+                                <div class="unseen">
+                                    <%= name.unseen %>
+                                </div>
+                            <% } %>
                         </div>
                 <% } %>
                 <%})%>
@@ -59,7 +64,8 @@
         <div class="messages">
 
             <% messages.slice().reverse().forEach(function(message){ %>
-                <% if(message.from==username){var colorClass = "from-self"}else{var colorClass = "from-other-user"} %>
+                <% if(message.from==username){var colorClass = "from-self"}else{var colorClass = "from-other-user"}%>
+                <% if(message.from==username && message.seen){var seen = "seen"}else{var seen = ""}%>
                 <% if(message.type==null){%>
                     
                     <% var afterExtracting = message.message; %>
@@ -71,19 +77,19 @@
                     <%  } %>
                     <% afterExtracting = urlify(afterExtracting); %>
 
-                    <div id="<%= message.id %>" class="message <%= colorClass %>">
+                    <div id="<%= message.id %>" class="message <%= colorClass %> <%= seen %>">
                         <%- afterExtracting %>
                     </div>
                 <%} else if(message.type=="image"){ %>
-                    <div id="<%= message.id %>"  class="message image">
+                    <div id="<%= message.id %>"  class="message image <%= seen %>">
                         <img class="media-<%= colorClass %>" src="<%= message.message %>">
                     </div>
                 <% }else if(message.type=="audio"){ %>
-                    <div id="message.id" class="message audio">
+                    <div id="message.id" class="message audio <%= seen %>">
                         <audio class="audio-<%= colorClass %>" controls src="<%= message.message %>"></audio>
                     </div>
                 <% }else{ %>
-                    <div id="<%= message.id %>" class="message video">
+                    <div id="<%= message.id %>" class="message video <%= seen %>">
                         <video class="media-<%= colorClass %>" controls src="<%= message.message %>"></video>
                     </div>
                 <% } %>
@@ -139,6 +145,12 @@
       firebase.initializeApp(firebaseConfig);
       firebase.analytics();
     </script>  
+    <script>
+        document.querySelector(".gradient").classList.add("gradient-animation");
+        setTimeout(() => {
+            document.querySelector(".gradient").classList.remove("gradient-animation");
+        },2000);
+    </script>
     <script defer src="/chat.js"></script>
     <script defer src="/call.js"></script>
     <script defer src="/registerServiceWorker.js"></script>
