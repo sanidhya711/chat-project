@@ -468,6 +468,7 @@ textarea::-webkit-scrollbar{
 .gradient{
     background-image: linear-gradient(to right, #FF1178, #FFF205);
     height: 5px;
+    transition: all 0.5s;
 }
 .gradient-animation{
     animation-name: gradientAnimation;
