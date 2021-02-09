@@ -590,12 +590,17 @@ function loadDynamic(bruhh){
     document.querySelector(".top-bar h3").style.color="inherit";
     document.querySelector(".top-bar h3").innerText=to;
     document.querySelector(".top-bar .pfp").src = pfpTo;
+    document.querySelector(".gradient").classList.add("gradient-animation");
+    setTimeout(() => {
+        document.querySelector(".gradient").classList.remove("gradient-animation");
+    },2500);
 }
 
 socket.on("dynamically loaded",data=>{
     canLoadMore = false;
     appendMessages(data,true);
     scrollToBottom();
+    document.querySelector(".gradient").classList.remove("gradient-animation");
     canLoadMore = true;
     users.classList.remove("users-swipe-left");
     users.classList.add("users-swipe-right");
