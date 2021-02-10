@@ -182,7 +182,6 @@ socket.emit("seeneverything",{to:username,from:to});
 //search for user
 document.querySelector(".search-user").addEventListener("input",function(){
     var query = document.querySelector(".search-user").value;
-    console.log(query);
     if(query!=null && query!="" && query!=" "){
         query.toLowerCase();
         var namesToShow = [];
@@ -226,12 +225,10 @@ document.querySelector(".search-user").addEventListener("input",function(){
             }
         });
     }else{
-        console.log("executed");
         var containers = document.querySelectorAll(".user");
         containers.forEach(function(element){
             var whosContainer = element.getAttribute("href");
             whosContainer = whosContainer.replace("/chats/","");
-            console.log(whosContainer);
             element.children[1].innerText = whosContainer;
             element.style.display="flex";
         });
@@ -264,6 +261,7 @@ socket.on("loaded more messages",data=>{
 });
 
 function appendMessages(data,addScrollToBottom){
+    disableScrolling();
     data.forEach(function(message){
         var div = document.createElement("div");
         div.classList.add("message");
@@ -297,7 +295,10 @@ function appendMessages(data,addScrollToBottom){
         }
         document.querySelector(".messages").prepend(div);
     });
+    enableScrolling();
 }
+
+
 
 //who is online
 socket.emit("getOnline","bruh");
@@ -553,7 +554,6 @@ function dropHandler(ev) {
     if( ev.dataTransfer.items.length<=10){
         for (let i = 0; i < ev.dataTransfer.items.length; i++) {
             var file =   ev.dataTransfer.items[i].getAsFile();
-            console.log(file);
             newFileUpload(file);
         }
     }else{
@@ -576,7 +576,6 @@ document.querySelector("textarea").style.height=(document.querySelector("textare
 function auto_grow(element){
     element.style.height = "5px";
     element.style.height = (element.scrollHeight)+"px";
-    console.log("executed");
     if(element.offsetHeight>50){
         document.querySelector(".messages").style.marginBottom = (element.offsetHeight+27)+"px";
         var bruh = document.querySelectorAll(".message");
@@ -637,9 +636,14 @@ document.addEventListener( "contextmenu", function(e){
     }
 });
 
+function disableScrolling(){
+    var x = document.querySelector(".messages").scrollX;
+    var y = document.querySelector(".messages").scrollY;
+    document.querySelector(".messages").onscroll=function(){document.querySelector(".messages").scrollTo(x, y);};}
 
-
-
+function enableScrolling(){
+    document.querySelector(".messages").onscroll=function(){};
+}
 
 
 
