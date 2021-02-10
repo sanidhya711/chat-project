@@ -51,6 +51,15 @@ body{
     border-top: 0.5px solid #FF1178;
     height: 100%;
     background-color: #474747;
+    animation-name: color-change;
+    animation-duration: 15s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+@keyframes color-change{
+    0%{border-top: 0.5px solid #FF1178;}
+    50%{border-top: 0.5px solid #5bc0de;}
+    100%{border-top: 0.5px solid #FF1178;}
 }
 .users h3{
     align-self: center;

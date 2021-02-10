@@ -87,3 +87,10 @@ document.querySelector(".search-user").addEventListener("input",function(){
       });
   }
 });
+
+document.addEventListener( "contextmenu", function(e){
+  e.preventDefault();
+  if(e.target.classList[0]=="user"){
+      console.log(e.target.classList[1]);
+  }
+});

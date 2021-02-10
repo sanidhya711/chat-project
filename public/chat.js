@@ -44,8 +44,8 @@ function handleGesture() {
     }
 }
 
-var doodleHolder = document.querySelector(".messages");
-var noOfDoodles = 6;
+var doodleHolder = document.querySelector(".main");
+var noOfDoodles = 4;
 var randomDoodle = Math.floor(Math.random() * noOfDoodles)+1;
 doodleHolder.style.backgroundImage = "url(/doodles/doodle"+randomDoodle+".jpg)";
 
@@ -183,10 +183,9 @@ socket.emit("seeneverything",{to:username,from:to});
 //search for user
 document.querySelector(".search-user").addEventListener("input",function(){
     var query = document.querySelector(".search-user").value;
-    query = query.toLowerCase();
-        if(query.charAt(query.length-1)==" "){
-            document.querySelector(".search-user").value = query.slice(0, -1); 
-        }else {
+    console.log(query);
+    if(query!=null && query!="" && query!=" "){
+        query.toLowerCase();
         var namesToShow = [];
         var allUserNames = document.querySelectorAll(".user h5");
         allUserNames.forEach(function(element){
@@ -215,7 +214,7 @@ document.querySelector(".search-user").addEventListener("input",function(){
             var whosContainer = element.getAttribute("href");
             whosContainer = whosContainer.replace("/chats/","")
             if(!namesToShow.includes(whosContainer)){
-               element.style.display="none";
+            element.style.display="none";
             }else{
                 element.style.display="flex"
                 var text = whosContainer;
@@ -226,7 +225,17 @@ document.querySelector(".search-user").addEventListener("input",function(){
                 var highlight = "<span style='color:#bfe970;'>"+query+"</span>";
                 element.children[1].innerHTML=part1+highlight+part2
             }
-            });
+        });
+    }else{
+        console.log("executed");
+        var containers = document.querySelectorAll(".user");
+        containers.forEach(function(element){
+            var whosContainer = element.getAttribute("href");
+            whosContainer = whosContainer.replace("/chats/","");
+            console.log(whosContainer);
+            element.children[1].innerText = whosContainer;
+            element.style.display="flex";
+        });
     }
 });
 
@@ -564,11 +573,20 @@ window.onload = function(){
 
 document.querySelector("textarea").style.height="5px";
 document.querySelector("textarea").style.height=(document.querySelector("textarea").scrollHeight)+"px";
-function auto_grow(element) {
+
+function auto_grow(element){
     element.style.height = "5px";
     element.style.height = (element.scrollHeight)+"px";
-    var allMessage = document.querySelectorAll(".message");
-    allMessage[allMessage.length-1].style.marginBottom = (element.offsetHeight+52)+"px";
+    console.log("executed");
+    if(element.offsetHeight>50){
+        document.querySelector(".messages").style.marginBottom = (element.offsetHeight+27)+"px";
+        var bruh = document.querySelectorAll(".message");
+        bruh[bruh.length-1].style.marginBottom = "20px"
+    }else{
+        document.querySelector(".messages").style.marginBottom = "0px"; 
+        var bruh = document.querySelectorAll(".message");
+        bruh[bruh.length-1].style.marginBottom = "100px"
+    }
     scrollToBottom();
 }
 
@@ -613,9 +631,12 @@ socket.on("dynamically loaded",data=>{
     socket.emit("seeneverything",{to:username,from:to});
 });
 
-
-
-
+document.addEventListener( "contextmenu", function(e){
+    e.preventDefault();
+    if(e.target.classList[0]=="user"){
+        console.log(e.target.classList[1]);
+    }
+});
 
 
 
