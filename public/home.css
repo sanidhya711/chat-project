@@ -6,7 +6,6 @@ body{
     color: #EAEAEA;
     overflow: hidden;
     display: flex;
-    background-color: rgb(49, 49, 49)
 }
 .left-navbar{
     width: 3.5%;
@@ -52,7 +51,7 @@ body{
     height: 100%;
     background-color: #474747;
     animation-name: color-change;
-    animation-duration: 15s;
+    animation-duration: 30s;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
 }
@@ -71,6 +70,9 @@ body{
     display: flex;
     flex-direction: column;
     height: 100%;
+    background-blend-mode:darken;
+    background-size: contain;
+    background-color: #333;
 }
 .top-bar{
     width: 100%;
@@ -114,8 +116,9 @@ input:focus{
     width: 100%;
     display: flex;
     align-items: flex-end;
-    transition: background-color 0.7s;
+    transition: background-color 0.6s;
     border-radius: 5px;
+    position: relative;
 }
 .no-users-found{
     width: 100%;
@@ -135,6 +138,71 @@ input:focus{
     border-radius: 50%;
     margin-right: 15px;
     object-fit: cover;
+}
+.fa-plus{
+    z-index: 1;
+    color: #333;
+    position: relative;
+    left: 59px;
+    top: 1px;
+    transition: color 0.3s;
+}
+.fa-plus:hover{
+    color: #5cb85c;
+}
+.fa-smile-o{
+    color: #333;
+    transition: color 0.5s;
+    position: relative;
+    right: 10px;
+}
+.fa-smile-o:hover{
+    color: #5cb85c;
+}
+.fa-paper-plane{
+    position: relative;
+    right: 3.5px;
+}
+.send-holder{
+    color: #333;
+    right: 64px;
+    position: relative;
+    background-color: #5cb85c;
+    padding: 5px 18px;
+    border-radius: 20px;
+    border-radius: 3px 20px 20px 3px;
+    transition: color 0.5s;
+}
+.send-holder:hover{
+    color: #EAEAEA;
+}
+.messages{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-top: 40px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.message{
+    padding: 12px 27px;
+    border-radius: 5px;
+    user-select:text;
+    word-break: break-all;
+    margin: 20px 4%;
+    position: relative;
+}
+.message:last-child{
+    margin-bottom: 100px;
+}
+.from-other-user{
+    align-self: flex-start;
+    background-color: #d9534f;
+}
+.from-self{
+    align-self: flex-end;
+    background-color: #5cb85c;
 }
 ::-webkit-scrollbar {
     width: 14px;
@@ -156,11 +224,8 @@ input:focus{
     background-color: transparent;
 }
 .users-inner::-webkit-scrollbar{
-    width: 12px;
-    display: none;
-}
-.users:hover .users-inner::-webkit-scrollbar{
-    display: block;
+    width: 11.5px;
+    /* display: none; */
 }
 .search-user{
     width: 85%;
@@ -207,6 +272,44 @@ input:focus{
         width: 100%;
         z-index: 1;
     }
+}
+video{
+    width: 100%;
+    border-radius: 5px;
+}
+video:focus{
+    outline: none;
+}
+img{
+    width: 100%;
+    border-radius: 5px;
+}
+video:fullscreen{
+    border: none;
+}
+.video{
+    padding: 0px;
+    margin: 27px;
+    max-width: fit-content;
+    align-self: center;
+    width: 60%;
+    min-width: 350px;
+    max-width: 580px;
+}
+.image{
+    padding: 0px;
+    margin: 20px;
+    max-width: fit-content;
+    align-self: center;
+    width: 60%;
+    min-width: 350px;
+    max-width: 580px;
+}
+.media-from-self{
+    border: 3px solid #5cb85c;
+}
+.media-from-other-user{
+    border: 3px solid #d9534f;
 }
 .users a{
     color: inherit;
@@ -267,6 +370,68 @@ svg:hover{
     padding: 5px;
     margin-top: 20px;
 }
+.gif{
+    width: 150px;
+    margin: 7px;
+    height: auto;
+}
+.gif-box{
+    display: flex;
+    flex-direction: column;
+
+}
+.gif-holder input{
+    padding-left: 20px;
+    font-size: 12px;
+    width: 84%;
+    transition: width 0.5s;
+}
+
+.gif-holder input:focus{
+    width: 90%;
+}
+.audio{
+    padding: 0px;
+    margin: 27px;
+    max-width: fit-content;
+    align-self: center;
+    width: 60%;
+    min-width: 350px;
+    max-width: 550px;
+}
+audio:focus{
+    outline: none;
+}
+audio{
+    width: 100%;
+}
+.audio-from-self::-webkit-media-controls-panel{
+    background-color: #5cb85c;
+}
+.audio-from-other-user::-webkit-media-controls-panel{
+    background-color: #d9534f;
+}
+#call{
+    position: absolute;
+    right: 95px;
+    color: #5cb85c;
+    transition: color 0.8s;
+}
+#hangup{
+    position: absolute;
+    right: 25px;
+    color: #d9534f;
+    transition: color 0.8s;
+}
+#answer{
+    position: absolute;
+    right: 60px;
+    color: #5bc0de;
+    transition: color 0.8s;
+}
+.fa-phone-square:hover{
+    color: #333 !important;
+}
 .user-self{
     width: 100%;
     display: flex;
@@ -311,10 +476,40 @@ textarea::-webkit-scrollbar{
 }
 .gradient{
     background-image: linear-gradient(to right, #FF1178, #FFF205);
-    height: 3px;
+    height: 5px;
+}
+.gradient-animation{
+    animation-name: gradientAnimation;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
 }
 
-
+@keyframes gradientAnimation{
+    from{width: 0%;}
+    to{width: 100%;}
+}
+.seen:last-of-type::before{
+    font-family: "Font Awesome 5 Free";
+    content: "\f06e";
+    color: #5bc0de;
+    position: absolute;
+    right: calc(100% + 7px);
+    width: 20px;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    top: calc(100% - 24px);
+}
+.unseen{
+    position: absolute;
+    right: 30px;
+    color: #5bc0de;
+    font-size: xx-large;
+}
 
 
 
@@ -329,6 +524,7 @@ textarea::-webkit-scrollbar{
     display: flex;
     padding-top: 35px;
     flex-direction: column;
+    background-color: #333;
 }
 .danger-buttons{
     position: absolute;

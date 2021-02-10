@@ -154,7 +154,6 @@ document.querySelector(".send-holder").addEventListener("click",function(){
         }
         socket.emit("new",msg);
         document.getElementById("msg").value="";
-        auto_grow(document.getElementById("msg"));
     }
     typing();
 });
@@ -581,11 +580,11 @@ function auto_grow(element){
     if(element.offsetHeight>50){
         document.querySelector(".messages").style.marginBottom = (element.offsetHeight+27)+"px";
         var bruh = document.querySelectorAll(".message");
-        bruh[bruh.length-1].style.marginBottom = "20px"
+        bruh[bruh.length-1].style.marginBottom = "20px";
     }else{
         document.querySelector(".messages").style.marginBottom = "0px"; 
         var bruh = document.querySelectorAll(".message");
-        bruh[bruh.length-1].style.marginBottom = "100px"
+        bruh[bruh.length-1].attr('style', ''); 
     }
     scrollToBottom();
 }
