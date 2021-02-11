@@ -8,5 +8,4 @@ var answerButton = document.getElementById("answer");
 
 
 myPeer.on('open', id => {
-    socket.emit("newUser",{username:username});
 });

@@ -156,6 +156,7 @@ document.querySelector(".send-holder").addEventListener("click",function(){
         document.getElementById("msg").value="";
     }
     typing();
+    auto_grow( document.getElementById("msg"));
 });
 
 //getting a delete request
@@ -607,6 +608,7 @@ function loadDynamic(bruhh){
     document.querySelector(".top-bar h3").innerText=to;
     document.querySelector(".top-bar .pfp").src = pfpTo;
     document.querySelector(".gradient").classList.add("gradient-animation");
+    document.querySelector("#msg").placeholder="Message "+to;
     users.classList.remove("users-swipe-left");
     users.classList.add("users-swipe-right");
     setTimeout(() => {
@@ -643,6 +645,7 @@ function enableScrolling(){
     document.querySelector(".messages").onscroll=function(){};
 }
 
+socket.emit("newUser",{username:username});
 
 
 

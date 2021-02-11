@@ -82,7 +82,6 @@ passport.deserializeUser(User.deserializeUser());
 //dont change anything above this
 var usersOnline = [];
 var pushSubscriptionIds = {};
-var offlineTimeout = {};
 
 //socket.io
 io.on("connection",socket => {
@@ -177,22 +176,15 @@ io.on("connection",socket => {
 
     socket.on('newUser',function(data) {
         socket.username = data.username;
-        if(offlineTimeout[data.username]!=null){
-            clearTimeout(offlineTimeout[data.username]);
-            offlineTimeout[data.username]=null;
-        }else{
-            usersOnline.push(data.username);
-            socket.broadcast.emit("online",{username:data.username});
-        }
+        usersOnline.push(data.username);
+        socket.broadcast.emit("online",{username:data.username});
    });
 
    socket.on('disconnect', function () {
     var index = usersOnline.indexOf(socket.username);
-    offlineTimeout[socket.username] = setTimeout(() => {
-        usersOnline.splice(index,1);
-        socket.broadcast.emit("offline",socket.username);
-        offlineTimeout[socket.username]=null;
-    },5000);
+    usersOnline.splice(index,1);
+    console.log(socket.username);
+    socket.broadcast.emit("offline",socket.username);
   });
 
   socket.on("getOnline",data=>{
