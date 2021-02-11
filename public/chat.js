@@ -244,7 +244,7 @@ document.querySelector(".messages").addEventListener("scroll",scrolled);
 function scrolled(){
     var scrollTop = document.querySelector(".messages").scrollTop;
     scrollTop = Math.round(scrollTop);
-    if(scrollTop<500 && canLoadMore){
+    if(scrollTop<520 && canLoadMore){
         var skip = document.querySelectorAll(".message");
         skip = skip.length;
         canLoadMore = false;
@@ -316,7 +316,6 @@ socket.on("startingOnline",data=>{
 socket.on("online",data=>{
     var userOnline=data.username;
     if(userOnline == to){
-        peerid=data.peerid;
         console.log("can call now");
         document.querySelector(".top-bar h3").style.color="#5cb85c";
         if(typingvar>0){
@@ -329,7 +328,6 @@ socket.on("online",data=>{
 
 socket.on("offline",userOffline=>{
     if(userOffline == to){
-        peerid=null;
         console.log("cannot call now");
         document.querySelector(".top-bar h3").style.color="inherit";
         if(!!document.querySelector(".typing-box")){

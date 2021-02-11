@@ -83,7 +83,6 @@ passport.deserializeUser(User.deserializeUser());
 var usersOnline = [];
 var pushSubscriptionIds = {};
 var offlineTimeout = {};
-var peerIDs = {};
 
 //socket.io
 io.on("connection",socket => {
@@ -178,19 +177,17 @@ io.on("connection",socket => {
 
     socket.on('newUser',function(data) {
         socket.username = data.username;
-        peerIDs[data.username]=data.peerid;
         if(offlineTimeout[data.username]!=null){
             clearTimeout(offlineTimeout[data.username]);
             offlineTimeout[data.username]=null;
         }else{
             usersOnline.push(data.username);
-            socket.broadcast.emit("online",{username:data.username,peerid:data.peerid});
+            socket.broadcast.emit("online",{username:data.username});
         }
    });
 
    socket.on('disconnect', function () {
     var index = usersOnline.indexOf(socket.username);
-    peerIDs[socket.username]=null;
     offlineTimeout[socket.username] = setTimeout(() => {
         usersOnline.splice(index,1);
         socket.broadcast.emit("offline",socket.username);
@@ -379,7 +376,7 @@ app.get("/chats/:to",async function(req,res){
                             toPfp = fetchedImage.pfp;      
                         });
                         Preference.findOne({username:username},{_id:0,primaryColor:1,secondryColor:1,pfp:1},function(err,preFetchedPreferences){
-                            res.render("chats",{username:username,to:to,from:username,messages:fetchedMessages,users:users,primaryColor:preFetchedPreferences.primaryColor,secondryColor:preFetchedPreferences.secondryColor,toPfp:toPfp,peerid:peerIDs[to],pfp:preFetchedPreferences.pfp});      
+                            res.render("chats",{username:username,to:to,from:username,messages:fetchedMessages,users:users,primaryColor:preFetchedPreferences.primaryColor,secondryColor:preFetchedPreferences.secondryColor,toPfp:toPfp,pfp:preFetchedPreferences.pfp});      
                         });                  
                     }); 
                 });
