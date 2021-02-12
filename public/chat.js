@@ -2,6 +2,7 @@ var element = document.querySelector(".main");
 var input_holder = document.querySelector(".input-bar-holder");
 var width = element.offsetWidth-10;
 input_holder.style.width=width+"px";
+var usersOnline = [];
 
 window.addEventListener("resize",function(){
     width = element.offsetWidth-10;
@@ -306,6 +307,7 @@ socket.emit("getOnline","bruh");
 
 socket.on("startingOnline",data=>{
   data.forEach(function(user) {
+    usersOnline.push(user);
     if(user == to){
      document.querySelector(".top-bar h3").style.color="#5cb85c";
     }else if(user != username){
@@ -315,19 +317,20 @@ socket.on("startingOnline",data=>{
 });
 
 socket.on("online",data=>{
-    var userOnline=data.username;
-    if(userOnline == to){
-        console.log("can call now");
+    usersOnline.push(data);
+    if(data == to){
         document.querySelector(".top-bar h3").style.color="#5cb85c";
         if(typingvar>0){
             socket.emit("typing",{roomName:roomName,typing:true});
         }
-    }else if(userOnline!=username){
-        document.querySelector("."+userOnline+" h5").style.color="#5cb85c";
+    }else if(data!=username){
+        document.querySelector("."+data+" h5").style.color="#5cb85c";
     }
 });
 
 socket.on("offline",userOffline=>{
+    var index = usersOnline.indexOf(userOffline);
+    usersOnline.splice(index,1);
     if(userOffline == to){
         console.log("cannot call now");
         document.querySelector(".top-bar h3").style.color="inherit";
@@ -335,7 +338,6 @@ socket.on("offline",userOffline=>{
             document.querySelector(".messages").removeChild(document.querySelector(".typing-box"));
         }
     }else if(userOffline!=username){
-        console.log(userOffline);
         document.querySelector("."+userOffline+" h5").style.color="inherit";
     }
 });
@@ -598,13 +600,20 @@ function loadDynamic(bruhh){
     user.setAttribute("href","/chats/"+to);
     user.onclick=function(){loadDynamic(this)};
     user.innerHTML=`<img class="pfp" src="${pfpTo}"><h5>${to}</h5>`;
+    if(usersOnline.includes(to)){
+        user.style.color="#5cb85c";
+    }
     document.querySelector(".users-inner").prepend(user);
     to = bruhh.classList[1];
     pfpTo = bruhh.children[0].src;
     window.history.pushState('page2', 'Title', '/chats/'+to);
     socket.emit("load dynamic",{from:from,to:to});
     document.querySelector("."+to).remove();
-    document.querySelector(".top-bar h3").style.color="inherit";
+    if(usersOnline.includes(to)){
+        document.querySelector(".top-bar h3").style.color="#5cb85c";
+    }else{
+        document.querySelector(".top-bar h3").style.color="inherit";
+    }
     document.querySelector(".top-bar h3").innerText=to;
     document.querySelector(".top-bar .pfp").src = pfpTo;
     document.querySelector(".gradient").classList.add("gradient-animation");

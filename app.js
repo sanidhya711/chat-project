@@ -18,7 +18,7 @@ const webPush = require("web-push");
 const secure = require('express-force-https');
 const publicVapidKey = process.env.PUBLICVAPIDKEY;
 const privateVapidKey = process.env.PRIVATEVAPIDKEY;
-webPush.setVapidDetails("mailto:kamlesh@gmail.com",publicVapidKey,privateVapidKey);
+webPush.setVapidDetails("mailto:kamleshsolution@gmail.com",publicVapidKey,privateVapidKey);
 app.use(express.static("public"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -164,20 +164,10 @@ io.on("connection",socket => {
         }
     });
 
-    socket.on("call",(data)=>{
-        console.log(data);
-        console.log(pushSubscriptionIds[data.to])
-        if(pushSubscriptionIds[data.to]!=null){
-            console.log("sending call notification");
-            var notificationData = JSON.stringify({title:"calling",from:data.from,pfp:"https://cdn2.iconfinder.com/data/icons/font-awesome/1792/phone-square-512.png"});
-            webPush.sendNotification(pushSubscriptionIds[data.to],notificationData).catch(err => console.log(err));
-        }
-    });
-
     socket.on('newUser',function(data) {
         socket.username = data.username;
         usersOnline.push(data.username);
-        socket.broadcast.emit("online",{username:data.username});
+        socket.broadcast.emit("online",data.username);
    });
 
    socket.on('disconnect', function () {
@@ -189,10 +179,6 @@ io.on("connection",socket => {
 
   socket.on("getOnline",data=>{
     socket.emit("startingOnline",usersOnline);
-  });
-
-  socket.on("hangup",data=>{
-      io.sockets.in(data.roomName).emit("hangup");
   });
 
   socket.on("load more messages",data=>{

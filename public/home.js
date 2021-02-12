@@ -1,5 +1,6 @@
 var touchstartX = 0;
 var touchendX = 0;
+var usersOnline = [];
 
 document.querySelector("body").addEventListener('touchstart', function(event){
     touchstartX = event.changedTouches[0].screenX;
@@ -272,7 +273,8 @@ function appendMessages(data,addScrollToBottom){
 socket.emit("getOnline","bruh");
 
 socket.on("startingOnline",data=>{
-  data.forEach(function(user) {
+  data.forEach(function(user){
+      usersOnline.push(user);
     if(user == to){
      document.querySelector(".top-bar h3").style.color="#5cb85c";
     }else if(user != username){
@@ -282,18 +284,20 @@ socket.on("startingOnline",data=>{
 });
 
 socket.on("online",data=>{
-    var userOnline=data.username;
-    if(userOnline == to){
+    usersOnline.push(data);
+    if(data == to){
         document.querySelector(".top-bar h3").style.color="#5cb85c";
         if(typingvar>0){
             socket.emit("typing",{roomName:roomName,typing:true});
         }
-    }else if(userOnline!=username){
-        document.querySelector("."+userOnline+" h5").style.color="#5cb85c";
+    }else if(data!=username){
+        document.querySelector("."+data+" h5").style.color="#5cb85c";
     }
 });
 
 socket.on("offline",userOffline=>{
+    var index = usersOnline.indexOf(userOffline);
+    usersOnline.splice(index,1);
     if(userOffline == to){
         document.querySelector(".top-bar h3").style.color="inherit";
         if(!!document.querySelector(".typing-box")){
@@ -533,7 +537,11 @@ function loadDynamic(bruhh){
     window.history.pushState('page2', 'Title', '/chats/'+to);
     socket.emit("load dynamic",{from:from,to:to});
     document.querySelector("."+to).remove();
-    document.querySelector(".top-bar h3").style.color="inherit";
+    if(usersOnline.includes(to)){
+        document.querySelector(".top-bar h3").style.color="#5cb85c";
+    }else{
+        document.querySelector(".top-bar h3").style.color="inherit";
+    }
     document.querySelector(".top-bar h3").innerText=to;
     document.querySelector(".top-bar .pfp").src = pfpTo;
     document.querySelector(".gradient").classList.add("gradient-animation");
@@ -601,8 +609,6 @@ function showMessages(userClickedData){
 </div>`
 var referenceNode = document.querySelector(".users");
 referenceNode.parentNode.insertBefore(div,referenceNode.nextSibling);
-loadDynamic(userClickedData);
-
 var element = document.querySelector(".main");
 var input_holder = document.querySelector(".input-bar-holder");
 var width = element.offsetWidth-10;
@@ -647,20 +653,27 @@ fileUpload.addEventListener("change",function(e){
         newFileUpload(file);
     }
 });
-// document.querySelector('emoji-picker').addEventListener('emoji-click',function(event){
-//   var value = document.querySelector("#msg").value;
-//   value = value+event.detail.unicode;
-//   document.querySelector("#msg").value=value;
-//   document.addEventListener('click',function(e) {
-//       document.querySelector("emoji-picker").style.display="none";
-//   });
-// });
-// document.querySelector(".search_gif").addEventListener("input",function(){
-//   grab_data();
-// });
 document.querySelector("textarea").style.height="5px";
 document.querySelector("textarea").style.height=(document.querySelector("textarea").scrollHeight)+"px";
+loadDynamic(userClickedData);
 }
 }
 
 socket.emit("newUser",{username:username});
+
+
+function uploadPfp(target){
+    var file = inputEvent.files[0];
+    var value = Math.round(circle.value())*100;
+    var storageRef = firebase.storage().ref("/pfp/"+username+"/"+file.name);
+    var uploadTask = storageRef.put(file)
+    uploadTask.on('state_changed', function(snapshot){
+    var progress =(snapshot.bytesTransferred / snapshot.totalBytes);
+    },function(error){},
+    function() {
+        uploadTask.snapshot.ref.getDownloadURL().then(function(pfp){
+            downloadURL = pfp;
+            socket.emit("setPreferences",{username:username,key:"pfp",value:downloadURL});
+        });
+    });
+}
