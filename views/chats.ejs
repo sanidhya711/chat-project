@@ -33,11 +33,11 @@
                         <div onclick="loadDynamic(this)" class="user <%= name.username %>" href="/chats/<%=name.username%>"> 
                             <img class="pfp" src="<%= name.pfp %>">
                             <h5><%= name.username %></h5>
+                            <div class="unseen">
                             <% if(name.unseen){%>
-                                <div class="unseen">
                                     <%= name.unseen %>
-                                </div>
                             <% } %>
+                        </div>
                         </div>
                 <% } %>
                 <%})%>

@@ -42,13 +42,16 @@ var socket = io();
 var username = document.getElementById("username").className;
 var from = username;
 var to;
+var roomName;
 
-if(from>to){
-    var roomName = from+to;
-    socket.emit('join', {roomName:roomName});
-}else{
-    var roomName = to+from;
-    socket.emit('join', {roomName:roomName});
+function join(){
+    if(from>to){
+        roomName = from+to;
+        socket.emit('join', {roomName:roomName});
+    }else{
+        roomName = to+from;
+        socket.emit('join', {roomName:roomName});
+    }
 }
 
 function urlify(text){
@@ -512,7 +515,7 @@ function auto_grow(element){
     }else{
         document.querySelector(".messages").style.marginBottom = "0px"; 
         var bruh = document.querySelectorAll(".message");
-        bruh[bruh.length-1].attr('style', ''); 
+        bruh[bruh.length-1].removeAttribute('style');
     }
     scrollToBottom();
 }
@@ -529,7 +532,7 @@ function loadDynamic(bruhh){
         user.classList.add(to);
         user.setAttribute("href","/chats/"+to);
         user.onclick=function(){loadDynamic(this)};
-        user.innerHTML=`<img class="pfp" src="${pfpTo}"><h5>${to}</h5>`;
+        user.innerHTML=`<img class="pfp" src="${pfpTo}"><h5>${to}</h5><div class="unseen"></div>`;
         document.querySelector(".users-inner").prepend(user);
     }
     to = bruhh.classList[1];
@@ -552,6 +555,7 @@ function loadDynamic(bruhh){
         document.querySelector(".gradient").classList.remove("gradient-animation");
     },2000);
   }
+  join();
 }
 
 socket.on("dynamically loaded",data=>{
@@ -697,3 +701,11 @@ function confirmPfp(file){
         });
     });
 }
+
+socket.on("notification",(data) => {
+    if(data!=to){
+        var previousNotifications = document.querySelector("."+data+" .unseen").innerText;
+        previousNotifications = previousNotifications > 0 ? parseInt(previousNotifications)+1 : 1
+        document.querySelector("."+data+" .unseen").innerText = previousNotifications;
+    }
+});

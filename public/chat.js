@@ -55,14 +55,18 @@ var socket = io();
 var username = document.getElementById("username").className;
 var from = username;
 var to = document.getElementById("to").className;
+var roomName;
 
-if(from>to){
-    var roomName = from+to;
-    socket.emit('join', {roomName:roomName});
-}else{
-    var roomName = to+from;
-    socket.emit('join', {roomName:roomName});
+function join() {
+    if(from>to){
+        roomName = from+to;
+        socket.emit('join', {roomName:roomName});
+    }else{
+        roomName = to+from;
+        socket.emit('join', {roomName:roomName});
+    }
 }
+join();
 
 function urlify(text){
     var urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -93,7 +97,7 @@ socket.on("new",function(message){
             } 
             const videoId = getId(message.message);
             console.log(videoId);
-            // div.innerHTML=`<iframe src="//www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+            div.innerHTML=`<iframe src="//www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
         }
     }else if(message.type=="image"){
         div.classList.add("image");
@@ -332,9 +336,8 @@ socket.on("offline",userOffline=>{
     var index = usersOnline.indexOf(userOffline);
     usersOnline.splice(index,1);
     if(userOffline == to){
-        console.log("cannot call now");
         document.querySelector(".top-bar h3").style.color="inherit";
-        if(!!document.querySelector(".typing-box")){
+        if(document.querySelector(".typing-box")){
             document.querySelector(".messages").removeChild(document.querySelector(".typing-box"));
         }
     }else if(userOffline!=username){
@@ -584,7 +587,7 @@ function auto_grow(element){
     }else{
         document.querySelector(".messages").style.marginBottom = "0px"; 
         var bruh = document.querySelectorAll(".message");
-        bruh[bruh.length-1].attr('style', ''); 
+        bruh[bruh.length-1].removeAttribute('style');
     }
     scrollToBottom();
 }
@@ -599,7 +602,7 @@ function loadDynamic(bruhh){
     user.classList.add(to);
     user.setAttribute("href","/chats/"+to);
     user.onclick=function(){loadDynamic(this)};
-    user.innerHTML=`<img class="pfp" src="${pfpTo}"><h5>${to}</h5>`;
+    user.innerHTML=`<img class="pfp" src="${pfpTo}"><h5>${to}</h5><div class="unseen"></div>`;
     if(usersOnline.includes(to)){
         user.style.color="#5cb85c";
     }
@@ -623,6 +626,7 @@ function loadDynamic(bruhh){
     setTimeout(() => {
         document.querySelector(".gradient").classList.remove("gradient-animation");
     },2000);
+    join();
 }
 
 socket.on("dynamically loaded",data=>{
@@ -654,14 +658,19 @@ function enableScrolling(){
     document.querySelector(".messages").onscroll=function(){};
 }
 
+socket.on("notification",(data) => {
+    if(data!=to){
+        var previousNotifications = document.querySelector("."+data+" .unseen").innerText;
+        previousNotifications = previousNotifications > 0 ? parseInt(previousNotifications)+1 : 1;
+        document.querySelector("."+data+" .unseen").innerText = previousNotifications;
+        var temporary = document.querySelector("."+data);
+        temporary.remove();
+        document.querySelector(".users-inner").prepend(temporary);
+    }
+});
+
+
 socket.emit("newUser",{username:username});
-
-
-
-
-
-
-
 
 
 

@@ -29,6 +29,11 @@
                     <div onclick="loadDynamic(this)" class="user <%= name.username %>" href="/chats/<%=name.username%>"> 
                         <img class="pfp" src="<%= name.pfp %>">
                         <h5><%= name.username %></h5>
+                        <div class="unseen">
+                        <% if(name.unseen){%>
+                                <%= name.unseen %>
+                        <% } %>
+                    </div>
                     </div>
             <% } %>
             <%})%>
@@ -38,7 +43,6 @@
             <h4><%= username %></h4>
             <img class="pfp" src="<%= pfp %>">
         </div>
-
 </div>
 
     <div class="settings">

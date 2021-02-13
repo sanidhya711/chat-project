@@ -1,5 +1,5 @@
 const express = require('express');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
@@ -82,12 +82,15 @@ passport.deserializeUser(User.deserializeUser());
 //dont change anything above this
 var usersOnline = [];
 var pushSubscriptionIds = {};
+var userSockets = {};
 
 //socket.io
 io.on("connection",socket => {
+
     //client wants to join a room
     socket.on("join",data => {
-    socket.join(data.roomName);
+        socket.leaveAll();
+        socket.join(data.roomName);
     });
 
     socket.on("load dynamic",data=>{
@@ -118,6 +121,9 @@ io.on("connection",socket => {
             });
             chat.save();
             io.sockets.in(message.roomName).emit("new",chat);
+            if(userSockets[message.to]){
+                userSockets[message.to].emit("notification",message.from);
+            }
             if( pushSubscriptionIds[message.to] != null ){
                 Preference.findOne({username:message.from},{_id:0,pfp:1},function(err,fetchedPfp){
                     var notificationData = JSON.stringify({title:message.msg,from:message.from,pfp:fetchedPfp.pfp});
@@ -130,7 +136,7 @@ io.on("connection",socket => {
     //delete a message
     socket.on("delete", data => {
     Chat.deleteOne({_id:data.id},function(err){});
-    io.sockets.in(data.roomName).emit("delete",data.id)
+        io.sockets.in(data.roomName).emit("delete",data.id)
     });
 
     //typing
@@ -167,13 +173,13 @@ io.on("connection",socket => {
     socket.on('newUser',function(data) {
         socket.username = data.username;
         usersOnline.push(data.username);
+        userSockets[data.username] = socket;
         socket.broadcast.emit("online",data.username);
    });
 
    socket.on('disconnect', function () {
     var index = usersOnline.indexOf(socket.username);
     usersOnline.splice(index,1);
-    console.log(socket.username);
     socket.broadcast.emit("offline",socket.username);
   });
 
