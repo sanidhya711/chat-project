@@ -618,4 +618,5 @@ textarea::-webkit-scrollbar{
     width: 100vw;
     display: flex;
     overflow: hidden;
+    position: relative;
 }
