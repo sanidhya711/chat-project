@@ -662,18 +662,38 @@ loadDynamic(userClickedData);
 socket.emit("newUser",{username:username});
 
 
-function uploadPfp(target){
+function uploadPfp(inputEvent){
     var file = inputEvent.files[0];
-    var value = Math.round(circle.value())*100;
+    var fr = new FileReader();
+    fr.onload = function () {
+        document.querySelector(".settings .pfp").src = fr.result;
+        document.querySelector(".user-self .pfp").src = fr.result;
+    }
+    fr.readAsDataURL(file);
+    document.querySelector(".setPfpButton").innerText="confirm";
+    document.querySelector(".setPfpButton").onclick = function(){
+      confirmPfp(file);  
+    }
+}
+
+function changepfpclicked(){
+    document.getElementById("uploadpfp").click();
+}
+
+function confirmPfp(file){
+    document.querySelector(".setPfpButton").innerText="uploading...";
+    document.querySelector(".setPfpButton").onclick = function(){}
     var storageRef = firebase.storage().ref("/pfp/"+username+"/"+file.name);
     var uploadTask = storageRef.put(file)
     uploadTask.on('state_changed', function(snapshot){
-    var progress =(snapshot.bytesTransferred / snapshot.totalBytes);
+        var progress = Math.round(snapshot.bytesTransferred / snapshot.totalBytes*100);
     },function(error){},
     function() {
         uploadTask.snapshot.ref.getDownloadURL().then(function(pfp){
             downloadURL = pfp;
             socket.emit("setPreferences",{username:username,key:"pfp",value:downloadURL});
+            document.querySelector(".setPfpButton").innerText="change pfp";
+            document.querySelector(".setPfpButton").onclick = function(){changepfpclicked()}
         });
     });
 }

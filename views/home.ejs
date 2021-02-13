@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="home.css">
     <script src="/socket.io/socket.io.js"></script>
 </head>
-<body>
+<body  id="drop_zone" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)">
+    <div class="body-wrapper">
     <div class="left-navbar">
         <a href="/"><i class="fa fa-2x fa-home" aria-hidden="true"></i></a>
         <a href="/about" class="fa fa-2x fa-info" aria-hidden="true"></a>
@@ -44,10 +45,23 @@
         <h1>Settings/Preferences</h1>
 
         <div class="settings-inner">
+            <div>
+                <img src="<%= pfp %>" class="pfp">
+                <div onclick="changepfpclicked()" class="btn btn-outline-light btn-sm setPfpButton">
+                    change pfp
+                <input id="uploadpfp" onchange="uploadPfp(this)" hidden type="file">
+            </div>
+            <br>
+            <br>
+            <input placeholder="email" class="email" type="email">
+            <div class="btn btn-outline-light btn-sm setEmailButton">set email</div>
+            <br>
+            <br>
+            <br>
             <h4>These buttons dont work right now... will fix them later</h4>
             <h5>- Sanidhya</h5>
             <br>
-            <div class="toggle-holder">
+            <!-- <div class="toggle-holder">
                 <h3>Notifications</h3>
                 <label class="toggle-control">
                     <input type="checkbox">
@@ -69,15 +83,8 @@
                     <input type="checkbox">
                     <span class="control"></span>
                 </label>
-            </div>
+            </div> -->
             <br>
-            <div>
-                <img src="<%= pfp %>" class="pfp">
-                <div class="btn btn-outline-light btn-sm">
-                    change pfp
-                </div>
-                <input onclick="uploadPfp(this)" hidden type="file">
-            </div>
             <div class="danger-buttons">
                 <div class="btn btn-danger">Logout</div>
                 <button  class="btn btn-danger">Delete Account</button>
@@ -110,5 +117,6 @@
     </script>  
     <script defer src="/home.js"></script>
     <script defer src="/registerServiceWorker.js"></script>
+    </div>
 </body>
 </html>

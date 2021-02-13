@@ -4,7 +4,7 @@
 body{
     height: 100vh;
     color: #EAEAEA;
-    display: flex;
+    overflow: hidden;
 }
 .left-navbar{
     width: 3.5%;
@@ -585,4 +585,37 @@ textarea::-webkit-scrollbar{
         left: 0;
         width: 100%;
     }
+}
+.settings .pfp{
+    height: 65px;
+    width: 65px;
+    border-radius: 65px;
+    margin: 0;
+    position: relative;
+    right: 0.1px;
+}
+.setPfpButton{
+    margin-left: 10px;
+}
+.email{
+    width: 250px;
+    padding: 15px;
+    height: 35px;
+}
+.email:focus{
+    width: 250px;
+}
+.email::placeholder{
+    color: #333;
+}
+.setEmailButton{
+    margin-left: 10px;
+    position: relative;
+    bottom: 1px;
+}
+.body-wrapper{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    overflow: hidden;
 }
