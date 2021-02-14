@@ -460,7 +460,7 @@ textarea::-webkit-scrollbar{
     width: 12px;
 }
 .gradient{
-    background-image: linear-gradient(to right, #FF1178, #FFF205);
+    background-color: #5bc0de;
     height: 5px;
     z-index: 1000;
     -webkit-box-shadow:1px 1px 6px 2px #eaeaea;
@@ -584,7 +584,6 @@ textarea::-webkit-scrollbar{
         position: absolute;
         left: 0;
         width: 100%;
-        z-index: 1;
     }
     .settings{
         position: absolute;
