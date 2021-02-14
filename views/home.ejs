@@ -51,19 +51,26 @@
         <div class="settings-inner">
             <div>
                 <img src="<%= pfp %>" class="pfp">
-                <div onclick="changepfpclicked()" class="btn btn-outline-light btn-sm setPfpButton">
-                    change pfp
+                <div onclick="changepfpclicked()" class="btn btn-outline-light btn-sm setPfpButton">change pfp</div>
                 <input id="uploadpfp" onchange="uploadPfp(this)" hidden type="file">
-            </div>
             <br>
             <br>
-            <input placeholder="email" class="email" type="email">
-            <div class="btn btn-outline-light btn-sm setEmailButton">set email</div>
-            <br>
-            <br>
-            <br>
-            <h4>These buttons dont work right now... will fix them later</h4>
-            <h5>- Sanidhya</h5>
+            <%if(email){%>
+                <style>
+                    .setEmail{
+                        display: none;
+                    }
+                </style>
+            <%}else{%>
+                <style>
+                    .changeEmail{
+                        display: none;
+                    }
+                </style>
+            <%}%>
+            <input placeholder="email" value="<%= email %>" disabled class="email" type="email">
+            <div onclick="changeEmail()" class="btn btn-outline-light btn-sm changeEmail">change email</div>
+            <div onclick="confirmEmail()" class="btn btn-outline-light btn-sm setEmail">set email</div>
             <br>
             <!-- <div class="toggle-holder">
                 <h3>Notifications</h3>

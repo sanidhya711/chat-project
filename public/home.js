@@ -573,8 +573,8 @@ socket.on("dynamically loaded",data=>{
 
 document.addEventListener( "contextmenu", function(e){
     e.preventDefault();
-    if(e.target.classList[0]=="user"){
-        console.log(e.target.classList[1]);
+    if(e.target.nodeName=="IMG"){
+        window.open(e.target.src);
     }
 });
 
@@ -709,3 +709,24 @@ socket.on("notification",(data) => {
         document.querySelector("."+data+" .unseen").innerText = previousNotifications;
     }
 });
+
+function confirmEmail(){
+    var email = document.querySelector(".email").value;
+    socket.emit("setPreferences",{username:username,key:"email",value:email});
+}
+
+socket.on("change email response",response=>{
+    if(response){
+        document.querySelector(".setEmail").style.display="none";
+        document.querySelector(".changeEmail").style.display="inline";
+        document.querySelector(".email").disabled = true;
+    }else{
+        alert("email is already registered with another account");
+    }
+});
+
+function changeEmail(){
+    document.querySelector(".changeEmail").style.display = "none";
+    document.querySelector(".setEmail").style.display="inline";
+    document.querySelector(".email").disabled = false;
+}
