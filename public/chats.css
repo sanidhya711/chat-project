@@ -43,6 +43,7 @@ body{
     background-color: #474747;
     display: flex;
     flex-direction: column;
+    z-index: 10000;
 }
 .users-inner{
     overflow-y: auto;
@@ -83,6 +84,7 @@ body{
     justify-content: center;
     color: #333;
     align-items:flex-end;
+    z-index: 10000;
 }
 .input-bar-holder{
     position: fixed;
@@ -460,10 +462,12 @@ textarea::-webkit-scrollbar{
     width: 12px;
 }
 .gradient{
-    background-image: linear-gradient(to right, #5bc0de, #5cb85c);
-    height: 6px;
-    background-repeat: no-repeat;
-    background-color: #5bc0de;
+    background-image: linear-gradient(to right, #FF1178, #FFF205);
+    height: 5px;
+    z-index: 1000;
+    -webkit-box-shadow:1px 1px 6px 2px #eaeaea;
+    -moz-box-shadow:1px 1px 6px 2px #eaeaea;
+    box-shadow:1px 1px 6px 2px #5bc0de;
 }
 .gradient-animation{
     animation-name: gradientAnimation;
