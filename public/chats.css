@@ -74,8 +74,8 @@ body{
     display: flex;
     flex-direction: column;
     height: 100%;
-    background-blend-mode:darken;
-    background-size: contain;
+    background-blend-mode:hard-light;
+    background-size: cover;
     background-color: #333;
 }
 .top-bar{
@@ -404,18 +404,6 @@ audio{
     position: absolute;
     right: 25px;
     color: #5cb85c;
-    transition: color 0.8s;
-}
-#hangup{
-    position: absolute;
-    right: 25px;
-    color: #d9534f;
-    transition: color 0.8s;
-}
-#answer{
-    position: absolute;
-    right: 60px;
-    color: #5bc0de;
     transition: color 0.8s;
 }
 .fa-phone-square:hover{

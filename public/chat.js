@@ -48,7 +48,8 @@ function handleGesture() {
 var doodleHolder = document.querySelector(".main");
 var noOfDoodles = 4;
 var randomDoodle = Math.floor(Math.random() * noOfDoodles)+1;
-doodleHolder.style.backgroundImage = "url(/doodles/doodle"+randomDoodle+".jpg)";
+// doodleHolder.style.backgroundImage = "url(/doodles/doodle"+randomDoodle+".jpg)";
+doodleHolder.style.backgroundImage = "url(/ooof.png)";
 
 var socket = io();
 
@@ -644,8 +645,11 @@ socket.on("dynamically loaded",data=>{
 
 document.addEventListener( "contextmenu", function(e){
     e.preventDefault();
-    if(e.target.classList[0]=="user"){
-        console.log(e.target.classList[1]);
+    if(e.target.nodeName=="IMG"){
+        window.open(e.target.src);
+    }
+    else if(e.target.className=="messages"){
+        alert("changeBackgroundWallpaper");
     }
 });
 

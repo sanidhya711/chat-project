@@ -54,6 +54,8 @@ body{
     animation-duration: 30s;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
+    padding-top: 3px;
+    padding-bottom: 3px;
 }
 @keyframes color-change{
     0%{border-top: 0.5px solid #FF1178;}
