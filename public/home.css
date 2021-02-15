@@ -509,6 +509,9 @@ textarea::-webkit-scrollbar{
     height: 100%;
     flex-direction: column;
     background-color: #333;
+    background-image: url(/ooof.jpg);
+    background-blend-mode: soft-light;
+    background-position: center;
 }
 .danger-buttons{
     position: absolute;
@@ -648,4 +651,10 @@ textarea::-webkit-scrollbar{
     right: 10px;
     color: #333;
     font-size: small;
+}
+::selection {
+    background: #474747; 
+  }
+::-moz-selection {
+    background: #ffb7b7;
 }

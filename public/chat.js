@@ -550,6 +550,9 @@ socket.on("newUser",data=>{
     element.href="/chats/"+data.username;
     element.innerHTML=`<img class="pfp" src="${data.pfp}"><h5>${data.username}</h5>`;
     document.querySelector(".users").appendChild(element);
+    user.onclick=function(){
+        loadDynamic(user);
+    };
 });
 
 
@@ -599,7 +602,7 @@ function loadDynamic(bruhh){
     document.querySelector(".search-user").dispatchEvent(new Event('input'));
     var pfpTo = document.querySelector(".top-bar img").src;
     var user = document.createElement("div");
-    user.classList.add("user");
+    user.classList.add("user")
     user.classList.add(to);
     user.setAttribute("href","/chats/"+to);
     user.onclick=function(){loadDynamic(this)};
@@ -608,6 +611,9 @@ function loadDynamic(bruhh){
         user.style.color="#5cb85c";
     }
     document.querySelector(".users-inner").prepend(user);
+    user.onclick=function(){
+        loadDynamic(user);
+    };
     to = bruhh.classList[1];
     pfpTo = bruhh.children[0].src;
     window.history.pushState('page2', 'Title', '/chats/'+to);
@@ -673,6 +679,12 @@ socket.on("notification",(data) => {
     }
 });
 
+var addEventListenToUsers = document.querySelectorAll(".user");
+addEventListenToUsers.forEach(function(user){
+    user.addEventListener("click",function(){
+        loadDynamic(user);
+    });
+});
 
 socket.emit("newUser",{username:username});
 

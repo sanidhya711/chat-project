@@ -529,3 +529,9 @@ textarea::-webkit-scrollbar{
     color: #333;
     font-size: small;
 }
+::selection {
+    background: #474747; 
+  }
+::-moz-selection {
+    background: #ffb7b7;
+}

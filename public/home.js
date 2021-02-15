@@ -307,7 +307,6 @@ socket.on("offline",userOffline=>{
             document.querySelector(".messages").removeChild(document.querySelector(".typing-box"));
         }
     }else if(userOffline!=username){
-        console.log(userOffline);
         document.querySelector("."+userOffline+" h5").style.color="inherit";
     }
 });
@@ -486,6 +485,9 @@ socket.on("newUser",data=>{
     element.href="/chats/"+data.username;
     element.innerHTML=`<img class="pfp" src="${data.pfp}"><h5>${data.username}</h5>`;
     document.querySelector(".users").appendChild(element);
+    user.onclick=function(){
+        loadDynamic(user);
+    };
 });
 
 
@@ -534,6 +536,9 @@ function loadDynamic(bruhh){
         user.onclick=function(){loadDynamic(this)};
         user.innerHTML=`<img class="pfp" src="${pfpTo}"><h5>${to}</h5><div class="unseen"></div>`;
         document.querySelector(".users-inner").prepend(user);
+        user.onclick=function(){
+            loadDynamic(user);
+        };
     }
     to = bruhh.classList[1];
     var pfpTo = bruhh.children[0].src;
@@ -731,3 +736,10 @@ function changeEmail(){
     document.querySelector(".setEmail").style.display="inline";
     document.querySelector(".email").disabled = false;
 }
+
+var addEventListenToUsers = document.querySelectorAll(".user");
+addEventListenToUsers.forEach(function(user){
+    user.addEventListener("click",function(){
+        loadDynamic(user);
+    });
+});

@@ -27,7 +27,7 @@
         <div class="users-inner">
             <% users.forEach(function(name){%>
                 <% if(username!=name.username){%>
-                    <div onclick="loadDynamic(this)" class="user <%= name.username %>" href="/chats/<%=name.username%>"> 
+                    <div class="user <%= name.username %>" href="/chats/<%=name.username%>"> 
                         <img class="pfp" src="<%= name.pfp %>">
                         <h5><%= name.username %></h5>
                         <div class="unseen">
