@@ -430,16 +430,18 @@ app.post("/getresetlink",function(req,res){
                     saveRecoveryToken.save();
                 });
 
+                console.log(email);
+
                   var transporter = nodemailer.createTransport({
                     service:"gmail",
                     auth: {
-                      user: process.env.USERNAME,
-                      pass: process.env.PASSWORD
+                      user: process.env.GMAILUSERNAME,
+                      pass: process.env.GMAILPASSWORD
                     }
                   });
                 
                   let mailOptions = {
-                    from: process.env.USERNAME,
+                    from: process.env.GMAILUSERNAME,
                     to: email,
                     subject: "Reset Password",
                     html: `Click <a href='https://intense-reef-95110.herokuapp.com/reset/${recovery_token}'>Here</a> To Reset Password`,

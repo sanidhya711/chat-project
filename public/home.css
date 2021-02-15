@@ -72,8 +72,9 @@ body{
     display: flex;
     flex-direction: column;
     height: 100%;
-    background-blend-mode:darken;
-    background-size: contain;
+    background-blend-mode:hard-light;
+    background-size: cover;
+    background-position: center;
     background-color: #333;
 }
 .top-bar{

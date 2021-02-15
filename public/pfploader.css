@@ -19,3 +19,6 @@ img{
   justify-content: center;
   align-items: center;
 }
+.meter.animate{
+  border-radius: 0;
+}

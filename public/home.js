@@ -620,7 +620,8 @@ input_holder.style.width=width+"px";
 var doodleHolder = document.querySelector(".main");
 var noOfDoodles = 4;
 var randomDoodle = Math.floor(Math.random() * noOfDoodles)+1;
-doodleHolder.style.backgroundImage = "url(/doodles/doodle"+randomDoodle+".jpg)";
+// doodleHolder.style.backgroundImage = "url(/doodles/doodle"+randomDoodle+".jpg)";
+doodleHolder.style.backgroundImage = "url(/ooof.png)";
 
 window.addEventListener("resize",function(){
     width = element.offsetWidth-10;
