@@ -577,26 +577,6 @@ textarea::-webkit-scrollbar{
     background: white;
     transition: left 0.2s ease-in;
 }
-@media only screen and (max-width: 1000px){
-    #msg{
-        width: 100%;
-    }
-    .main{
-        width: 100%;
-        position: absolute;
-        height: 100%;
-    }
-    .users{
-        position: absolute;
-        left: 0;
-        width: 100%;
-    }
-    .settings{
-        position: absolute;
-        left: 0;
-        width: 100%;
-    }
-}
 .settings .pfp{
     height: 65px;
     width: 65px;
@@ -657,4 +637,24 @@ textarea::-webkit-scrollbar{
   }
 ::-moz-selection {
     background: #ffb7b7;
+}
+@media only screen and (max-width: 1000px){
+    #msg{
+        width: 100%;
+    }
+    .main{
+        width: 100%;
+        position: absolute;
+        height: 100%;
+    }
+    .users{
+        position: absolute;
+        left: 0;
+        width: 100%;
+    }
+    .settings{
+        position: absolute;
+        left: 0;
+        width: 100%;
+    }
 }

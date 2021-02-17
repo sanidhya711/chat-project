@@ -549,9 +549,9 @@ socket.on("newUser",data=>{
     element.classList.add(data.username);
     element.href="/chats/"+data.username;
     element.innerHTML=`<img class="pfp" src="${data.pfp}"><h5>${data.username}</h5>`;
-    document.querySelector(".users").appendChild(element);
-    user.onclick=function(){
-        loadDynamic(user);
+    document.querySelector(".users-inner").appendChild(element);
+    element.onclick=function(){
+        loadDynamic(element);
     };
 });
 
