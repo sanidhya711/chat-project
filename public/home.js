@@ -83,17 +83,17 @@ socket.on("new",function(message){
             } 
             const videoId = getId(message.message);
             console.log(videoId);
-            // div.innerHTML=`<iframe src="//www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+            div.innerHTML=`<iframe src="//www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
         }
     }else if(message.type=="image"){
         div.classList.add("image");
-        div.innerHTML=`<img class="media-${colorClass}" src="${message.message}">`;
+        div.innerHTML=`<img class="media-${colorClass}" onload="scrollToBottom()" src="${message.message}">`;
     }else if(message.type=="audio"){
         div.classList.add("audio");
-        div.innerHTML=`<audio class="audio-${colorClass}" controls src="${message.message}"></audio>`
+        div.innerHTML=`<audio class="audio-${colorClass}"  onload="scrollToBottom()" controls src="${message.message}"></audio>`
     }else{
         div.classList.add("video");
-        div.innerHTML=`<video class="media-${colorClass}" controls src="${message.message}"></video>`;
+        div.innerHTML=`<video class="media-${colorClass}"  onload="scrollToBottom()" controls src="${message.message}"></video>`;
     }
     document.querySelector(".messages").appendChild(div);
     scrollToBottom();
@@ -143,13 +143,22 @@ socket.on("delete",WhatToDelete =>{
     parentt.removeChild(childd);
 });
 
+var gifactivateeventlistener = false;
+
 // send message if user presses enter
-document.addEventListener("keypress",function(e) {
-    if(e.key=="Enter"){
-        e.preventDefault();
-        document.querySelector(".send-holder").click();
-    }
-});
+    document.addEventListener("keydown",function(e) {
+        if(e.key=="Enter"){
+            e.preventDefault();
+            document.querySelector(".send-holder").click();
+        }
+        if(e.key=="Escape"){
+            console.log(gifactivateeventlistener);
+            if(gifactivateeventlistener){
+                document.querySelector(".gif-holder").style.display="none";
+                gifactivateeventlistener = false;
+            }
+        }
+    });
     
 //when connected mark everything as seen
 socket.emit("seeneverything",{to:username,from:to});
@@ -410,19 +419,9 @@ function deleteFileFromFirebase(fileName){
     }
 }
 
-//clicke on show smoji button
-// document.querySelector(".fa-smile-o").addEventListener("click",function(){
-//     document.querySelector("emoji-picker").style.display="inline-block";
-// });
-
-
-//send emoji
-
-//click on gif button
-// document.querySelector("svg").addEventListener("click",function(e){
-//     e.stopPropagation();
-//     document.querySelector(".gif-holder").style.display="flex";   
-// });
+document.querySelector(".search_gif").addEventListener("input",function(){
+    grab_data();
+});
 
 function httpGetAsync(theUrl, callback){
     var xmlHttp = new XMLHttpRequest();
@@ -574,6 +573,7 @@ socket.on("dynamically loaded",data=>{
         isAnimationRuuning=false;
     },750);
     socket.emit("seeneverything",{to:username,from:to});
+    document.getElementById("msg").focus();
 });
 
 document.addEventListener( "contextmenu", function(e){
@@ -666,6 +666,25 @@ fileUpload.addEventListener("change",function(e){
 document.querySelector("textarea").style.height="5px";
 document.querySelector("textarea").style.height=(document.querySelector("textarea").scrollHeight)+"px";
 loadDynamic(userClickedData);
+// click on gif button
+document.querySelector("svg").addEventListener("click",function(e){
+    if(!gifactivateeventlistener){
+        e.stopPropagation();
+        document.querySelector(".gif-holder").style.display="flex";   
+        document.querySelector(".search_gif").focus();
+        grab_data();
+        gifactivateeventlistener = true;
+    }
+});
+
+document.addEventListener("click",function(eve){
+    if(gifactivateeventlistener){
+        if(eve.target.className!="gif-holder" && eve.target.className!="search_gif" && eve.target.className!="gif-box" && eve.target.className!="gif-preview-holder"){
+            document.querySelector(".gif-holder").style.display="none";  
+            gifactivateeventlistener = false; 
+        }
+    }
+});
 }
 }
 

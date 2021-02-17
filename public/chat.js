@@ -102,13 +102,13 @@ socket.on("new",function(message){
         }
     }else if(message.type=="image"){
         div.classList.add("image");
-        div.innerHTML=`<img class="media-${colorClass}" src="${message.message}">`;
+        div.innerHTML=`<img class="media-${colorClass}" onload="scrollToBottom()" src="${message.message}">`;
     }else if(message.type=="audio"){
         div.classList.add("audio");
-        div.innerHTML=`<audio class="audio-${colorClass}" controls src="${message.message}"></audio>`
+        div.innerHTML=`<audio class="audio-${colorClass}"  onload="scrollToBottom()" controls src="${message.message}"></audio>`
     }else{
         div.classList.add("video");
-        div.innerHTML=`<video class="media-${colorClass}" controls src="${message.message}"></video>`;
+        div.innerHTML=`<video class="media-${colorClass}"  onload="scrollToBottom()" controls src="${message.message}"></video>`;
     }
     document.querySelector(".messages").appendChild(div);
     scrollToBottom();
@@ -173,10 +173,17 @@ socket.on("delete",WhatToDelete =>{
 });
 
 // send message if user presses enter
-document.addEventListener("keypress",function(e) {
+document.addEventListener("keydown",function(e) {
     if(e.key=="Enter"){
         e.preventDefault();
         document.querySelector(".send-holder").click();
+    }
+    if(e.key=="Escape"){
+        console.log(gifactivateeventlistener);
+        if(gifactivateeventlistener){
+            document.querySelector(".gif-holder").style.display="none";
+            gifactivateeventlistener = false;
+        }
     }
 });
 
@@ -475,11 +482,27 @@ document.querySelector('emoji-picker').addEventListener('emoji-click',function(e
     });
 });
 
-//click on gif button
-// document.querySelector("svg").addEventListener("click",function(e){
-//     e.stopPropagation();
-//     document.querySelector(".gif-holder").style.display="flex";   
-// });
+var gifactivateeventlistener = false;
+
+// click on gif button
+document.querySelector("svg").addEventListener("click",function(e){
+    if(!gifactivateeventlistener){
+        e.stopPropagation();
+        document.querySelector(".gif-holder").style.display="flex";   
+        document.querySelector(".search_gif").focus();
+        grab_data();
+        gifactivateeventlistener = true;
+    }
+});
+
+document.addEventListener("click",function(eve){
+    if(gifactivateeventlistener){
+        if(eve.target.className!="gif-holder" && eve.target.className!="search_gif" && eve.target.className!="gif-box" && eve.target.className!="gif-preview-holder"){
+            document.querySelector(".gif-holder").style.display="none";  
+            gifactivateeventlistener = false; 
+        }
+    }
+});
 
 function httpGetAsync(theUrl, callback){
     var xmlHttp = new XMLHttpRequest();
@@ -647,6 +670,7 @@ socket.on("dynamically loaded",data=>{
         isAnimationRuuning=false;
     },750);
     socket.emit("seeneverything",{to:username,from:to});
+    document.getElementById("msg").focus();
 });
 
 document.addEventListener( "contextmenu", function(e){

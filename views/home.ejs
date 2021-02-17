@@ -14,95 +14,77 @@
 </head>
 <body  id="drop_zone" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)">
     <div class="body-wrapper">
-    <div class="left-navbar">
-        <a href="/"><i class="fa fa-2x fa-home" aria-hidden="true"></i></a>
-        <a href="/about" class="fa fa-2x fa-info" aria-hidden="true"></a>
-        <i class="fa fa-2x fa-user-circle-o" aria-hidden="true"></i>
-        <i  class="fa fa-2x fa-cog" aria-hidden="true"></i>
-        <a onclick="unregister()" class="sign-out-holder" href="/logout"><i class="fa fa-2x fa-sign-out" aria-hidden="true"></i></a>
-    </div>
-    <div class="users">
-        <h3>Conversations</h3>
-        <input placeholder="Search User" class="search-user" type="search">
-        <div class="users-inner">
-            <% users.forEach(function(name){%>
+        <div class="left-navbar">
+            <a href="/"><i class="fa fa-2x fa-home" aria-hidden="true"></i></a>
+            <a href="/about" class="fa fa-2x fa-info" aria-hidden="true"></a>
+            <i class="fa fa-2x fa-user-circle-o" aria-hidden="true"></i>
+            <i  class="fa fa-2x fa-cog" aria-hidden="true"></i>
+            <a onclick="unregister()" class="sign-out-holder" href="/logout"><i class="fa fa-2x fa-sign-out" aria-hidden="true"></i></a>
+        </div>
+        <div class="users">
+            <h3>Conversations</h3>
+            <input placeholder="Search User" class="search-user" type="search">
+            <div class="users-inner">
+                <% users.forEach(function(name){%>
                 <% if(username!=name.username){%>
                     <div class="user <%= name.username %>" href="/chats/<%=name.username%>"> 
                         <img class="pfp" src="<%= name.pfp %>">
                         <h5><%= name.username %></h5>
                         <div class="unseen">
-                        <% if(name.unseen){%>
-                                <%= name.unseen %>
-                        <% } %>
+                            <% if(name.unseen){%>
+                                    <%= name.unseen %>
+                            <% } %>
+                        </div>
                     </div>
-                    </div>
-            <% } %>
-            <%})%>
+                <% } %>
+                <%})%>
+            </div>
+            <div class="user-self"> 
+                <h4><%= username %></h4>
+                <img class="pfp" src="<%= pfp %>">
+            </div>
         </div>
-
-        <div class="user-self"> 
-            <h4><%= username %></h4>
-            <img class="pfp" src="<%= pfp %>">
-        </div>
-</div>
-
-    <div class="settings">
-        <h1>Settings/Preferences</h1>
-
-        <div class="settings-inner">
-            <div>
-                <img src="<%= pfp %>" class="pfp">
-                <div onclick="changepfpclicked()" class="btn btn-outline-light btn-sm setPfpButton">change pfp</div>
-                <input id="uploadpfp" onchange="uploadPfp(this)" hidden type="file">
-            <br>
-            <br>
-            <%if(email){%>
-                <style>
-                    .setEmail{
+        <div class="settings">
+            <h1>Settings/Preferences</h1>
+            <div class="settings-inner">
+                <div>
+                    <img src="<%= pfp %>" class="pfp">
+                    <div onclick="changepfpclicked()" class="btn btn-outline-light btn-sm setPfpButton">change pfp</div>
+                    <input id="uploadpfp" onchange="uploadPfp(this)" hidden type="file">
+                    <br>
+                    <br>
+                    <%if(email){%>
+                        <style>
+                        .setEmail{
+                        display: none;
+                        }
+                    </style>
+                        <%}else{%>
+                        <style>
+                        .changeEmail{
                         display: none;
                     }
-                </style>
-            <%}else{%>
-                <style>
-                    .changeEmail{
-                        display: none;
-                    }
-                </style>
-            <%}%>
-            <input placeholder="email" value="<%= email %>" disabled class="email" type="email">
-            <div onclick="changeEmail()" class="btn btn-outline-light btn-sm changeEmail">change email</div>
-            <div onclick="confirmEmail()" class="btn btn-outline-light btn-sm setEmail">set email</div>
-            <br>
-            <!-- <div class="toggle-holder">
-                <h3>Notifications</h3>
-                <label class="toggle-control">
-                    <input type="checkbox">
-                    <span class="control"></span>
-                </label>
-            </div>
-            <br>
-            <div class="toggle-holder">
-                <h3>Color Theme</h3>
-                <label class="toggle-control">
-                    <input type="checkbox" checked="checked">
-                    <span class="control"></span>
-                </label>
-            </div>
-            <br>
-            <div class="toggle-holder">
-                <h3>Chat Filter</h3>
-                <label class="toggle-control">
-                    <input type="checkbox">
-                    <span class="control"></span>
-                </label>
-            </div> -->
-            <br>
-            <div class="danger-buttons">
-                <div class="btn btn-danger">Logout</div>
-                <button  class="btn btn-danger">Delete Account</button>
+                        </style>
+                    <%}%>
+                    <input placeholder="email" value="<%= email %>" disabled class="email" type="email">
+                    <div onclick="changeEmail()" class="btn btn-outline-light btn-sm changeEmail">change email</div>
+                    <div onclick="confirmEmail()" class="btn btn-outline-light btn-sm setEmail">set email</div>
+                    <br>
+                    <br>
+                    <div class="danger-buttons">
+                        <div class="btn btn-danger">Logout</div>
+                        <button  class="btn btn-danger">Delete Account</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+        <div style="display: none;" class="gif-holder">
+            <input autocomplete="off" placeholder="Search For GIFS" class="search_gif" type="search">
+            <div class="gif-preview-holder">
+                <div class="gif-box" id="gif-box1"></div>
+                <div class="gif-box" id="gif-box2"></div>
+            </div>
+        </div>
     <div class="<%= username %>" id="username"></div>
     <script src="https://www.gstatic.com/firebasejs/7.17.2/firebase.js"></script>
     <script type="module">
