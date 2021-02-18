@@ -554,6 +554,7 @@ function loadDynamic(bruhh){
     to = bruhh.classList[1];
     var pfpTo = bruhh.children[0].src;
     window.history.pushState('page2', 'Title', '/chats/'+to);
+    document.title = "Chats "+to;
     socket.emit("load dynamic",{from:from,to:to});
     document.querySelector("."+to).remove();
     if(usersOnline.includes(to)){
@@ -704,6 +705,16 @@ document.querySelector(".fa-smile-o").addEventListener("click",function(){
     document.querySelector("emoji-picker").style.display="inline-block";
     emojiactivateeventlistener = true;
 });
+
+setInterval(() => {
+    if(document.querySelector(".fa-smile-o").style.display != "none"){
+        document.querySelector(".fa-smile-o").style.display = "none";
+        document.querySelector("svg").style.display = "inline-block";
+    }else{
+        document.querySelector(".fa-smile-o").style.display = "inline-block";
+        document.querySelector("svg").style.display = "none";
+    }
+},3000);
 
 }
 }

@@ -648,6 +648,7 @@ function loadDynamic(bruhh){
     to = bruhh.classList[1];
     pfpTo = bruhh.children[0].src;
     window.history.pushState('page2', 'Title', '/chats/'+to);
+    document.title = "Chats "+to;
     socket.emit("load dynamic",{from:from,to:to});
     document.querySelector("."+to).remove();
     if(usersOnline.includes(to)){
@@ -725,7 +726,6 @@ function call(){
 }
 
 setInterval(() => {
-    console.log(document.querySelector(".fa-smile-o").style.display);
     if(document.querySelector(".fa-smile-o").style.display != "none"){
         document.querySelector(".fa-smile-o").style.display = "none";
         document.querySelector("svg").style.display = "inline-block";
