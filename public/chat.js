@@ -720,12 +720,20 @@ addEventListenToUsers.forEach(function(user){
 
 socket.emit("newUser",{username:username});
 
-
 function call(){
     alert("in developement!!");
 }
 
-
+setInterval(() => {
+    console.log(document.querySelector(".fa-smile-o").style.display);
+    if(document.querySelector(".fa-smile-o").style.display != "none"){
+        document.querySelector(".fa-smile-o").style.display = "none";
+        document.querySelector("svg").style.display = "inline-block";
+    }else{
+        document.querySelector(".fa-smile-o").style.display = "inline-block";
+        document.querySelector("svg").style.display = "none";
+    }
+},3000);
 
 
 

@@ -331,6 +331,7 @@ svg{
     transition: all 0.5s;
     position: relative;
     right: 5px;
+    display: none;
 }
 svg:hover{
     fill: #5cb85c;

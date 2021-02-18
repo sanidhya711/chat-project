@@ -160,7 +160,9 @@ input:focus{
     color: #333;
     transition: color 0.5s;
     position: relative;
-    right: 10px;
+    right: 5px;
+    width:33px;
+    height: 33px;
 }
 .fa-smile-o:hover{
     color: #5cb85c;
@@ -334,6 +336,7 @@ svg{
     transition: all 0.5s;
     position: relative;
     right: 5px;
+    display: none;
 }
 svg:hover{
     fill: #5cb85c;
@@ -544,4 +547,7 @@ textarea::-webkit-scrollbar{
   }
 ::-moz-selection {
     background: #ffb7b7;
+}
+.emoji_gif:hover{
+    color: #5bc0de;
 }
