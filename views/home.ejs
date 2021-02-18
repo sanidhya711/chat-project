@@ -91,7 +91,7 @@
         import {Picker} from "https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js";
         const picker = new Picker();
         const style = document.createElement('style');
-        style.textContent = `::-webkit-scrollbar-track{box-shadow: inset 0 0 6px rgba(0,0,0,0.3);background-color: #EAEAEA;}::-webkit-scrollbar{width: 10px;background-color: #EAEAEA;}::-webkit-scrollbar-thumb{background-color: #5bc0de;}#search{border-radius: 27px;width: 90%;background-color: rgb(202, 202, 202);transition: width 0.5s;color:#333;padding-left:15px;}#search:focus{width:100%;outline:none;}.search-wrapper{width:100%;display:flex;justify-content:center;}`;
+        style.textContent = `::-webkit-scrollbar-track{box-shadow: inset 0 0 6px rgba(0,0,0,0.3);background-color: #EAEAEA;}::-webkit-scrollbar{width: 10px;background-color: #EAEAEA;}::-webkit-scrollbar-thumb{background-color: #5bc0de;}#search{border-radius: 6px;width: 90%;background-color: rgb(202, 202, 202);transition: width 0.5s;color:#333;padding-left:15px;}#search:focus{outline:none;}.search-wrapper{width:100%;display:flex;justify-content:center;}`;
         picker.shadowRoot.appendChild(style);
         document.body.appendChild(picker);
     </script>

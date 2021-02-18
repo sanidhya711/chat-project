@@ -179,10 +179,13 @@ document.addEventListener("keydown",function(e) {
         document.querySelector(".send-holder").click();
     }
     if(e.key=="Escape"){
-        console.log(gifactivateeventlistener);
         if(gifactivateeventlistener){
             document.querySelector(".gif-holder").style.display="none";
             gifactivateeventlistener = false;
+        }
+        if(emojiactivateeventlistener){
+            document.querySelector("emoji-picker").style.display="none";
+            emojiactivateeventlistener = false;
         }
     }
 });
@@ -466,10 +469,11 @@ function deleteFileFromFirebase(fileName){
     }
 }
 
-//clicke on show smoji button
-// document.querySelector(".fa-smile-o").addEventListener("click",function(){
-//     document.querySelector("emoji-picker").style.display="inline-block";
-// });
+// clicke on show smoji button
+document.querySelector(".fa-smile-o").addEventListener("click",function(e){
+    document.querySelector("emoji-picker").style.display="inline-block";
+    emojiactivateeventlistener = true;
+});
 
 
 //send emoji
@@ -477,17 +481,15 @@ document.querySelector('emoji-picker').addEventListener('emoji-click',function(e
     var value = document.querySelector("#msg").value;
     value = value+event.detail.unicode;
     document.querySelector("#msg").value=value;
-    document.addEventListener('click',function(e) {
-        document.querySelector("emoji-picker").style.display="none";
-    });
+    document.querySelector("emoji-picker").style.display="none";
 });
 
 var gifactivateeventlistener = false;
+var emojiactivateeventlistener = false;
 
 // click on gif button
 document.querySelector("svg").addEventListener("click",function(e){
     if(!gifactivateeventlistener){
-        e.stopPropagation();
         document.querySelector(".gif-holder").style.display="flex";   
         document.querySelector(".search_gif").focus();
         grab_data();
@@ -497,9 +499,15 @@ document.querySelector("svg").addEventListener("click",function(e){
 
 document.addEventListener("click",function(eve){
     if(gifactivateeventlistener){
-        if(eve.target.className!="gif-holder" && eve.target.className!="search_gif" && eve.target.className!="gif-box" && eve.target.className!="gif-preview-holder"){
+        if(eve.target.className!="gif-holder" && eve.target.className!="search_gif" && eve.target.className!="gif-box" && eve.target.className!="gif-preview-holder" && eve.target.nodeName != "svg"){
             document.querySelector(".gif-holder").style.display="none";  
             gifactivateeventlistener = false; 
+        }
+    }
+    if(emojiactivateeventlistener){
+        if(eve.target.className.length!=0 && eve.target.className!="fa fa-2x fa-smile-o"){
+            document.querySelector("emoji-picker").style.display="none";  
+            emojiactivateeventlistener = false; 
         }
     }
 });
@@ -712,6 +720,10 @@ addEventListenToUsers.forEach(function(user){
 
 socket.emit("newUser",{username:username});
 
+
+function call(){
+    alert("in developement!!");
+}
 
 
 

@@ -321,6 +321,7 @@ emoji-picker{
     right: 5%;
     bottom: 80px;
     display: none;
+    --input-placeholder-color : #222;
 }
 .gif-emoji-button-holder{
     right: 65px;
