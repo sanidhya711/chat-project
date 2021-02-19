@@ -1,13 +1,13 @@
-var element = document.querySelector(".main");
-var input_holder = document.querySelector(".input-bar-holder");
-var width = element.offsetWidth-10;
-input_holder.style.width=width+"px";
+// var element = document.querySelector(".main");
+// var input_holder = document.querySelector(".input-bar-holder");
+// var width = element.offsetWidth-10;
+// input_holder.style.width=width+"px";
 var usersOnline = [];
 
-window.addEventListener("resize",function(){
-    width = element.offsetWidth-10;
-    input_holder.style.width=width+"px";
-});
+// window.addEventListener("resize",function(){
+//     width = element.offsetWidth-10;
+//     input_holder.style.width=width+"px";
+// });
 
 var touchstartX = 0;
 var touchendX = 0;
@@ -110,7 +110,11 @@ socket.on("new",function(message){
         div.classList.add("video");
         div.innerHTML=`<video class="media-${colorClass}"  onload="scrollToBottom()" controls src="${message.message}"></video>`;
     }
-    document.querySelector(".messages").appendChild(div);
+    if(document.querySelector(".typing-box")){
+        document.querySelector(".typing-box").before(div);
+    }else{
+        document.querySelector(".messages").appendChild(div);
+    }
     scrollToBottom();
 });
 
@@ -615,15 +619,6 @@ document.querySelector("textarea").style.height=(document.querySelector("textare
 function auto_grow(element){
     element.style.height = "5px";
     element.style.height = (element.scrollHeight)+"px";
-    if(element.offsetHeight>50){
-        document.querySelector(".messages").style.marginBottom = (element.offsetHeight+27)+"px";
-        var bruh = document.querySelectorAll(".message");
-        bruh[bruh.length-1].style.marginBottom = "20px";
-    }else{
-        document.querySelector(".messages").style.marginBottom = "0px"; 
-        var bruh = document.querySelectorAll(".message");
-        bruh[bruh.length-1].removeAttribute('style');
-    }
     scrollToBottom();
 }
 
@@ -659,7 +654,7 @@ function loadDynamic(bruhh){
     document.querySelector(".top-bar h3").innerText=to;
     document.querySelector(".top-bar .pfp").src = pfpTo;
     document.querySelector(".gradient").classList.add("gradient-animation");
-    document.querySelector("#msg").placeholder="Message "+to;
+    document.querySelector("#msg").placeholder="@"+to;
     users.classList.remove("users-swipe-left");
     users.classList.add("users-swipe-right");
     setTimeout(() => {
@@ -735,10 +730,10 @@ setInterval(() => {
     }
 },3000);
 
-addEventListener("load", function() {
-    var viewport = document.querySelector("meta[name=viewport]");
-    viewport.setAttribute("content", viewport.content + ", height=" + window.innerHeight);
-})
+// addEventListener("load", function() {
+//     var viewport = document.querySelector("meta[name=viewport]");
+//     viewport.setAttribute("content", viewport.content + ", height=" + window.innerHeight);
+// })
 
 
 

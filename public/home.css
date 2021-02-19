@@ -1,8 +1,11 @@
+html{
+    height: 100%;
+}
 *{
     user-select: none;
 }
 body{
-    height: 100vh;
+    height: 100%;
     color: #EAEAEA;
     overflow: hidden;
 }
@@ -88,7 +91,6 @@ body{
     align-items:flex-end;
 }
 .input-bar-holder{
-    position: fixed;
     bottom: 0px;
     display: flex;
     justify-content: center;
@@ -96,6 +98,7 @@ body{
     padding: 20px 0px;
     align-self: center;
     align-self: start;
+    width: 100%;
 }
 input{
     border-radius: 27px;
@@ -200,7 +203,7 @@ input:focus{
     position: relative;
 }
 .message:last-child{
-    margin-bottom: 100px;
+    margin-bottom: 25px;
 }
 .from-other-user{
     align-self: flex-start;
@@ -450,24 +453,22 @@ audio{
 .fa:hover{
     text-decoration: none;
 }
-textarea {
+textarea{
     resize: none;
     max-height: 300px;
     position: relative;
     left: 30px;
     border-radius: 27px;
-    width: 75%;
+    width: 100%;
+    max-width: 1000px;
     padding: 12px 100px 12px 45px;
-    border: none;
+    border: 0;
     background-color: rgb(202, 202, 202);
-    transition: width 0.5s;
-    caret-color: transparent;
     box-shadow: 0 0 6px #EAEAEA;
+    caret-color: #333;
 }
 textarea:focus{
     outline: none;
-    width: 80%;
-    caret-color: #333;
 }
 textarea::-webkit-scrollbar-track{
     margin: 20px 0px;
@@ -652,9 +653,6 @@ textarea::-webkit-scrollbar{
     background: #ffb7b7;
 }
 @media only screen and (max-width: 1000px){
-    #msg{
-        width: 100%;
-    }
     .main{
         width: 100%;
         position: absolute;
