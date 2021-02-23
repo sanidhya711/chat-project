@@ -99,6 +99,11 @@ io.on("connection",socket => {
         });
     });
 
+    socket.on("hangup",(userToEmitTo) => {
+        console.log(userToEmitTo);
+        userSockets[userToEmitTo].emit("hangup");
+    });
+
     //new message in some room
     socket.on("new", message => {
     Preference.find({username: {$in:[message.from,message.to]}},{_id:0,filter:1},function(err,fetchedFilterSettings){

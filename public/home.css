@@ -433,7 +433,7 @@ audio{
     color: #5bc0de;
     transition: color 0.8s;
 }
-.fa-phone-square:hover{
+#call:hover{
     color: #333 !important;
 }
 .user-self{

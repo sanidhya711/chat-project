@@ -716,10 +716,6 @@ addEventListenToUsers.forEach(function(user){
 
 socket.emit("newUser",{username:username});
 
-function call(){
-    alert("in developement!!");
-}
-
 setInterval(() => {
     if(document.querySelector(".fa-smile-o").style.display != "none"){
         document.querySelector(".fa-smile-o").style.display = "none";
