@@ -496,6 +496,10 @@ app.get("/about",function(req,res){
     res.render("about");
 });
 
+app.get('*', function(req, res){
+    res.send('<style>body{margin:0;}</style><div style="height:100vh;width:100%;display:flex;align-items:center;flex-direction:column;background-color:#333;"><span style="font-size:300px;">404</span><span style="font-size:70px;margin-top:50px;opacity:75%;">Page not found</span></div>');
+});
+
 //do not change
 var server = http.listen(process.env.PORT || 3000, () => {
     console.log('server is running on port', server.address().port);
