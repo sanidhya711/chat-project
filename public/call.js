@@ -6,6 +6,12 @@ var videoGrid = document.querySelector(".video-grid-inner");
 var callButton = document.getElementById("call");
 
 document.querySelector("#call").addEventListener("click",function(){
+    call_peer();
+});
+
+function call_peer(){
+    document.querySelector(".fa-phone").remove();
+    document.querySelector(".ringtone").play();
     navigator.mediaDevices.getUserMedia({audio:true,video:true}).then(stream => {
         otherPerson = to;
         var myVideo = document.createElement("video");
@@ -31,6 +37,7 @@ document.querySelector("#call").addEventListener("click",function(){
 
         var video = document.createElement('video');
         call.on('stream', userVideoStream =>{
+            pause();
             video.srcObject = userVideoStream;
             video.addEventListener("loadedmetadata",function(){
                 video.play();
@@ -40,22 +47,44 @@ document.querySelector("#call").addEventListener("click",function(){
     }).catch(function(err){
         alert(err);
     });
-});
+}
 
 function hangup(){
     call.close();
     document.querySelector(".video-grid").innerHTML=`<div class="video-grid-inner"></div> <div class="call-buttons"></div>`;
     socket.emit("hangup",otherPerson);
     videoGrid = document.querySelector(".video-grid-inner");
+    var i = document.createElement("i");
+    i.id="call"
+    i.classList.add("fas");
+    i.classList.add("fa-2x");
+    i.classList.add("fa-phone");
+    i.onclick = function(){
+        call_peer();
+    };
+    document.querySelector(".top-bar").appendChild(i);
+    pause();
 }
 
 socket.on("hangup",()=>{
     call.close();
     document.querySelector(".video-grid").innerHTML=`<div class="video-grid-inner"></div> <div class="call-buttons"></div>`;
     videoGrid = document.querySelector(".video-grid-inner");
+    var i = document.createElement("i");
+    i.id="call"
+    i.classList.add("fas");
+    i.classList.add("fa-2x");
+    i.classList.add("fa-phone");
+    i.onclick = function(){
+        call_peer();
+    };
+    document.querySelector(".top-bar").appendChild(i);
+    pause();
 });
 
 myPeer.on('call', calll => {
+    document.querySelector(".fa-phone").remove();
+    document.querySelector(".ringtone").play();
 
     call = calll;
     otherPerson = call.peer;
@@ -86,9 +115,11 @@ myPeer.on('call', calll => {
     i.classList.add("fa-2x");
     i.id="answer";
     i.onclick=function(){
+        pause();
+        this.remove();
+        console.log("removed");
         navigator.mediaDevices.getUserMedia({audio:true,video:true}).then(stream => {
         var myVideo = document.createElement("video");
-        console.log(myVideo);
         myVideo.srcObject=stream;
         myVideo.muted=true;
         myVideo.play();
@@ -102,19 +133,14 @@ myPeer.on('call', calll => {
             })
             videoGrid.appendChild(video);
             });
-            var i = document.createElement("i");
-            i.classList.add("fas");
-            i.classList.add("fa-phone-slash");
-            i.classList.add("fa-2x");
-            i.id="hangup";
-            i.onclick=function(){
-                hangup();
-            };
-            document.querySelector(".call-buttons").appendChild(i);
         }).catch(function(err){
             alert(err);
         })
-        console.log(call);
     };
     document.querySelector(".call-buttons").appendChild(i);
 });
+
+function pause(params) {
+    document.querySelector(".ringtone").pause();
+    document.querySelector(".ringtone").currentTime = 0;
+}
