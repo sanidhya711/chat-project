@@ -5,12 +5,8 @@ var call;
 var videoGrid = document.querySelector(".video-grid-inner");
 var callButton = document.getElementById("call");
 
-document.querySelector("#call").addEventListener("click",function(){
-    call_peer();
-});
-
-function call_peer(){
-    document.querySelector(".fa-phone").remove();
+function call_peer(elem){
+    elem.remove();
     document.querySelector(".ringtone").play();
     navigator.mediaDevices.getUserMedia({audio:true,video:true}).then(stream => {
         otherPerson = to;
@@ -60,7 +56,7 @@ function hangup(){
     i.classList.add("fa-2x");
     i.classList.add("fa-phone");
     i.onclick = function(){
-        call_peer();
+        call_peer(this);
     };
     document.querySelector(".top-bar").appendChild(i);
     pause();
@@ -76,7 +72,7 @@ socket.on("hangup",()=>{
     i.classList.add("fa-2x");
     i.classList.add("fa-phone");
     i.onclick = function(){
-        call_peer();
+        call_peer(this);
     };
     document.querySelector(".top-bar").appendChild(i);
     pause();

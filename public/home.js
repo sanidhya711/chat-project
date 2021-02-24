@@ -623,7 +623,7 @@ function showMessages(userClickedData){
   document.querySelector(".settings").remove();
   var div = document.createElement("div");
   div.className = "main";
-  div.innerHTML = `<div class="top-bar"><img class="pfp" src=""><h3></h3><i onclick="call()" id="call" class="fa fa-2x fa-phone-square"></i></div>
+  div.innerHTML = `<div class="top-bar"><img class="pfp" src=""><h3></h3><i id="call" onclick="call_peer(this);" class="fa fa-2x fa-phone-square"></i></div>
 <div class="gradient"></div>
 <div class="video-grid"></div>
 <div class="messages"></div>
@@ -788,8 +788,4 @@ addEventListenToUsers.forEach(function(user){
         loadDynamic(user);
     });
 });
-
-function call(){
-    alert("in developement!!");
-}
 
