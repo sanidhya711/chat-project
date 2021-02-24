@@ -100,8 +100,9 @@ io.on("connection",socket => {
     });
 
     socket.on("hangup",(userToEmitTo) => {
-        console.log(userToEmitTo);
-        userSockets[userToEmitTo].emit("hangup");
+        if(userSockets[userToEmitTo]){
+            userSockets[userToEmitTo].emit("hangup");
+        }
     });
 
     //new message in some room
