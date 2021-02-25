@@ -48,3 +48,7 @@ function urlBase64ToUint8Array(base64String) {
 function unregister(){
     register.unregister();
 }
+
+function pushMessageToServiceWorker(nameToPush) {
+    register.active.postMessage(JSON.stringify(nameToPush));
+}

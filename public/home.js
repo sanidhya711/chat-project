@@ -63,7 +63,9 @@ function urlify(text){
 
 //getting new messages in room
 socket.on("new",function(message){
-    socket.emit("seeneverything",{to:username,from:to,roomName:roomName});
+    if(!document.hidden){
+        socket.emit("seeneverything",{to:username,from:to,roomName:roomName});
+    }
     var div = document.createElement("div");
     div.classList.add("message");
     if(message.from==username){var colorClass = "from-self"}else{var colorClass = "from-other-user"} 
@@ -183,7 +185,7 @@ socket.emit("seeneverything",{to:username,from:to});
 document.querySelector(".search-user").addEventListener("input",function(){
     var query = document.querySelector(".search-user").value;
     if(query!=null && query!="" && query!=" "){
-        query.toLowerCase();
+        query = query.toLowerCase();
         var namesToShow = [];
         var allUserNames = document.querySelectorAll(".user h5");
         allUserNames.forEach(function(element){

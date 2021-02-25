@@ -1,13 +1,4 @@
-// var element = document.querySelector(".main");
-// var input_holder = document.querySelector(".input-bar-holder");
-// var width = element.offsetWidth-10;
-// input_holder.style.width=width+"px";
 var usersOnline = [];
-
-// window.addEventListener("resize",function(){
-//     width = element.offsetWidth-10;
-//     input_holder.style.width=width+"px";
-// });
 
 var touchstartX = 0;
 var touchendX = 0;
@@ -78,7 +69,9 @@ function urlify(text){
 
 //getting new messages in room
 socket.on("new",function(message){
-    socket.emit("seeneverything",{to:username,from:to,roomName:roomName});
+    if(!document.hidden){
+        socket.emit("seeneverything",{to:username,from:to,roomName:roomName});
+    }
     var div = document.createElement("div");
     div.classList.add("message");
     if(message.from==username){var colorClass = "from-self"}else{var colorClass = "from-other-user"} 
@@ -204,7 +197,7 @@ socket.emit("seeneverything",{to:username,from:to});
 document.querySelector(".search-user").addEventListener("input",function(){
     var query = document.querySelector(".search-user").value;
     if(query!=null && query!="" && query!=" "){
-        query.toLowerCase();
+        query = query.toLowerCase();
         var namesToShow = [];
         var allUserNames = document.querySelectorAll(".user h5");
         allUserNames.forEach(function(element){
@@ -473,13 +466,6 @@ function deleteFileFromFirebase(fileName){
     }
 }
 
-// clicke on show smoji button
-document.querySelector(".fa-smile-o").addEventListener("click",function(e){
-    document.querySelector("emoji-picker").style.display="inline-block";
-    emojiactivateeventlistener = true;
-});
-
-
 //send emoji
 document.querySelector('emoji-picker').addEventListener('emoji-click',function(event){
     var value = document.querySelector("#msg").value;
@@ -494,16 +480,29 @@ var emojiactivateeventlistener = false;
 // click on gif button
 document.querySelector("svg").addEventListener("click",function(e){
     if(!gifactivateeventlistener){
-        document.querySelector(".gif-holder").style.display="flex";   
-        document.querySelector(".search_gif").focus();
-        grab_data();
-        gifactivateeventlistener = true;
+        e.stopPropagation();
     }
+    document.querySelector("emoji-picker").style.display="none";
+    document.querySelector(".gif-holder").style.display="flex";   
+    document.querySelector(".search_gif").focus();
+    grab_data();
+    gifactivateeventlistener = true;
 });
+
+// clicke on show smoji button
+document.querySelector(".fa-smile-o").addEventListener("click",function(e){
+    if(!emojiactivateeventlistener){
+        e.stopPropagation();
+    }
+    document.querySelector(".gif-holder").style.display="none"; 
+    document.querySelector("emoji-picker").style.display="inline-block";
+    emojiactivateeventlistener = true;
+});
+
 
 document.addEventListener("click",function(eve){
     if(gifactivateeventlistener){
-        if(eve.target.className!="gif-holder" && eve.target.className!="search_gif" && eve.target.className!="gif-box" && eve.target.className!="gif-preview-holder" && eve.target.nodeName != "svg"){
+        if(eve.target.className!="gif-holder" && eve.target.className!="search_gif" && eve.target.className!="gif-box" && eve.target.className!="gif-preview-holder"){
             document.querySelector(".gif-holder").style.display="none";  
             gifactivateeventlistener = false; 
         }
@@ -641,6 +640,7 @@ function loadDynamic(bruhh){
         loadDynamic(user);
     };
     to = bruhh.classList[1];
+    pushMessageToServiceWorker(to);
     pfpTo = bruhh.children[0].src;
     window.history.pushState('page2', 'Title', '/chats/'+to);
     document.title = "Chats "+to;

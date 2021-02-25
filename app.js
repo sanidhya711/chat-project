@@ -79,7 +79,6 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-//dont change anything above this
 var usersOnline = [];
 var pushSubscriptionIds = {};
 var userSockets = {};
@@ -102,6 +101,17 @@ io.on("connection",socket => {
     socket.on("hangup",(userToEmitTo) => {
         if(userSockets[userToEmitTo]){
             userSockets[userToEmitTo].emit("hangup");
+        }
+    });
+
+    socket.on("calling",data=>{
+        if(!usersOnline.includes(data.to)){
+            if( pushSubscriptionIds[data.to] != null ){
+                Preference.findOne({username:data.from},{_id:0,pfp:1},function(err,fetchedPfp){
+                    var notificationData = JSON.stringify({title:"calling",from:data.from,pfp:fetchedPfp.pfp});
+                    webPush.sendNotification(pushSubscriptionIds[data.to],notificationData).catch(err => console.log(err));
+                });
+            }
         }
     });
 

@@ -6,6 +6,7 @@ var videoGrid = document.querySelector(".video-grid-inner");
 var callButton = document.getElementById("call");
 
 function call_peer(elem){
+    socket.emit("calling",{from:username,to:to});
     elem.remove();
     document.querySelector(".ringtone").play();
     navigator.mediaDevices.getUserMedia({audio:true,video:true}).then(stream => {
@@ -16,7 +17,6 @@ function call_peer(elem){
         myVideo.play();
         videoGrid.appendChild(myVideo);
         call = myPeer.call(to,stream);
-
         var eee = document.createElement("div");
         var mmm = document.querySelector(".top-bar img").src;
         eee.innerHTML = `<img src="${mmm}"></img>`;
@@ -40,8 +40,6 @@ function call_peer(elem){
             })
             videoGrid.appendChild(video);
         });
-    }).catch(function(err){
-        alert(err);
     });
 }
 
@@ -113,7 +111,6 @@ myPeer.on('call', calll => {
     i.onclick=function(){
         pause();
         this.remove();
-        console.log("removed");
         navigator.mediaDevices.getUserMedia({audio:true,video:true}).then(stream => {
         var myVideo = document.createElement("video");
         myVideo.srcObject=stream;
