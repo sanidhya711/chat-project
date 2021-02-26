@@ -197,6 +197,8 @@ io.on("connection",socket => {
     var index = usersOnline.indexOf(socket.username);
     usersOnline.splice(index,1);
     socket.broadcast.emit("offline",socket.username);
+    var notificationData = JSON.stringify({wentOffline:true});
+    webPush.sendNotification(pushSubscriptionIds[socket.username],notificationData).catch(err);
   });
 
   socket.on("getOnline",data=>{
@@ -508,7 +510,7 @@ app.get("/about",function(req,res){
 });
 
 app.get('*', function(req, res){
-    res.send('<style>body{margin:0;}</style><div style="height:100vh;width:100%;display:flex;align-items:center;flex-direction:column;background-color:#333;"><span style="font-size:300px;">404</span><span style="font-size:70px;margin-top:50px;opacity:75%;">Page not found</span></div>');
+    res.render("404page");
 });
 
 //do not change

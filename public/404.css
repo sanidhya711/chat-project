@@ -1,0 +1,24 @@
+body{
+    background: #333;
+    height: 100vh;
+    color: #EAEAEA;
+}
+h1{
+    font-size: 150px;
+    color: rgb(219, 87, 87);
+}
+.h1-holder{
+    padding-top: 20px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+h2{
+    font-size: 50px;
+}
+.h2-holder{
+    padding-top: 200px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}

@@ -558,6 +558,7 @@ function loadDynamic(bruhh){
         };
     }
     to = bruhh.classList[1];
+    pushMessageToServiceWorker(to);
     var pfpTo = bruhh.children[0].src;
     window.history.pushState('page2', 'Title', '/chats/'+to);
     document.title = "Chats "+to;

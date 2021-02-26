@@ -500,12 +500,6 @@ textarea::-webkit-scrollbar{
     -webkit-font-smoothing: antialiased;
     top: calc(100% - 24px);
 }
-.unseen{
-    position: absolute;
-    right: 30px;
-    color: #5bc0de;
-    font-size: xx-large;
-}
 @media only screen and (max-width: 1000px){
     input{
         width: 100%;
