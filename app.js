@@ -198,7 +198,7 @@ io.on("connection",socket => {
     usersOnline.splice(index,1);
     socket.broadcast.emit("offline",socket.username);
     var notificationData = JSON.stringify({wentOffline:true});
-    webPush.sendNotification(pushSubscriptionIds[socket.username],notificationData).catch(err);
+    webPush.sendNotification(pushSubscriptionIds[socket.username],notificationData).catch(err => console.log(err));
   });
 
   socket.on("getOnline",data=>{
