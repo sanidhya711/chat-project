@@ -318,27 +318,53 @@ function appendMessages(data,addScrollToBottom){
 socket.emit("getOnline","bruh");
 
 socket.on("startingOnline",data=>{
-  data.forEach(function(user) {
+  data.forEach(function(userr){
+    var user = userr.slice(0,-1);
+    var deviceType = userr.substr(userr.length-1);
     usersOnline.push(user);
     if(user == to){
      document.querySelector(".top-bar h3").style.color="#5cb85c";
     }else if(user != username){
      document.querySelector("."+user+" h5").style.color="#5cb85c";
+     var i = document.createElement("i");
+    if(deviceType == "m"){
+        i.classList.add("fas");
+        i.classList.add("fa-mobile-alt");
+        insertAfter(i,document.querySelector("."+user+" h5"));
+    }else{
+        i.classList.add("fas");
+        i.classList.add("fa-desktop");
+        insertAfter(i,document.querySelector("."+user+" h5"));
+    }
     }
   });
 });
 
 socket.on("online",data=>{
-    usersOnline.push(data);
-    if(data == to){
+    usersOnline.push(data.username);
+    if(data.username == to){
         document.querySelector(".top-bar h3").style.color="#5cb85c";
         if(typingvar>0){
             socket.emit("typing",{roomName:roomName,typing:true});
         }
-    }else if(data!=username){
-        document.querySelector("."+data+" h5").style.color="#5cb85c";
+    }else if(data.username!=username){
+        document.querySelector("."+data.username+" h5").style.color="#5cb85c";
+        var i = document.createElement("i");
+        if(data.isMobile){
+            i.classList.add("fas");
+            i.classList.add("fa-mobile-alt");
+            insertAfter(i,document.querySelector("."+data.username+" h5"));
+        }else{
+            i.classList.add("fas");
+            i.classList.add("fa-desktop");
+            insertAfter(i,document.querySelector("."+data.username+" h5"));
+        }
     }
 });
+
+function insertAfter(newNode, existingNode) {
+    existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
+}
 
 socket.on("offline",userOffline=>{
     var index = usersOnline.indexOf(userOffline);
@@ -350,6 +376,7 @@ socket.on("offline",userOffline=>{
         }
     }else if(userOffline!=username){
         document.querySelector("."+userOffline+" h5").style.color="inherit";
+        document.querySelector("."+userOffline+" h5").nextSibling.remove();
     }
 });
 
@@ -714,7 +741,7 @@ addEventListenToUsers.forEach(function(user){
     });
 });
 
-socket.emit("newUser",{username:username});
+socket.emit("newUser",{username:username,isMobile:isMobileDevice()});
 
 setInterval(() => {
     if(document.querySelector(".fa-smile-o").style.display != "none"){
@@ -726,11 +753,14 @@ setInterval(() => {
     }
 },3000);
 
-// addEventListener("load", function() {
-//     var viewport = document.querySelector("meta[name=viewport]");
-//     viewport.setAttribute("content", viewport.content + ", height=" + window.innerHeight);
-// })
+addEventListener("load", function() {
+    var viewport = document.querySelector("meta[name=viewport]");
+    viewport.setAttribute("content", viewport.content + ", height=" + window.innerHeight);
+})
 
+function isMobileDevice(){
+    return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+};
 
 
 

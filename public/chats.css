@@ -558,3 +558,21 @@ textarea::-webkit-scrollbar{
         min-width: calc(100vw - 30px);
     }
 }
+.unseen{
+    position: absolute;
+    right: 40px;
+    color: #5bc0de;
+    font-size: xx-large;
+}
+.fa-desktop{
+    position: absolute;
+    right: 10px;
+    top: 40px;
+    color: #5bc0de;
+}
+.fa-mobile-alt{
+    position: absolute;
+    right: 10px;
+    top: 40px;
+    color: #5bc0de;
+}

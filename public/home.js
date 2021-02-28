@@ -303,25 +303,51 @@ function appendMessages(data,addScrollToBottom){
 socket.emit("getOnline","bruh");
 
 socket.on("startingOnline",data=>{
-  data.forEach(function(user){
+    data.forEach(function(userr){
+      var user = userr.slice(0,-1);
+      var deviceType = userr.substr(userr.length-1);
       usersOnline.push(user);
-    if(user == to){
-     document.querySelector(".top-bar h3").style.color="#5cb85c";
-    }else if(user != username){
-     document.querySelector("."+user+" h5").style.color="#5cb85c";
-    }
+      if(user == to){
+       document.querySelector(".top-bar h3").style.color="#5cb85c";
+      }else if(user != username){
+       document.querySelector("."+user+" h5").style.color="#5cb85c";
+       var i = document.createElement("i");
+      if(deviceType == "m"){
+          i.classList.add("fas");
+          i.classList.add("fa-mobile-alt");
+          insertAfter(i,document.querySelector("."+user+" h5"));
+      }else{
+          i.classList.add("fas");
+          i.classList.add("fa-desktop");
+          insertAfter(i,document.querySelector("."+user+" h5"));
+      }
+      }
+    });
   });
-});
+
+function insertAfter(newNode, existingNode) {
+    existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
+}
 
 socket.on("online",data=>{
-    usersOnline.push(data);
-    if(data == to){
+    usersOnline.push(data.username);
+    if(data.username == to){
         document.querySelector(".top-bar h3").style.color="#5cb85c";
         if(typingvar>0){
             socket.emit("typing",{roomName:roomName,typing:true});
         }
-    }else if(data!=username){
-        document.querySelector("."+data+" h5").style.color="#5cb85c";
+    }else if(data.username!=username){
+        document.querySelector("."+data.username+" h5").style.color="#5cb85c";
+        var i = document.createElement("i");
+        if(data.isMobile){
+            i.classList.add("fas");
+            i.classList.add("fa-mobile-alt");
+            insertAfter(i,document.querySelector("."+data.username+" h5"));
+        }else{
+            i.classList.add("fas");
+            i.classList.add("fa-desktop");
+            insertAfter(i,document.querySelector("."+data.username+" h5"));
+        }
     }
 });
 
@@ -330,11 +356,12 @@ socket.on("offline",userOffline=>{
     usersOnline.splice(index,1);
     if(userOffline == to){
         document.querySelector(".top-bar h3").style.color="inherit";
-        if(!!document.querySelector(".typing-box")){
+        if(document.querySelector(".typing-box")){
             document.querySelector(".messages").removeChild(document.querySelector(".typing-box"));
         }
     }else if(userOffline!=username){
         document.querySelector("."+userOffline+" h5").style.color="inherit";
+        document.querySelector("."+userOffline+" h5").nextSibling.remove();
     }
 });
 
@@ -524,18 +551,10 @@ function dragOverHandler(ev) {
     ev.preventDefault();
 }
 
+
 function auto_grow(element){
     element.style.height = "5px";
     element.style.height = (element.scrollHeight)+"px";
-    if(element.offsetHeight>50){
-        document.querySelector(".messages").style.marginBottom = (element.offsetHeight+27)+"px";
-        var bruh = document.querySelectorAll(".message");
-        bruh[bruh.length-1].style.marginBottom = "20px";
-    }else{
-        document.querySelector(".messages").style.marginBottom = "0px"; 
-        var bruh = document.querySelectorAll(".message");
-        bruh[bruh.length-1].removeAttribute('style');
-    }
     scrollToBottom();
 }
 
@@ -717,7 +736,7 @@ setInterval(() => {
 }
 }
 
-socket.emit("newUser",{username:username});
+socket.emit("newUser",{username:username,isMobile:isMobileDevice()});
 
 
 function uploadPfp(inputEvent){
@@ -792,3 +811,6 @@ addEventListenToUsers.forEach(function(user){
     });
 });
 
+function isMobileDevice() {
+    return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+};

@@ -81,6 +81,7 @@ passport.deserializeUser(User.deserializeUser());
 
 var usersOnline = [];
 var pushSubscriptionIds = {};
+var deviceTypes = {};
 var userSockets = {};
 
 //socket.io
@@ -186,23 +187,31 @@ io.on("connection",socket => {
         }
     });
 
-    socket.on('newUser',function(data) {
+    socket.on('newUser',function(data){
         socket.username = data.username;
         usersOnline.push(data.username);
         userSockets[data.username] = socket;
-        socket.broadcast.emit("online",data.username);
+        deviceTypes[socket.username] = data.isMobile;
+        socket.broadcast.emit("online",data);
    });
 
-   socket.on('disconnect', function () {
+   socket.on('disconnect', function(){
     var index = usersOnline.indexOf(socket.username);
     usersOnline.splice(index,1);
-    socket.broadcast.emit("offline",socket.username);
-    var notificationData = JSON.stringify({wentOffline:true});
-    webPush.sendNotification(pushSubscriptionIds[socket.username],notificationData).catch(err => console.log(err));
+    if(!usersOnline.includes(socket.username)){
+        socket.broadcast.emit("offline",socket.username);
+        var notificationData = JSON.stringify({wentOffline:true});
+        webPush.sendNotification(pushSubscriptionIds[socket.username],notificationData).catch(err => console.log(err));
+    }
   });
 
   socket.on("getOnline",data=>{
-    socket.emit("startingOnline",usersOnline);
+    var usersWithDeviceTypes = [];
+    usersOnline.forEach(function(user){
+        user = deviceTypes[user] ? user+"m" : user+"d";
+        usersWithDeviceTypes.push(user);
+    });
+    socket.emit("startingOnline",usersWithDeviceTypes);
   });
 
   socket.on("load more messages",data=>{

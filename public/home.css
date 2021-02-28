@@ -678,3 +678,15 @@ textarea::-webkit-scrollbar{
         min-width: calc(100vw - 30px);
     }
 }
+.fa-desktop{
+    position: absolute;
+    right: 10px;
+    top: 40px;
+    color: #5bc0de;
+}
+.fa-mobile-alt{
+    position: absolute;
+    right: 10px;
+    top: 40px;
+    color: #5bc0de;
+}
