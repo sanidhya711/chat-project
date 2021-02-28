@@ -37,7 +37,7 @@ function call_peer(elem){
             video.srcObject = userVideoStream;
             video.addEventListener("loadedmetadata",function(){
                 video.play();
-            })
+            });
             videoGrid.appendChild(video);
         });
     });
@@ -77,60 +77,64 @@ socket.on("hangup",()=>{
 });
 
 myPeer.on('call', calll => {
-    document.querySelector(".fa-phone").remove();
-    document.querySelector(".ringtone").play();
-
-    call = calll;
-    otherPerson = call.peer;
-
-    var eee = document.createElement("div");
-    var mmm = document.querySelector(".user-self .pfp").src;
-    eee.innerHTML = `<img src="${mmm}"></img>`;
-    videoGrid.appendChild(eee);
-
-    var eee = document.createElement("div");
-    var mmm = document.querySelector(".top-bar img").src;
-    eee.innerHTML = `<img src="${mmm}"></img>`;
-    videoGrid.appendChild(eee);
-
-    var i = document.createElement("i");
-    i.classList.add("fas");
-    i.classList.add("fa-phone-slash");
-    i.classList.add("fa-2x");
-    i.id="hangup";
-    i.onclick=function(){
-        hangup();
-    };
-    document.querySelector(".call-buttons").appendChild(i);
-
-    var i = document.createElement("i");
-    i.classList.add("fas");
-    i.classList.add("fa-phone");
-    i.classList.add("fa-2x");
-    i.id="answer";
-    i.onclick=function(){
-        pause();
-        this.remove();
-        navigator.mediaDevices.getUserMedia({audio:true,video:true}).then(stream => {
-        var myVideo = document.createElement("video");
-        myVideo.srcObject=stream;
-        myVideo.muted=true;
-        myVideo.play();
-        videoGrid.appendChild(myVideo);
-        call.answer(stream);
-        var video = document.createElement('video');
-        call.on('stream', userVideoStream => {
-            video.srcObject = userVideoStream;
-            video.addEventListener("loadedmetadata",function(){
-                video.play();
+    if(to = call.peer){
+        document.querySelector(".fa-phone").remove();
+        document.querySelector(".ringtone").play();
+    
+        call = calll;
+        otherPerson = call.peer;
+    
+        var eee = document.createElement("div");
+        var mmm = document.querySelector(".user-self .pfp").src;
+        eee.innerHTML = `<img src="${mmm}"></img>`;
+        videoGrid.appendChild(eee);
+    
+        var eee = document.createElement("div");
+        var mmm = document.querySelector(".top-bar img").src;
+        eee.innerHTML = `<img src="${mmm}"></img>`;
+        videoGrid.appendChild(eee);
+    
+        var i = document.createElement("i");
+        i.classList.add("fas");
+        i.classList.add("fa-phone-slash");
+        i.classList.add("fa-2x");
+        i.id="hangup";
+        i.onclick=function(){
+            hangup();
+        };
+        document.querySelector(".call-buttons").appendChild(i);
+    
+        var i = document.createElement("i");
+        i.classList.add("fas");
+        i.classList.add("fa-phone");
+        i.classList.add("fa-2x");
+        i.id="answer";
+        i.onclick=function(){
+            pause();
+            this.remove();
+            navigator.mediaDevices.getUserMedia({audio:true,video:true}).then(stream => {
+            var myVideo = document.createElement("video");
+            myVideo.srcObject=stream;
+            myVideo.muted=true;
+            myVideo.play();
+            videoGrid.appendChild(myVideo);
+            call.answer(stream);
+            var video = document.createElement('video');
+            call.on('stream', userVideoStream => {
+                video.srcObject = userVideoStream;
+                video.addEventListener("loadedmetadata",function(){
+                    video.play();
+                })
+                videoGrid.appendChild(video);
+                });
+            }).catch(function(err){
+                alert(err);
             })
-            videoGrid.appendChild(video);
-            });
-        }).catch(function(err){
-            alert(err);
-        })
-    };
-    document.querySelector(".call-buttons").appendChild(i);
+        };
+        document.querySelector(".call-buttons").appendChild(i);
+    }else{
+        alert(call.peer+" is calling you");
+    }
 });
 
 function pause(params) {

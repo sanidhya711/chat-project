@@ -46,7 +46,7 @@ body{
     background-color: #474747;
     display: flex;
     flex-direction: column;
-    z-index: 10001;
+    z-index: 100000;
 }
 .users-inner{
     overflow-y: auto;
@@ -481,7 +481,12 @@ textarea::-webkit-scrollbar{
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
 }
-
+.user-self .fa-home{
+    position: absolute;
+    left: 15px;
+    bottom: 12px;
+    display: none;
+}
 @keyframes gradientAnimation{
     from{width: 0%;}
     to{width: 100%;}
@@ -543,4 +548,13 @@ textarea::-webkit-scrollbar{
 }
 .emoji_gif:hover{
     color: #5bc0de;
+}
+
+@media only screen and (max-width: 370px){
+    .image{
+        min-width: calc(100vw - 30px);
+    }
+    .video{
+        min-width: calc(100vw - 30px);
+    }
 }

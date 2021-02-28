@@ -662,11 +662,19 @@ textarea::-webkit-scrollbar{
         position: absolute;
         left: 0;
         width: 100%;
-        z-index: 100;
+        z-index: 100000;
     }
     .settings{
         position: absolute;
         left: 0;
         width: 100%;
+    }
+}
+@media only screen and (max-width: 370px){
+    .image{
+        min-width: calc(100vw - 30px);
+    }
+    .video{
+        min-width: calc(100vw - 30px);
     }
 }
