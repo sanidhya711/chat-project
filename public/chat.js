@@ -80,7 +80,7 @@ socket.on("new",function(message){
             div.classList.add(colorClass);
             var afterExtracting = message.message;
             afterExtracting = urlify(afterExtracting);
-            div.innerHTML=`${afterExtracting}`;
+            div.innerText=`${afterExtracting}`;
         }else{
             function getId(url){
                 const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
@@ -284,7 +284,7 @@ function appendMessages(data,addScrollToBottom){
             div.classList.add(colorClass);
             var afterExtracting = message.message;
             afterExtracting = urlify(afterExtracting);
-            div.innerHTML=`${afterExtracting}`;    
+            div.innerText=`${afterExtracting}`;    
         }else if(message.type=="image"){
             div.classList.add("image");
             if(addScrollToBottom){
