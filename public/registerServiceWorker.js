@@ -15,7 +15,9 @@ async function send(){
     });
 
     if(to!=null){
-        register.active.postMessage(JSON.stringify(to));
+        setTimeout(() => {
+            register.active.postMessage(JSON.stringify(to));
+        },100);
     }
 
     var data = {
@@ -49,6 +51,6 @@ function unregister(){
     register.unregister();
 }
 
-function pushMessageToServiceWorker(nameToPush) {
+function pushMessageToServiceWorker(nameToPush){
     register.active.postMessage(JSON.stringify(nameToPush));
 }
