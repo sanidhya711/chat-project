@@ -78,7 +78,7 @@
                     <% afterExtracting = urlify(afterExtracting); %>
 
                     <div id="<%= message.id %>" class="message <%= colorClass %> <%= seen %>">
-                        <%- afterExtracting %>
+                        <%= afterExtracting %>
                     </div>
                 <%} else if(message.type=="image"){ %>
                     <div id="<%= message.id %>"  class="message image <%= seen %>">
