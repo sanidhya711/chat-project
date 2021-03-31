@@ -10,20 +10,22 @@
     <link rel="stylesheet" href="signupANDsignin.css">
 </head>
 <body>
-    <% if(failureMessage){ %>
-        <h1 class="errorMessage">
-            <%= failureMessage %>
-        </h1>
-    <% } %>
     <div class="outer">
         <div class="signin-holder">
             <h1>
                 Sign Up
             </h1>
         </div>
+        <div class="gradient gradient-loading-animation"></div>
             <form action="/signup" method="POST">
-                <br>
-                <br>
+                <% if(failureMessage){ %>
+                    <h5 class="errorMessage">
+                        <%= failureMessage %>
+                    </h5>
+                <% }else{ %>
+                    <br>
+                    <br>
+                <% } %>
                 <input id="username" oninput="" autocomplete="off" required name="username" placeholder="Username" type="text">
                 <br>
                 <div class="password-holder">

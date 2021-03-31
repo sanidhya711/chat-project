@@ -283,7 +283,7 @@ app.get("/signup",function(req,res){
 app.post("/signup",function(req,res){
     User.register({username: req.body.username},req.body.password,function(err,user){
         if(err){
-            res.render("signup",{failureMessage:"a user with the given username already exists"});
+            res.render("signup",{failureMessage:"username not available"});
         }else{        
             const anime = randomanime.anime();
             var setPreferences = new Preference({
