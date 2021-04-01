@@ -523,7 +523,7 @@ textarea::-webkit-scrollbar{
     height: 100%;
     flex-direction: column;
     background-color: #333;
-    background-image: url(/ooof.jpg);
+    background-image: url(/assets/ooof.jpg);
     background-blend-mode: soft-light;
     background-position: center;
 }

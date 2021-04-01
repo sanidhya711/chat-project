@@ -7,12 +7,12 @@
     <meta property="og:site_name" content="sanidhyas chatting app">
     <meta property="og:description" content="A chatting web app :D">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="icon" href="/favicon.png">
-    <link rel="stylesheet" href="/three-dots.min.css">
+    <link rel="icon" href="/assets/favicon.png">
+    <link rel="stylesheet" href="/css/three-dots.min.css">
     <script src="https://kit.fontawesome.com/9f3fe80a0d.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/loading-bar.css">
+    <link rel="stylesheet" href="/css/loading-bar.css">
     <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
-    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="/css/home.css">
     <script src="/socket.io/socket.io.js"></script>
 </head>
 <body  id="drop_zone" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)">
@@ -88,6 +88,7 @@
                 <div class="gif-box" id="gif-box2"></div>
             </div>
         </div>
+    <audio class="ringtone" loop src="/assets/ringtone.mp3"></audio>
     <div class="<%= username %>" id="username"></div>
     <script src="https://www.gstatic.com/firebasejs/7.17.2/firebase.js"></script>
     <script type="module">
@@ -112,9 +113,9 @@
       firebase.initializeApp(firebaseConfig);
       firebase.analytics();
     </script>  
-    <script defer src="/home.js"></script>
-    <script defer src="/registerServiceWorker.js"></script>
-    <script defer src="/call.js"></script>
+    <script defer src="/js/home.js"></script>
+    <script defer src="/js/registerServiceWorker.js"></script>
+    <script defer src="/js/call.js"></script>
     </div>
 </body>
 </html>

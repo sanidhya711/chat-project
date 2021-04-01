@@ -1,71 +1,55 @@
+var usersOnline = [];
+
 var touchstartX = 0;
 var touchendX = 0;
-var touchstartY = 0;
-var touchendY = 0;
-var usersOnline = [];
 
 document.querySelector("body").addEventListener('touchstart', function(event){
     touchstartX = event.changedTouches[0].screenX;
-    touchstartY = event.changedTouches[0].screenY;
 },false);
 
 document.querySelector("body").addEventListener('touchend',function(event){
     touchendX = event.changedTouches[0].screenX;
-    touchendY = event.changedTouches[0].screenY;
     handleGesture();
 },false); 
 
-window.addEventListener("resize",function(){
-    if(window.innerWidth > 1000){
-        if(users.classList.contains("users-swipe-right")){
-            users.classList.remove("users-swipe-right");
-        }
-        if(users.classList.contains("users-swipe-left")){
-            users.classList.remove("users-swipe-left");
-        }
-    }
-});
-
 var users = document.querySelector(".users");
 var isAnimationRuuning = false;
-var firstAnimation = true;
 
 function handleGesture() {
-    if(touchendY > touchstartY + 65 || touchstartY > touchendY + 65){
-        var userWasJustScrolling = true;
-    }else{
-        var userWasJustScrolling = false;
+    if (touchendX+65 <= touchstartX && !isAnimationRuuning){
+            if(users.classList.contains("users-swipe-left")){
+                isAnimationRuuning = true;
+                users.classList.remove("users-swipe-left");
+                users.classList.add("users-swipe-right");
+                setTimeout(() => {
+                    isAnimationRuuning=false;
+                },750);
+            }
     }
-    
-    if (touchendX+65 <= touchstartX && !isAnimationRuuning && !userWasJustScrolling){
-        firstAnimation=false;
+    if(touchendX >= touchstartX+65 && !isAnimationRuuning){
         isAnimationRuuning = true;
-        users.classList.remove("users-swipe-left");
-        users.classList.add("users-swipe-right");
+        users.classList.remove("users-swipe-right");
+        users.classList.add("users-swipe-left");
         setTimeout(() => {
             isAnimationRuuning=false;
         },750);
     }
-    if(touchendX >= touchstartX+65 && !isAnimationRuuning){
-        if(users.classList.contains("users-swipe-right" || firstAnimation)){
-            isAnimationRuuning = true;
-            users.classList.remove("users-swipe-right");
-            users.classList.add("users-swipe-left");
-            setTimeout(() => {
-                isAnimationRuuning=false;
-            },750);
-        }
-    }
 }
+
+var doodleHolder = document.querySelector(".main");
+var noOfDoodles = 4;
+var randomDoodle = Math.floor(Math.random() * noOfDoodles)+1;
+// doodleHolder.style.backgroundImage = "url(/doodles/doodle"+randomDoodle+".jpg)";
+doodleHolder.style.backgroundImage = "url(/assets/ooof.png)";
 
 var socket = io();
 
 var username = document.getElementById("username").className;
 var from = username;
-var to;
+var to = document.getElementById("to").className;
 var roomName;
 
-function join(){
+function join() {
     if(from>to){
         roomName = from+to;
         socket.emit('join', {roomName:roomName});
@@ -74,6 +58,7 @@ function join(){
         socket.emit('join', {roomName:roomName});
     }
 }
+join();
 
 function urlify(text){
     var urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -127,9 +112,7 @@ socket.on("new",function(message){
 });
 
 function scrollToBottom(){
-  if(document.querySelector(".messages")){
     document.querySelector(".messages").scrollTop = document.querySelector(".messages").scrollHeight;
-  }
 }
 
 //emit when typing
@@ -163,15 +146,28 @@ socket.on("typing",data=>{
     }
 })
 
+//send new data
+document.querySelector(".send-holder").addEventListener("click",function(){
+    if(document.getElementById("msg").value){
+        var msg = {
+            msg:document.getElementById("msg").value,
+            from:from,
+            to:to,
+            roomName:roomName
+        }
+        socket.emit("new",msg);
+        document.getElementById("msg").value="";
+    }
+    typing();
+    auto_grow( document.getElementById("msg"));
+});
+
 //getting a delete request
 socket.on("delete",WhatToDelete =>{
     var parentt = document.querySelector(".messages");
     var childd = document.getElementById(WhatToDelete);
     parentt.removeChild(childd);
 });
-
-var gifactivateeventlistener = false;
-var emojiactivateeventlistener = false;
 
 // send message if user presses enter
 document.addEventListener("keydown",function(e) {
@@ -191,14 +187,9 @@ document.addEventListener("keydown",function(e) {
     }
 });
 
-document.querySelector('emoji-picker').addEventListener('emoji-click',function(event){
-    var value = document.querySelector("#msg").value;
-    value = value+event.detail.unicode;
-    document.querySelector("#msg").value=value;
-    document.querySelector("emoji-picker").style.display="none";
-});
-
-
+//scroll all the way down on load
+scrollToBottom();
+    
 //when connected mark everything as seen
 socket.emit("seeneverything",{to:username,from:to});
 
@@ -260,6 +251,9 @@ document.querySelector(".search-user").addEventListener("input",function(){
 
 
 var canLoadMore = true;
+
+//load more messages when user scrolls up
+document.querySelector(".messages").addEventListener("scroll",scrolled);
 
 function scrolled(){
     var scrollTop = document.querySelector(".messages").scrollTop;
@@ -324,31 +318,27 @@ function appendMessages(data,addScrollToBottom){
 socket.emit("getOnline","bruh");
 
 socket.on("startingOnline",data=>{
-    data.forEach(function(userr){
-      var user = userr.slice(0,-1);
-      var deviceType = userr.substr(userr.length-1);
-      usersOnline.push(user);
-      if(user == to){
-       document.querySelector(".top-bar h3").style.color="#5cb85c";
-      }else if(user != username){
-       document.querySelector("."+user+" h5").style.color="#5cb85c";
-       var i = document.createElement("i");
-      if(deviceType == "m"){
-          i.classList.add("fas");
-          i.classList.add("fa-mobile-alt");
-          insertAfter(i,document.querySelector("."+user+" h5"));
-      }else{
-          i.classList.add("fas");
-          i.classList.add("fa-desktop");
-          insertAfter(i,document.querySelector("."+user+" h5"));
-      }
-      }
-    });
+  data.forEach(function(userr){
+    var user = userr.slice(0,-1);
+    var deviceType = userr.substr(userr.length-1);
+    usersOnline.push(user);
+    if(user == to){
+     document.querySelector(".top-bar h3").style.color="#5cb85c";
+    }else if(user != username){
+     document.querySelector("."+user+" h5").style.color="#5cb85c";
+     var i = document.createElement("i");
+    if(deviceType == "m"){
+        i.classList.add("fas");
+        i.classList.add("fa-mobile-alt");
+        insertAfter(i,document.querySelector("."+user+" h5"));
+    }else{
+        i.classList.add("fas");
+        i.classList.add("fa-desktop");
+        insertAfter(i,document.querySelector("."+user+" h5"));
+    }
+    }
   });
-
-function insertAfter(newNode, existingNode) {
-    existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
-}
+});
 
 socket.on("online",data=>{
     usersOnline.push(data.username);
@@ -372,6 +362,10 @@ socket.on("online",data=>{
     }
 });
 
+function insertAfter(newNode, existingNode) {
+    existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
+}
+
 socket.on("offline",userOffline=>{
     var index = usersOnline.indexOf(userOffline);
     usersOnline.splice(index,1);
@@ -383,6 +377,20 @@ socket.on("offline",userOffline=>{
     }else if(userOffline!=username){
         document.querySelector("."+userOffline+" h5").style.color="inherit";
         document.querySelector("."+userOffline+" h5").nextSibling.remove();
+    }
+});
+
+//file upload
+var uploadButton = document.querySelector(".fa-plus");
+var fileUpload = document.querySelector(".fileUpload");
+uploadButton.addEventListener("click",function(){
+    fileUpload.click();
+});
+
+fileUpload.addEventListener("change",function(e){
+    var file = e.target.files[0];
+    if(file!=null){
+        newFileUpload(file);
     }
 });
 
@@ -485,8 +493,53 @@ function deleteFileFromFirebase(fileName){
     }
 }
 
-document.querySelector(".search_gif").addEventListener("input",function(){
+//send emoji
+document.querySelector('emoji-picker').addEventListener('emoji-click',function(event){
+    var value = document.querySelector("#msg").value;
+    value = value+event.detail.unicode;
+    document.querySelector("#msg").value=value;
+    document.querySelector("emoji-picker").style.display="none";
+});
+
+var gifactivateeventlistener = false;
+var emojiactivateeventlistener = false;
+
+// click on gif button
+document.querySelector("svg").addEventListener("click",function(e){
+    if(!gifactivateeventlistener){
+        e.stopPropagation();
+    }
+    document.querySelector("emoji-picker").style.display="none";
+    document.querySelector(".gif-holder").style.display="flex";   
+    document.querySelector(".search_gif").focus();
     grab_data();
+    gifactivateeventlistener = true;
+});
+
+// clicke on show smoji button
+document.querySelector(".fa-smile-o").addEventListener("click",function(e){
+    if(!emojiactivateeventlistener){
+        e.stopPropagation();
+    }
+    document.querySelector(".gif-holder").style.display="none"; 
+    document.querySelector("emoji-picker").style.display="inline-block";
+    emojiactivateeventlistener = true;
+});
+
+
+document.addEventListener("click",function(eve){
+    if(gifactivateeventlistener){
+        if(eve.target.className!="gif-holder" && eve.target.className!="search_gif" && eve.target.className!="gif-box" && eve.target.className!="gif-preview-holder"){
+            document.querySelector(".gif-holder").style.display="none";  
+            gifactivateeventlistener = false; 
+        }
+    }
+    if(emojiactivateeventlistener){
+        if(eve.target.className.length!=0 && eve.target.className!="fa fa-2x fa-smile-o"){
+            document.querySelector("emoji-picker").style.display="none";  
+            emojiactivateeventlistener = false; 
+        }
+    }
 });
 
 function httpGetAsync(theUrl, callback){
@@ -543,6 +596,14 @@ function grab_data(){
     return;
 }
 
+document.querySelector(".search_gif").addEventListener("input",function(){
+    grab_data();
+});
+
+document.querySelector("body").addEventListener("load",function(){
+    scrollToBottom();
+});
+
 socket.on("newUser",data=>{
     var element = document.createElement("a");
     element.classList.add("user");
@@ -572,6 +633,14 @@ function dragOverHandler(ev) {
     ev.preventDefault();
 }
 
+window.onload = function(){
+    scrollToBottom();
+    document.querySelector(".gradient").classList.remove("gradient-animation");
+};
+
+
+document.querySelector("textarea").style.height="5px";
+document.querySelector("textarea").style.height=(document.querySelector("textarea").scrollHeight)+"px";
 
 function auto_grow(element){
     element.style.height = "5px";
@@ -580,26 +649,26 @@ function auto_grow(element){
 }
 
 function loadDynamic(bruhh){
-  if(document.querySelector(".main")){
     document.querySelector(".messages").innerHTML="";
     document.querySelector(".search-user").value="";
     document.querySelector(".search-user").dispatchEvent(new Event('input'));
-    if(document.querySelector(".top-bar h3").innerText.length!=0){
-        var pfpTo = document.querySelector(".top-bar img").src;
-        var user = document.createElement("div");
-        user.classList.add("user");
-        user.classList.add(to);
-        user.setAttribute("href","/chats/"+to);
-        user.onclick=function(){loadDynamic(this)};
-        user.innerHTML=`<img class="pfp" src="${pfpTo}"><h5>${to}</h5><div class="unseen"></div>`;
-        document.querySelector(".users-inner").prepend(user);
-        user.onclick=function(){
-            loadDynamic(user);
-        };
+    var pfpTo = document.querySelector(".top-bar img").src;
+    var user = document.createElement("div");
+    user.classList.add("user")
+    user.classList.add(to);
+    user.setAttribute("href","/chats/"+to);
+    user.onclick=function(){loadDynamic(this)};
+    user.innerHTML=`<img class="pfp" src="${pfpTo}"><h5>${to}</h5><div class="unseen"></div>`;
+    if(usersOnline.includes(to)){
+        user.style.color="#5cb85c";
     }
+    document.querySelector(".users-inner").prepend(user);
+    user.onclick=function(){
+        loadDynamic(user);
+    };
     to = bruhh.classList[1];
     pushMessageToServiceWorker(to);
-    var pfpTo = bruhh.children[0].src;
+    pfpTo = bruhh.children[0].src;
     window.history.pushState('page2', 'Title', '/chats/'+to);
     document.title = "Chats "+to;
     socket.emit("load dynamic",{from:from,to:to});
@@ -618,8 +687,7 @@ function loadDynamic(bruhh){
     setTimeout(() => {
         document.querySelector(".gradient").classList.remove("gradient-animation");
     },2000);
-  }
-  join();
+    join();
 }
 
 socket.on("dynamically loaded",data=>{
@@ -641,6 +709,9 @@ document.addEventListener( "contextmenu", function(e){
     if(e.target.nodeName=="IMG"){
         window.open(e.target.src);
     }
+    else if(e.target.className=="messages"){
+        alert("changeBackgroundWallpaper");
+    }
 });
 
 function disableScrolling(){
@@ -652,94 +723,25 @@ function enableScrolling(){
     document.querySelector(".messages").onscroll=function(){};
 }
 
-var allUsers = document.querySelectorAll(".user");
-
-function handleShowMessages(e){
-    showMessages(e.target);
-}
-
-for (let i = 0; i < allUsers.length; i++) {
-  allUsers[i].addEventListener("click",handleShowMessages);
-}
-
-function showMessages(userClickedData){
-
-    for (let i = 0; i < allUsers.length; i++) {
-        allUsers[i].removeEventListener("click",handleShowMessages);
-    }
-
-  if(!document.querySelector(".main")){
-  to = userClickedData.classList[1];
-  document.querySelector(".settings").remove();
-  var div = document.createElement("div");
-  div.className = "main";
-  div.innerHTML = `<div class="top-bar"><img class="pfp" src=""><h3></h3><i id="call" onclick="call_peer(this);" class="fa fa-2x fa-phone-square"></i></div><div class="gradient"></div><div class="video-grid"></div><div class="messages"></div><div class="input-bar-holder"><i class="fa fa-plus" aria-hidden="true"></i><input type="file" hidden class="fileUpload"><textarea onkeypress="typing()" oninput="auto_grow(this)" id="msg" placeholder="${to}" type="text"></textarea><div class="gif-emoji-button-holder"><i class="fa fa-2x fa-smile-o" aria-hidden="true"></i><svg version="1.0" xmlns="http://www.w3.org/2000/svg"width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000"preserveAspectRatio="xMidYMid meet"><g id="gif-svg-change-fill-color" transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" stroke="none"><path d="M2270 4705 c-242 -35 -462 -103 -668 -205 -654 -324 -1091 -938 -1187 -1664 -19 -150 -19 -402 0 -553 128 -987 903 -1753 1895 -1873 125 -15 402 -12 536 5 965 127 1725 883 1859 1850 22 159 22 431 0 590 -133 956 -874 1705 -1827 1845 -156 23 -469 26 -608 5z m569 -171 c659 -96 1221 -505 1512 -1099 339 -693 246 -1526 -238 -2125 -82 -102 -259 -272 -363 -349 -268 -199 -577 -326 -911 -375 -139 -21 -404 -21 -550 0 -719 100 -1330 587 -1593 1271 -40 102 -77 239 -101 370 -22 118 -31 422 -16 549 51 436 229 824 523 1138 315 338 715 549 1173 620 127 20 431 20 564 0z"/><path d="M1550 3205 c-225 -51 -414 -244 -482 -492 -31 -113 -31 -373 0 -486 48 -176 172 -343 307 -414 123 -64 190 -78 385 -78 148 1 188 4 260 23 85 22 227 84 281 123 l29 20 0 277 c0 152 -4 282 -8 288 -20 31 -55 34 -342 34 l-291 0 -24 -25 c-30 -30 -32 -64 -4 -99 l20 -26 240 0 239 0 0 -180 0 -180 -61 -31 c-132 -66 -322 -93 -467 -66 -112 22 -198 66 -265 136 -105 110 -149 240 -149 441 1 372 187 591 502 591 215 0 364 -97 421 -271 28 -85 51 -110 101 -110 44 0 88 35 88 70 0 37 -50 173 -82 222 -67 105 -183 188 -315 224 -82 23 -300 28 -383 9z"/><path d="M2631 3174 c-21 -26 -21 -34 -21 -706 l0 -679 25 -24 c33 -34 87 -34 120 0 l25 24 0 679 c0 672 0 680 -21 706 -16 21 -29 26 -64 26 -35 0 -48 -5 -64 -26z"/><path d="M3114 3178 c-12 -5 -27 -21 -33 -34 -16 -36 -16 -1323 0 -1358 22 -47 98 -56 142 -18 15 14 17 43 17 334 l0 318 399 0 c388 0 399 1 425 21 31 25 34 66 7 100 l-19 24 -406 3 -406 3 0 234 0 235 414 0 c403 0 414 1 440 21 33 26 36 79 6 109 -19 19 -33 20 -492 19 -304 0 -481 -4 -494 -11z"/></g></svg></div><div class="send-holder"><i class="fa fa-paper-plane" aria-hidden="true"></i></div></div></div>`
-var referenceNode = document.querySelector(".users");
-referenceNode.parentNode.insertBefore(div,referenceNode.nextSibling);
-var doodleHolder = document.querySelector(".main");
-var noOfDoodles = 4;
-var randomDoodle = Math.floor(Math.random() * noOfDoodles)+1;
-// doodleHolder.style.backgroundImage = "url(/doodles/doodle"+randomDoodle+".jpg)";
-doodleHolder.style.backgroundImage = "url(/ooof.png)";
-
-//send new data
-document.querySelector(".send-holder").addEventListener("click",function(){
-  if(document.getElementById("msg").value){
-      var msg = {
-          msg:document.getElementById("msg").value,
-          from:from,
-          to:to,
-          roomName:roomName
-      }
-      socket.emit("new",msg);
-      document.getElementById("msg").value="";
-      auto_grow( document.getElementById("msg"));
-  }
-  typing();
-});
-//load more messages when user scrolls up
-document.querySelector(".messages").addEventListener("scroll",scrolled);
-//file upload
-var uploadButton = document.querySelector(".fa-plus");
-var fileUpload = document.querySelector(".fileUpload");
-uploadButton.addEventListener("click",function(){
-    fileUpload.click();
-});
-
-fileUpload.addEventListener("change",function(e){
-    var file = e.target.files[0];
-    if(file!=null){
-        newFileUpload(file);
-    }
-});
-document.querySelector("textarea").style.height="5px";
-document.querySelector("textarea").style.height=(document.querySelector("textarea").scrollHeight)+"px";
-loadDynamic(userClickedData);
-// click on gif button
-document.querySelector("svg").addEventListener("click",function(e){
-    if(!gifactivateeventlistener){
-        e.stopPropagation();
-        document.querySelector(".gif-holder").style.display="flex";   
-        document.querySelector(".search_gif").focus();
-        grab_data();
-        gifactivateeventlistener = true;
+socket.on("notification",(data) => {
+    if(data!=to){
+        var previousNotifications = document.querySelector("."+data+" .unseen").innerText;
+        previousNotifications = previousNotifications > 0 ? parseInt(previousNotifications)+1 : 1;
+        document.querySelector("."+data+" .unseen").innerText = previousNotifications;
+        var temporary = document.querySelector("."+data);
+        temporary.remove();
+        document.querySelector(".users-inner").prepend(temporary);
     }
 });
 
-document.addEventListener("click",function(eve){
-    if(gifactivateeventlistener){
-        if(eve.target.className!="gif-holder" && eve.target.className!="search_gif" && eve.target.className!="gif-box" && eve.target.className!="gif-preview-holder"){
-            document.querySelector(".gif-holder").style.display="none";  
-            gifactivateeventlistener = false; 
-        }
-    }
+var addEventListenToUsers = document.querySelectorAll(".user");
+addEventListenToUsers.forEach(function(user){
+    user.addEventListener("click",function(){
+        loadDynamic(user);
+    });
 });
 
-// clicke on show smoji button
-document.querySelector(".fa-smile-o").addEventListener("click",function(){
-    document.querySelector("emoji-picker").style.display="inline-block";
-    emojiactivateeventlistener = true;
-});
+socket.emit("newUser",{username:username,isMobile:isMobileDevice()});
 
 setInterval(() => {
     if(document.querySelector(".fa-smile-o").style.display != "none"){
@@ -751,84 +753,15 @@ setInterval(() => {
     }
 },3000);
 
-}
-}
+addEventListener("load", function() {
+    var viewport = document.querySelector("meta[name=viewport]");
+    viewport.setAttribute("content", viewport.content + ", height=" + window.innerHeight);
+})
 
-socket.emit("newUser",{username:username,isMobile:isMobileDevice()});
-
-
-function uploadPfp(inputEvent){
-    var file = inputEvent.files[0];
-    var fr = new FileReader();
-    fr.onload = function () {
-        document.querySelector(".settings .pfp").src = fr.result;
-        document.querySelector(".user-self .pfp").src = fr.result;
-    }
-    fr.readAsDataURL(file);
-    document.querySelector(".setPfpButton").innerText="confirm";
-    document.querySelector(".setPfpButton").onclick = function(){
-      confirmPfp(file);  
-    }
-}
-
-function changepfpclicked(){
-    document.getElementById("uploadpfp").click();
-}
-
-function confirmPfp(file){
-    document.querySelector(".setPfpButton").innerText="uploading...";
-    document.querySelector(".setPfpButton").onclick = function(){}
-    var storageRef = firebase.storage().ref("/pfp/"+username+"/"+file.name);
-    var uploadTask = storageRef.put(file)
-    uploadTask.on('state_changed', function(snapshot){
-        var progress = Math.round(snapshot.bytesTransferred / snapshot.totalBytes*100);
-    },function(error){},
-    function() {
-        uploadTask.snapshot.ref.getDownloadURL().then(function(pfp){
-            downloadURL = pfp;
-            socket.emit("setPreferences",{username:username,key:"pfp",value:downloadURL});
-            document.querySelector(".setPfpButton").innerText="change pfp";
-            document.querySelector(".setPfpButton").onclick = function(){changepfpclicked()}
-        });
-    });
-}
-
-socket.on("notification",(data) => {
-    if(data!=to){
-        var previousNotifications = document.querySelector("."+data+" .unseen").innerText;
-        previousNotifications = previousNotifications > 0 ? parseInt(previousNotifications)+1 : 1
-        document.querySelector("."+data+" .unseen").innerText = previousNotifications;
-    }
-});
-
-function confirmEmail(){
-    var email = document.querySelector(".email").value;
-    socket.emit("setPreferences",{username:username,key:"email",value:email});
-}
-
-socket.on("change email response",response=>{
-    if(response){
-        document.querySelector(".setEmail").style.display="none";
-        document.querySelector(".changeEmail").style.display="inline";
-        document.querySelector(".email").disabled = true;
-    }else{
-        alert("email is already registered with another account");
-    }
-});
-
-function changeEmail(){
-    document.querySelector(".changeEmail").style.display = "none";
-    document.querySelector(".setEmail").style.display="inline";
-    document.querySelector(".email").disabled = false;
-}
-
-var addEventListenToUsers = document.querySelectorAll(".user");
-addEventListenToUsers.forEach(function(user){
-    user.addEventListener("click",function(){
-        loadDynamic(user);
-    });
-});
-
-function isMobileDevice() {
+function isMobileDevice(){
     return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
 };
+
+
+
+
