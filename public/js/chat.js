@@ -2,6 +2,8 @@ var usersOnline = [];
 
 var touchstartX = 0;
 var touchendX = 0;
+var touchstartY = 0;
+var touchendY = 0;
 
 document.querySelector("body").addEventListener('touchstart', function(event){
     touchstartX = event.changedTouches[0].screenX;
