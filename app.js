@@ -16,7 +16,7 @@ const crypto = require('crypto');
 const randomanime = require('random-anime');
 const webPush = require("web-push");
 const secure = require('express-force-https');
-const publicVapidKey = process.env.PUBLICVAPIDKEY;
+const publicVapidKey = "BLMUx_WIr-gWDHM5B6xn5imROX4HeA4q-d8_iI50lKhFDJm4YVwQNqygD_Hn2Ihk83mDMvARdXLqs6mvzNrYhX8";
 const privateVapidKey = process.env.PRIVATEVAPIDKEY;
 webPush.setVapidDetails("mailto:kamleshsolution@gmail.com",publicVapidKey,privateVapidKey);
 app.use(express.static("public"));
