@@ -153,7 +153,7 @@ input:focus{
     z-index: 1;
     color: #333;
     position: relative;
-    left: 59px;
+    left: 66px;
     top: 1px;
     transition: color 0.3s;
 }
@@ -164,7 +164,7 @@ input:focus{
     color: #333;
     transition: color 0.5s;
     position: relative;
-    right: 5px;
+    left: 1px;
     width:33px;
     height: 33px;
 }
@@ -177,7 +177,7 @@ input:focus{
 }
 .send-holder{
     color: #333;
-    right: 64px;
+    right: 59px;
     position: relative;
     background-color: #5cb85c;
     padding: 5px 18px;
@@ -339,7 +339,7 @@ svg{
     fill: #333;
     transition: all 0.5s;
     position: relative;
-    right: 5px;
+    left: 1px;
     display: none;
 }
 svg:hover{
@@ -448,10 +448,10 @@ textarea{
     resize: none;
     max-height: 300px;
     position: relative;
-    left: 30px;
+    left: 34px;
     border-radius: 27px;
     width: 100%;
-    max-width: 1000px;
+    max-width: 900px;
     padding: 12px 100px 12px 45px;
     border: 0;
     background-color: rgb(202, 202, 202);
@@ -505,21 +505,6 @@ textarea::-webkit-scrollbar{
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
     top: calc(100% - 24px);
-}
-@media only screen and (max-width: 1000px){
-    input{
-        width: 100%;
-    }
-    .main{
-        width: 100%;
-        position: absolute;
-        height: 100%;
-    }
-    .users{
-        position: absolute;
-        transform: translateX(-100%);
-        width: 100%;
-    }
 }
 .body-wrapper{
     height: 100%;
@@ -576,4 +561,22 @@ textarea::-webkit-scrollbar{
     right: 10px;
     top: 40px;
     color: #5bc0de;
+}
+@media only screen and (max-width: 1000px){
+    input{
+        width: 100%;
+    }
+    textarea{
+        min-width: calc(100% - 30px);
+    }
+    .main{
+        width: 100%;
+        position: absolute;
+        height: 100%;
+    }
+    .users{
+        position: absolute;
+        transform: translateX(-100%);
+        width: 100%;
+    }
 }

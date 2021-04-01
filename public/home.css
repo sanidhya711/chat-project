@@ -150,7 +150,7 @@ input:focus{
     z-index: 1;
     color: #333;
     position: relative;
-    left: 59px;
+    left: 66px;
     top: 1px;
     transition: color 0.3s;
 }
@@ -161,8 +161,8 @@ input:focus{
     color: #333;
     transition: color 0.5s;
     position: relative;
-    right: 5px;
-    width: 33px;
+    left: 1px;
+    width:33px;
     height: 33px;
 }
 .fa-smile-o:hover{
@@ -174,7 +174,7 @@ input:focus{
 }
 .send-holder{
     color: #333;
-    right: 64px;
+    right: 59px;
     position: relative;
     background-color: #5cb85c;
     padding: 5px 18px;
@@ -457,10 +457,10 @@ textarea{
     resize: none;
     max-height: 300px;
     position: relative;
-    left: 30px;
+    left: 34px;
     border-radius: 27px;
     width: 100%;
-    max-width: 1000px;
+    max-width: 900px;
     padding: 12px 100px 12px 45px;
     border: 0;
     background-color: rgb(202, 202, 202);
@@ -657,6 +657,9 @@ textarea::-webkit-scrollbar{
         width: 100%;
         position: absolute;
         height: 100%;
+    }
+    textarea{
+        min-width: calc(100% - 30px);
     }
     .users{
         position: absolute;
