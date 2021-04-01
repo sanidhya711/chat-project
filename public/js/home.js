@@ -31,29 +31,31 @@ var isAnimationRuuning = false;
 var firstAnimation = true;
 
 function handleGesture() {
-    if(touchendY > touchstartY + 65 || touchstartY > touchendY + 65){
-        var userWasJustScrolling = true;
-    }else{
-        var userWasJustScrolling = false;
-    }
-    
-    if (touchendX+65 <= touchstartX && !isAnimationRuuning && !userWasJustScrolling){
-        firstAnimation=false;
-        isAnimationRuuning = true;
-        users.classList.remove("users-swipe-left");
-        users.classList.add("users-swipe-right");
-        setTimeout(() => {
-            isAnimationRuuning=false;
-        },750);
-    }
-    if(touchendX >= touchstartX+65 && !isAnimationRuuning){
-        if(users.classList.contains("users-swipe-right" || firstAnimation)){
+    if(window.innerWidth < 1000){
+        if(touchendY > touchstartY + 65 || touchstartY > touchendY + 65){
+            var userWasJustScrolling = true;
+        }else{
+            var userWasJustScrolling = false;
+        }
+        
+        if (touchendX+65 <= touchstartX && !isAnimationRuuning && !userWasJustScrolling){
+            firstAnimation=false;
             isAnimationRuuning = true;
-            users.classList.remove("users-swipe-right");
-            users.classList.add("users-swipe-left");
+            users.classList.remove("users-swipe-left");
+            users.classList.add("users-swipe-right");
             setTimeout(() => {
                 isAnimationRuuning=false;
             },750);
+        }
+        if(touchendX >= touchstartX+65 && !isAnimationRuuning){
+            if(users.classList.contains("users-swipe-right" || firstAnimation)){
+                isAnimationRuuning = true;
+                users.classList.remove("users-swipe-right");
+                users.classList.add("users-swipe-left");
+                setTimeout(() => {
+                    isAnimationRuuning=false;
+                },750);
+            }
         }
     }
 }
@@ -593,9 +595,6 @@ function loadDynamic(bruhh){
         user.onclick=function(){loadDynamic(this)};
         user.innerHTML=`<img class="pfp" src="${pfpTo}"><h5>${to}</h5><div class="unseen"></div>`;
         document.querySelector(".users-inner").prepend(user);
-        user.onclick=function(){
-            loadDynamic(user);
-        };
     }
     to = bruhh.classList[1];
     pushMessageToServiceWorker(to);
@@ -613,8 +612,10 @@ function loadDynamic(bruhh){
     document.querySelector(".top-bar .pfp").src = pfpTo;
     document.querySelector(".gradient").classList.add("gradient-animation");
     document.querySelector("#msg").placeholder="@"+to;
-    users.classList.remove("users-swipe-left");
-    users.classList.add("users-swipe-right");
+    if(window.innerWidth < 1000){
+        users.classList.remove("users-swipe-left");
+        users.classList.add("users-swipe-right");
+    }
     setTimeout(() => {
         document.querySelector(".gradient").classList.remove("gradient-animation");
     },2000);

@@ -16,7 +16,8 @@ var users = document.querySelector(".users");
 var isAnimationRuuning = false;
 
 function handleGesture() {
-    if (touchendX+65 <= touchstartX && !isAnimationRuuning){
+    if(window.innerWidth < 1000){
+        if (touchendX+65 <= touchstartX && !isAnimationRuuning){
             if(users.classList.contains("users-swipe-left")){
                 isAnimationRuuning = true;
                 users.classList.remove("users-swipe-left");
@@ -25,14 +26,15 @@ function handleGesture() {
                     isAnimationRuuning=false;
                 },750);
             }
-    }
-    if(touchendX >= touchstartX+65 && !isAnimationRuuning){
-        isAnimationRuuning = true;
-        users.classList.remove("users-swipe-right");
-        users.classList.add("users-swipe-left");
-        setTimeout(() => {
-            isAnimationRuuning=false;
-        },750);
+        }
+        if(touchendX >= touchstartX+65 && !isAnimationRuuning){
+            isAnimationRuuning = true;
+            users.classList.remove("users-swipe-right");
+            users.classList.add("users-swipe-left");
+            setTimeout(() => {
+                isAnimationRuuning=false;
+            },750);
+        }
     }
 }
 
@@ -682,8 +684,10 @@ function loadDynamic(bruhh){
     document.querySelector(".top-bar .pfp").src = pfpTo;
     document.querySelector(".gradient").classList.add("gradient-animation");
     document.querySelector("#msg").placeholder="@"+to;
-    users.classList.remove("users-swipe-left");
-    users.classList.add("users-swipe-right");
+    if(window.innerWidth < 1000){
+        users.classList.remove("users-swipe-left");
+        users.classList.add("users-swipe-right");
+    }
     setTimeout(() => {
         document.querySelector(".gradient").classList.remove("gradient-animation");
     },2000);
