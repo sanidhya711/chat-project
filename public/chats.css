@@ -257,7 +257,7 @@ input:focus{
 }
 .users-swipe-right{
     animation-name: users-swipe-right-animation;
-    animation-duration: 0.7s;
+    animation-duration: 0.6s;
     animation-fill-mode: forwards;
     animation-timing-function: cubic-bezier(.98,.26,.81,.82);
 }

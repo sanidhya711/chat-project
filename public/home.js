@@ -1,22 +1,43 @@
 var touchstartX = 0;
 var touchendX = 0;
+var touchstartY = 0;
+var touchendY = 0;
 var usersOnline = [];
 
 document.querySelector("body").addEventListener('touchstart', function(event){
     touchstartX = event.changedTouches[0].screenX;
+    touchstartY = event.changedTouches[0].screenY;
 },false);
 
 document.querySelector("body").addEventListener('touchend',function(event){
     touchendX = event.changedTouches[0].screenX;
+    touchendY = event.changedTouches[0].screenY;
     handleGesture();
 },false); 
+
+window.addEventListener("resize",function(){
+    if(window.innerWidth > 1000){
+        if(users.classList.contains("users-swipe-right")){
+            users.classList.remove("users-swipe-right");
+        }
+        if(users.classList.contains("users-swipe-left")){
+            users.classList.remove("users-swipe-left");
+        }
+    }
+});
 
 var users = document.querySelector(".users");
 var isAnimationRuuning = false;
 var firstAnimation = true;
 
 function handleGesture() {
-    if (touchendX+65 <= touchstartX && !isAnimationRuuning){
+    if(touchendY > touchstartY + 75 || touchstartY > touchendY + 75){
+        var userWasJustScrolling = true;
+    }else{
+        var userWasJustScrolling = false;
+    }
+    
+    if (touchendX+65 <= touchstartX && !isAnimationRuuning && !userWasJustScrolling){
         firstAnimation=false;
         isAnimationRuuning = true;
         users.classList.remove("users-swipe-left");
