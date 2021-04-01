@@ -31,7 +31,7 @@ var isAnimationRuuning = false;
 var firstAnimation = true;
 
 function handleGesture() {
-    if(touchendY > touchstartY + 75 || touchstartY > touchendY + 75){
+    if(touchendY > touchstartY + 65 || touchstartY > touchendY + 65){
         var userWasJustScrolling = true;
     }else{
         var userWasJustScrolling = false;
