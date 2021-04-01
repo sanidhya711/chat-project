@@ -259,12 +259,12 @@ input:focus{
     animation-timing-function: cubic-bezier(.98,.26,.81,.82);
 }
 @keyframes users-swipe-left-animation{
-    from{left:-100%;}
-    to{left: 0%;}
+    from{transform: translateX(-100%);}
+    to{transform: translateX(0%);}
 }
 @keyframes users-swipe-right-animation{
-    from{left:0%;}
-    to{left: -100%;}
+    from{transform: translateX(0%);}
+    to{transform: translateX(-100%);}
 }
 video{
     width: 100%;
@@ -660,7 +660,6 @@ textarea::-webkit-scrollbar{
     }
     .users{
         position: absolute;
-        left: 0;
         width: 100%;
         z-index: 100000;
     }

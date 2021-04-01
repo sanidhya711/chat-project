@@ -47,6 +47,7 @@ body{
     display: flex;
     flex-direction: column;
     z-index: 100000;
+    transform: translateX(0%);
 }
 .users-inner{
     overflow-y: auto;
@@ -252,7 +253,7 @@ input:focus{
     animation-name: users-swipe-left-animation;
     animation-duration: 0.7s;
     animation-fill-mode: forwards;
-    animation-timing-function: ccubic-bezier(.98,.26,.81,.82);
+    animation-timing-function: cubic-bezier(.98,.26,.81,.82);
 }
 .users-swipe-right{
     animation-name: users-swipe-right-animation;
@@ -261,12 +262,12 @@ input:focus{
     animation-timing-function: cubic-bezier(.98,.26,.81,.82);
 }
 @keyframes users-swipe-left-animation{
-    from{left:-100%;}
-    to{left: 0%;}
+    from{transform: translateX(-100%);}
+    to{transform: translateX(0%);}
 }
 @keyframes users-swipe-right-animation{
-    from{left:0%;}
-    to{left: -100%;}
+    from{transform: translateX(0%);}
+    to{transform: translateX(-100%);}
 }
 video{
     width: 100%;
@@ -516,7 +517,7 @@ textarea::-webkit-scrollbar{
     }
     .users{
         position: absolute;
-        left: -100%;
+        transform: translateX(-100%);
         width: 100%;
     }
 }
