@@ -13,35 +13,44 @@ document.querySelector("body").addEventListener('touchend',function(event){
 },false); 
 
 var users = document.querySelector(".users");
+var navbar = document.querySelector(".left-navbar");
 var isAnimationRuuning = false;
 
 window.addEventListener("resize",function(){
     if(window.innerWidth > 1000){
-        if(users.classList.contains("users-swipe-right")){
-            users.classList.remove("users-swipe-right");
-        }
-        if(users.classList.contains("users-swipe-left")){
-            users.classList.remove("users-swipe-left");
-        }
+        users.classList.remove("users-swipe-right");
+        users.classList.remove("users-swipe-left");
+        navbar.classList.remove("navbar-show");
+        navbar.classList.remove("navbar-hide");
     }
 });
 
 function handleGesture() {
     if(window.innerWidth < 1000){
-        if (touchendX+65 <= touchstartX && !isAnimationRuuning){
+        if(touchendY > touchstartY + 65 || touchstartY > touchendY + 65){
+            var userWasJustScrolling = true;
+        }else{
+            var userWasJustScrolling = false;
+        }
+
+        if (touchendX+65 <= touchstartX && !isAnimationRuuning && !userWasJustScrolling){
             if(users.classList.contains("users-swipe-left")){
                 isAnimationRuuning = true;
-                users.classList.remove("users-swipe-left");
                 users.classList.add("users-swipe-right");
+                users.classList.remove("users-swipe-left");
+                navbar.classList.remove("navbar-show");
+                navbar.classList.add("navbar-hide");
                 setTimeout(() => {
                     isAnimationRuuning=false;
                 },750);
             }
         }
-        if(touchendX >= touchstartX+65 && !isAnimationRuuning){
+        if(touchendX >= touchstartX+65 && !isAnimationRuuning && !userWasJustScrolling){
             isAnimationRuuning = true;
             users.classList.remove("users-swipe-right");
             users.classList.add("users-swipe-left");
+            navbar.classList.remove("navbar-hide");
+            navbar.classList.add("navbar-show");
             setTimeout(() => {
                 isAnimationRuuning=false;
             },750);
@@ -49,11 +58,7 @@ function handleGesture() {
     }
 }
 
-var doodleHolder = document.querySelector(".main");
-var noOfDoodles = 4;
-var randomDoodle = Math.floor(Math.random() * noOfDoodles)+1;
-// doodleHolder.style.backgroundImage = "url(/doodles/doodle"+randomDoodle+".jpg)";
-doodleHolder.style.backgroundImage = "url(/assets/ooof.png)";
+document.querySelector(".main").style.backgroundImage = "url(/assets/ooof.png)";
 
 var socket = io();
 
@@ -697,6 +702,8 @@ function loadDynamic(bruhh){
     if(window.innerWidth < 1000){
         users.classList.remove("users-swipe-left");
         users.classList.add("users-swipe-right");
+        navbar.classList.remove("navbar-show");
+        navbar.classList.add("navbar-hide");
     }
     setTimeout(() => {
         document.querySelector(".gradient").classList.remove("gradient-animation");

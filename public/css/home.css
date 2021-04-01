@@ -14,10 +14,12 @@ body{
     padding: 20px 0;
     background-color: #EAEAEA;
     height: 100%;
-    min-width: 40px;
+    min-width: 45px;
+    max-width: 55px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    z-index: 10000000;
 }
 .left-navbar .fa{
     color: #333;
@@ -46,7 +48,7 @@ body{
     background-color: #474747;
     display: flex;
     flex-direction: column;
-    z-index: 10001;
+    z-index: 100000;
 }
 .users-inner{
     overflow-y: auto;
@@ -250,11 +252,11 @@ input:focus{
     animation-name: users-swipe-left-animation;
     animation-duration: 0.7s;
     animation-fill-mode: forwards;
-    animation-timing-function: ccubic-bezier(.98,.26,.81,.82);
+    animation-timing-function: cubic-bezier(.98,.26,.81,.82);
 }
 .users-swipe-right{
     animation-name: users-swipe-right-animation;
-    animation-duration: 0.6s;
+    animation-duration: 0.7s;
     animation-fill-mode: forwards;
     animation-timing-function: cubic-bezier(.98,.26,.81,.82);
 }
@@ -265,6 +267,25 @@ input:focus{
 @keyframes users-swipe-right-animation{
     from{transform: translateX(0%);}
     to{transform: translateX(-100%);}
+}
+.navbar-show{
+    animation-name: navbar-show-animation;
+    animation-duration: 0.3s;
+    /* animation-delay: 0.6s; */
+    animation-fill-mode: forwards;
+}
+.navbar-hide{
+    animation-name: navbar-hide-animation;
+    animation-duration: 0.3s;
+    animation-fill-mode: forwards;
+}
+@keyframes navbar-show-animation{
+    from{transform: translateX(-45px);}
+    to{transform: translateX(0px);}
+}
+@keyframes navbar-hide-animation{
+    from{transform: translateX(0px);}
+    to{transform: translateX(-45px);}
 }
 video{
     width: 100%;
@@ -652,19 +673,36 @@ textarea::-webkit-scrollbar{
 ::-moz-selection {
     background: #ffb7b7;
 }
+
+
 @media only screen and (max-width: 1000px){
+    textarea{
+        min-width: calc(100% - 30px);
+    }
+    .left-navbar{
+        transform: translateX(-45px);
+    }
     .main{
         width: 100%;
         position: absolute;
         height: 100%;
     }
-    textarea{
-        min-width: calc(100% - 30px);
-    }
     .users{
         position: absolute;
         width: 100%;
-        z-index: 100000;
+    }
+    .users-inner{
+        padding-left: 50px;
+    }
+    .user-self{
+        padding-left: 50px;
+    }
+    .search-user{
+        width: calc(100vw - 90px);
+        margin-left: 39px;
+    }
+    .users h3{
+        padding-left: 37px;
     }
     .settings{
         position: absolute;
@@ -672,6 +710,7 @@ textarea::-webkit-scrollbar{
         width: 100%;
     }
 }
+
 @media only screen and (max-width: 370px){
     .image{
         min-width: calc(100vw - 30px);

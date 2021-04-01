@@ -4,6 +4,12 @@ var touchstartY = 0;
 var touchendY = 0;
 var usersOnline = [];
 
+var previousStateMoreThan1000 = window.innerWidth > 1000 ? true : false ;
+
+if(!previousStateMoreThan1000){
+    document.querySelector(".left-navbar").classList.add("navbar-show");
+}
+
 document.querySelector("body").addEventListener('touchstart', function(event){
     touchstartX = event.changedTouches[0].screenX;
     touchstartY = event.changedTouches[0].screenY;
@@ -15,22 +21,27 @@ document.querySelector("body").addEventListener('touchend',function(event){
     handleGesture();
 },false); 
 
-window.addEventListener("resize",function(){
-    if(window.innerWidth > 1000){
-        if(users.classList.contains("users-swipe-right")){
-            users.classList.remove("users-swipe-right");
-        }
-        if(users.classList.contains("users-swipe-left")){
-            users.classList.remove("users-swipe-left");
-        }
-    }
-});
-
 var users = document.querySelector(".users");
+var navbar = document.querySelector(".left-navbar");
 var isAnimationRuuning = false;
 var firstAnimation = true;
 
-function handleGesture() {
+window.addEventListener("resize",function(){
+    if(previousStateMoreThan1000 && window.innerWidth < 1000){
+        document.querySelector(".left-navbar").classList.add("navbar-show");
+    }
+    if(window.innerWidth > 1000){
+        previousStateMoreThan1000 = true;
+        users.classList.remove("users-swipe-right");
+        users.classList.remove("users-swipe-left");
+        navbar.classList.remove("navbar-show");
+        navbar.classList.remove("navbar-hide");
+    }else{
+        previousStateMoreThan1000 = false;
+    }
+});
+
+function handleGesture(){
     if(window.innerWidth < 1000){
         if(touchendY > touchstartY + 65 || touchstartY > touchendY + 65){
             var userWasJustScrolling = true;
@@ -43,18 +54,22 @@ function handleGesture() {
             isAnimationRuuning = true;
             users.classList.remove("users-swipe-left");
             users.classList.add("users-swipe-right");
+            navbar.classList.remove("navbar-show");
+            navbar.classList.add("navbar-hide");
             setTimeout(() => {
                 isAnimationRuuning=false;
-            },750);
+            },800);
         }
-        if(touchendX >= touchstartX+65 && !isAnimationRuuning){
+        if(touchendX >= touchstartX+65 && !isAnimationRuuning && !userWasJustScrolling){
             if(users.classList.contains("users-swipe-right" || firstAnimation)){
                 isAnimationRuuning = true;
                 users.classList.remove("users-swipe-right");
                 users.classList.add("users-swipe-left");
+                navbar.classList.remove("navbar-hide");
+                navbar.classList.add("navbar-show");
                 setTimeout(() => {
                     isAnimationRuuning=false;
-                },750);
+                },800);
             }
         }
     }
@@ -613,6 +628,8 @@ function loadDynamic(bruhh){
     if(window.innerWidth < 1000){
         users.classList.remove("users-swipe-left");
         users.classList.add("users-swipe-right");
+        navbar.classList.remove("navbar-show");
+        navbar.classList.add("navbar-hide");
     }
     setTimeout(() => {
         document.querySelector(".gradient").classList.remove("gradient-animation");
