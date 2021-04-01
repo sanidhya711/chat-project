@@ -6,22 +6,19 @@ self.addEventListener('message',function(event){
 });
 
 self.addEventListener("push",function(e){
+
     var data = e.data.json();
+
+    console.log("new notification "+ data.wentOffline);
+
+
     if(data.wentOffline == true){
-        console.log("offline");
         to = "";
-        console.log("set to empty");
     }else{
-        console.log(to);
         if(data.from!=to){ 
-            if(JSON.stringify(data.from)!=to){
-                const notificationPromise = self.registration.showNotification(data.title,{
-                body:data.from,
-                icon:data.pfp,
-                click_action : "/chats/"+data.from,
-            });
+            console.log("still not comign?");
+            const notificationPromise = self.registration.showNotification(data.title,{body:data.from,icon:data.pfp,click_action : "/chats/"+data.from,});
             e.waitUntil(notificationPromise);
-            }
         }
     }
 });
