@@ -15,6 +15,17 @@ document.querySelector("body").addEventListener('touchend',function(event){
 var users = document.querySelector(".users");
 var isAnimationRuuning = false;
 
+window.addEventListener("resize",function(){
+    if(window.innerWidth > 1000){
+        if(users.classList.contains("users-swipe-right")){
+            users.classList.remove("users-swipe-right");
+        }
+        if(users.classList.contains("users-swipe-left")){
+            users.classList.remove("users-swipe-left");
+        }
+    }
+});
+
 function handleGesture() {
     if(window.innerWidth < 1000){
         if (touchendX+65 <= touchstartX && !isAnimationRuuning){
@@ -92,7 +103,6 @@ socket.on("new",function(message){
                   : null;
             } 
             const videoId = getId(message.message);
-            console.log(videoId);
             div.innerHTML=`<iframe src="//www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
         }
     }else if(message.type=="image"){

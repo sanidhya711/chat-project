@@ -11,6 +11,7 @@ const moment = require('moment-timezone');
 const Filter = require("bad-words");
 const filter = new Filter();
 const nodemailer = require('nodemailer');
+const sgTransport = require('nodemailer-sendgrid-transport');
 require('dotenv').config();
 const crypto = require('crypto');
 const randomanime = require('random-anime');
@@ -457,30 +458,26 @@ app.post("/getresetlink",function(req,res){
                     saveRecoveryToken.save();
                 });
 
-                console.log(email);
-
-                  var transporter = nodemailer.createTransport({
-                    service:"gmail",
+                var mailer = nodemailer.createTransport(sgTransport({
                     auth: {
-                      user: process.env.GMAILUSERNAME,
-                      pass: process.env.GMAILPASSWORD
+                        api_key: process.env.SENDGRID_API_KEY
                     }
-                  });
+                }));
                 
-                  let mailOptions = {
-                    from: process.env.GMAILUSERNAME,
+                var mail = {
                     to: email,
+                    from: "intense.reef.95110@gmail.com",
                     subject: "Reset Password",
                     html: `Click <a href='https://intense-reef-95110.herokuapp.com/reset/${recovery_token}'>Here</a> To Reset Password`,
-                  };
-        
-                  transporter.sendMail(mailOptions,function(err,info){
-                      if(err){
+                };
+
+                mailer.sendMail(mail,function(err,info){
+                    if (err){
                         res.send(err);
-                      }else{
+                    }else{
                         res.send("<h2>Check Your Email For Instructions on how to change your password <br> if you dont see it please check spam <br> The link will be valid for 24 hours </h2>");
-                      }
-                  });
+                    }
+                });    
             });
         }else{
             res.send("<h1>your email is not registered with us</h1>");
@@ -522,7 +519,6 @@ app.get('*', function(req, res){
     res.render("404page");
 });
 
-//do not change
 var server = http.listen(process.env.PORT || 3000, () => {
     console.log('server is running on port', server.address().port);
 });

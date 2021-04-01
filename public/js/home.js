@@ -107,7 +107,6 @@ socket.on("new",function(message){
                   : null;
             } 
             const videoId = getId(message.message);
-            console.log(videoId);
             div.innerHTML=`<iframe src="//www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
         }
     }else if(message.type=="image"){
@@ -660,7 +659,6 @@ for (let i = 0; i < allUsers.length; i++) {
 }
 
 function showMessages(userClickedData){
-    console.log("user click data = "+userClickedData);
 
     for (let i = 0; i < allUsers.length; i++) {
         allUsers[i].onclick = function(){}
