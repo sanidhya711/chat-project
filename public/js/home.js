@@ -666,6 +666,14 @@ function showMessages(userClickedData){
         allUsers[i].onclick = function(){}
     }
 
+    
+    var addEventListenToUsers = document.querySelectorAll(".user");
+    addEventListenToUsers.forEach(function(user){
+        user.addEventListener("click",function(){
+            loadDynamic(user);
+        });
+    });
+
     to = userClickedData.classList[1];
     document.querySelector(".settings").remove();
     var div = document.createElement("div");
@@ -814,12 +822,6 @@ function changeEmail(){
     document.querySelector(".email").disabled = false;
 }
 
-var addEventListenToUsers = document.querySelectorAll(".user");
-addEventListenToUsers.forEach(function(user){
-    user.addEventListener("click",function(){
-        loadDynamic(user);
-    });
-});
 
 function isMobileDevice() {
     return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
