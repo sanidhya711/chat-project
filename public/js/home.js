@@ -309,10 +309,16 @@ function appendMessages(data,addScrollToBottom){
             div.innerText=`${afterExtracting}`;    
         }else if(message.type=="image"){
             div.classList.add("image");
-            if(addScrollToBottom){
-                div.innerHTML=`<img class="media-${colorClass}" onload="scrollToBottom()" src="${message.message}">`;
-            }else{
+            if(message.message.includes("tenor")){
                 div.innerHTML=`<img class="media-${colorClass}" src="${message.message}">`;
+            }else{
+                div.innerHTML=`<img class="media-${colorClass}" src="${message.message}"> <a id="${message.message}" class="imageDownloadButton" download><i class="fas fa-download fa-lg"></i></a>`;
+                makeDownloadButtonsNotSuck(div.children[1]);
+            }
+            if(addScrollToBottom){
+                div.children[0].onload = ()=>{
+                    scrollToBottom();
+                }
             }
         }else if(message.type=="audio"){
             div.classList.add("audio");
@@ -840,3 +846,17 @@ function changeEmail(){
 function isMobileDevice() {
     return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
 };
+
+function makeDownloadButtonsNotSuck(downloadButton){
+    var url = downloadButton.id;
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = 'blob';
+    xhr.onload = function(){
+        var blob = xhr.response;
+        var file = new File([blob], "image name", { type: blob.type });
+        downloadButton.download = file.name;
+        downloadButton.href = URL.createObjectURL(file);
+    };
+    xhr.open('GET', url);
+    xhr.send();
+}

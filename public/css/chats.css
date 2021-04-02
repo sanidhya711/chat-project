@@ -616,3 +616,20 @@ textarea::-webkit-scrollbar{
         padding-left: 37px;
     }
 }
+.fa-download{
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    color: #333;
+    opacity: 0%;
+    transition: all 0.5s;
+}
+.fa-download:hover{
+    color: #5bc0de;
+}
+.image:hover .fa-download{
+    opacity: 100%;
+}
+.imageDownloadButton:hover{
+    cursor: default;
+}

@@ -81,7 +81,12 @@
                     </div>
                 <%} else if(message.type=="image"){ %>
                     <div id="<%= message.id %>"  class="message image <%= seen %>">
-                        <img class="media-<%= colorClass %>" src="<%= message.message %>">
+                            <img class="media-<%= colorClass %>" src="<%= message.message %>">
+                        <% if(!message.message.includes('tenor')){ %>
+                            <a id="<%=message.message %>" class="imageDownloadButton" download>
+                                <i class="fas fa-download fa-lg"></i>
+                            </a>
+                        <% } %>
                     </div>
                 <% }else if(message.type=="audio"){ %>
                     <div id="message.id" class="message audio <%= seen %>">
