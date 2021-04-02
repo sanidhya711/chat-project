@@ -648,7 +648,6 @@ socket.on("dynamically loaded",data=>{
         isAnimationRuuning=false;
     },550);
     socket.emit("seeneverything",{to:username,from:to});
-    document.getElementById("msg").focus();
 });
 
 document.addEventListener( "contextmenu", function(e){
