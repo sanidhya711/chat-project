@@ -44,7 +44,7 @@ function handleGesture() {
                 navbar.classList.add("navbar-hide");
                 setTimeout(() => {
                     isAnimationRuuning=false;
-                },750);
+                },550);
             }
         }
         if(touchendX >= touchstartX+65 && !isAnimationRuuning && !userWasJustScrolling){
@@ -55,7 +55,7 @@ function handleGesture() {
             navbar.classList.add("navbar-show");
             setTimeout(() => {
                 isAnimationRuuning=false;
-            },750);
+            },550);
         }
     }
 }
@@ -722,7 +722,7 @@ socket.on("dynamically loaded",data=>{
     isAnimationRuuning=true;
     setTimeout(() => {
         isAnimationRuuning=false;
-    },750);
+    },550);
     socket.emit("seeneverything",{to:username,from:to});
     document.getElementById("msg").focus();
 });

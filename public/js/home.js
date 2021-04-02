@@ -646,7 +646,7 @@ socket.on("dynamically loaded",data=>{
     isAnimationRuuning=true;
     setTimeout(() => {
         isAnimationRuuning=false;
-    },750);
+    },550);
     socket.emit("seeneverything",{to:username,from:to});
     document.getElementById("msg").focus();
 });
