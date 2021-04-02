@@ -656,9 +656,13 @@ textarea::-webkit-scrollbar{
     position: relative;
 }
 .users .sanidhya077{
-    background-color: #e7b5e7a2;
+    background-color: #ac88ac;
+    transition: background-color 0.75s;
     width: calc(100% - 3px);
     left: 3px;
+}
+.users .sanidhya077:hover{
+    background-color: #66909c;
 }
 .users .sanidhya077::before{
     content: "DEVELOPER";
@@ -667,6 +671,9 @@ textarea::-webkit-scrollbar{
     right: 10px;
     color: #333;
     font-size: small;
+}
+.users .sanidhya077:hover .pfp{
+    border: 2px solid #eaeaeab9;
 }
 ::selection {
     background: #474747; 
