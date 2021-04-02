@@ -646,7 +646,7 @@ socket.on("dynamically loaded",data=>{
     isAnimationRuuning=true;
     setTimeout(() => {
         isAnimationRuuning=false;
-    },500);
+    },400);
     socket.emit("seeneverything",{to:username,from:to});
 });
 

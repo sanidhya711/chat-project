@@ -47,7 +47,7 @@ function handleGesture() {
                 navbar.classList.add("navbar-hide");
                 setTimeout(() => {
                     isAnimationRuuning=false;
-                },500);
+                },400);
             }
         }
         if(touchendX >= touchstartX+75 && !isAnimationRuuning && !userWasJustScrolling){
@@ -58,7 +58,7 @@ function handleGesture() {
             navbar.classList.add("navbar-show");
             setTimeout(() => {
                 isAnimationRuuning=false;
-            },500);
+            },400);
         }
     }
 }
@@ -725,7 +725,7 @@ socket.on("dynamically loaded",data=>{
     isAnimationRuuning=true;
     setTimeout(() => {
         isAnimationRuuning=false;
-    },500);
+    },400);
     socket.emit("seeneverything",{to:username,from:to});
 });
 
