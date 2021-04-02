@@ -7,10 +7,12 @@ var touchendY = 0;
 
 document.querySelector("body").addEventListener('touchstart', function(event){
     touchstartX = event.changedTouches[0].screenX;
+    touchstartY = event.changedTouches[0].screenY;
 },false);
 
 document.querySelector("body").addEventListener('touchend',function(event){
     touchendX = event.changedTouches[0].screenX;
+    touchendY = event.changedTouches[0].screenY;
     handleGesture();
 },false); 
 
@@ -29,13 +31,14 @@ window.addEventListener("resize",function(){
 
 function handleGesture() {
     if(window.innerWidth < 1000){
-        if(touchendY > touchstartY + 65 || touchstartY > touchendY + 65){
+        if(touchendY > touchstartY + 200 || touchstartY > touchendY + 200){
             var userWasJustScrolling = true;
         }else{
             var userWasJustScrolling = false;
         }
 
-        if (touchendX+65 <= touchstartX && !isAnimationRuuning && !userWasJustScrolling){
+        if (touchendX+75 <= touchstartX && !isAnimationRuuning && !userWasJustScrolling){
+            console.log(userWasJustScrolling);
             if(users.classList.contains("users-swipe-left")){
                 isAnimationRuuning = true;
                 users.classList.add("users-swipe-right");
@@ -44,10 +47,10 @@ function handleGesture() {
                 navbar.classList.add("navbar-hide");
                 setTimeout(() => {
                     isAnimationRuuning=false;
-                },550);
+                },500);
             }
         }
-        if(touchendX >= touchstartX+65 && !isAnimationRuuning && !userWasJustScrolling){
+        if(touchendX >= touchstartX+75 && !isAnimationRuuning && !userWasJustScrolling){
             isAnimationRuuning = true;
             users.classList.remove("users-swipe-right");
             users.classList.add("users-swipe-left");
@@ -55,7 +58,7 @@ function handleGesture() {
             navbar.classList.add("navbar-show");
             setTimeout(() => {
                 isAnimationRuuning=false;
-            },550);
+            },500);
         }
     }
 }
@@ -722,7 +725,7 @@ socket.on("dynamically loaded",data=>{
     isAnimationRuuning=true;
     setTimeout(() => {
         isAnimationRuuning=false;
-    },550);
+    },500);
     socket.emit("seeneverything",{to:username,from:to});
 });
 

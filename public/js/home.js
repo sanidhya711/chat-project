@@ -43,13 +43,13 @@ window.addEventListener("resize",function(){
 
 function handleGesture(){
     if(window.innerWidth < 1000){
-        if(touchendY > touchstartY + 65 || touchstartY > touchendY + 65){
+        if(touchendY > touchstartY + 200 || touchstartY > touchendY + 200){
             var userWasJustScrolling = true;
         }else{
             var userWasJustScrolling = false;
         }
         
-        if (touchendX+65 <= touchstartX && !isAnimationRuuning && !userWasJustScrolling){
+        if (touchendX+75 <= touchstartX && !isAnimationRuuning && !userWasJustScrolling){
             firstAnimation=false;
             isAnimationRuuning = true;
             users.classList.remove("users-swipe-left");
@@ -60,7 +60,7 @@ function handleGesture(){
                 isAnimationRuuning=false;
             },800);
         }
-        if(touchendX >= touchstartX+65 && !isAnimationRuuning && !userWasJustScrolling){
+        if(touchendX >= touchstartX+75 && !isAnimationRuuning && !userWasJustScrolling){
             if(users.classList.contains("users-swipe-right" || firstAnimation)){
                 isAnimationRuuning = true;
                 users.classList.remove("users-swipe-right");
@@ -646,7 +646,7 @@ socket.on("dynamically loaded",data=>{
     isAnimationRuuning=true;
     setTimeout(() => {
         isAnimationRuuning=false;
-    },550);
+    },500);
     socket.emit("seeneverything",{to:username,from:to});
 });
 
