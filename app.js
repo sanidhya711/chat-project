@@ -25,7 +25,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.set("view engine","ejs")
 var maxAge = null;
-app.use(secure);
+// app.use(secure);
 app.use(session({
     secret:process.env.SECRET,
     resave:false,
